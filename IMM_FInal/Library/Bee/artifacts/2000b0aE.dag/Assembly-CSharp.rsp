@@ -355,6 +355,7 @@
 "Assets/ButtonHandler.cs"
 "Assets/CustomerAnimationController.cs"
 "Assets/CustomerOrder.cs"
+"Assets/CustomerPosition.cs"
 "Assets/CustomerSetup.cs"
 "Assets/FoodDestroy.cs"
 "Assets/FoodScript.cs"

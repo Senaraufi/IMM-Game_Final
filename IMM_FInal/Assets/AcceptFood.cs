@@ -19,6 +19,26 @@ namespace SojaExiles
         private void Start()
         {
             animationController = GetComponent<CustomerAnimationController>();
+            
+            // Check if TextHide is assigned
+            if (textHide == null)
+            {
+                Debug.LogError($"[{gameObject.name}] TextHide component not assigned in inspector!");
+            }
+            
+            if (animationController == null)
+            {
+                Debug.LogError($"[{gameObject.name}] CustomerAnimationController not found!");
+            }
+        }
+
+        private void ShowMessage(string message)
+        {
+            if (textHide != null)
+            {
+                textHide.ShowText(message);
+            }
+            Debug.Log($"[{gameObject.name}] {message}");
         }
 
         private void OnTriggerEnter(Collider other)
@@ -28,7 +48,7 @@ namespace SojaExiles
                 FoodScript foodScript = other.gameObject.GetComponent<FoodScript>();
                 if (foodScript == null)
                 {
-                    Debug.LogError("FoodScript component not found on the Food GameObject.");
+                    Debug.LogError($"[{gameObject.name}] FoodScript component not found on the Food GameObject.");
                     return;
                 }
 
@@ -36,12 +56,17 @@ namespace SojaExiles
 
                 if (incomingFoodType != acceptedFoodType)
                 {
-                    textHide.ShowText("FUCK OFF");
+                    ShowMessage("FUCK OFF");
                 }
                 else
                 {
-                    textHide.ShowText("Food accepted");
-                    Debug.Log("Food accepted");
+                    ShowMessage("Food accepted");
+                    // Play happy animation when correct food enters trigger
+                    if (animationController != null)
+                    {
+                        animationController.PlayHappyAnimation();
+                        Debug.Log($"[{gameObject.name}] Triggering wave animation from OnTriggerEnter");
+                    }
                 }
             }
         }
@@ -50,17 +75,27 @@ namespace SojaExiles
         {
             if (type != acceptedFoodType)
             {
-                textHide.ShowText("FUCK OFF");
+                ShowMessage("FUCK OFF");
                 return false;
             }
             else
             {
-                textHide.ShowText("Food accepted");
-                Destroy(heldFood);
+                ShowMessage("Food accepted");
+                
                 // Play happy animation when food is accepted
                 if (animationController != null)
                 {
                     animationController.PlayHappyAnimation();
+                    Debug.Log($"[{gameObject.name}] Triggering wave animation from AcceptFoodItem");
+                }
+                else
+                {
+                    Debug.LogError($"[{gameObject.name}] Animation controller not found!");
+                }
+                
+                if (heldFood != null)
+                {
+                    Destroy(heldFood);
                 }
                 return true;
             }
