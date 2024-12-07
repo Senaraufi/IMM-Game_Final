@@ -2,52 +2,68 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using SojaExiles;
 
-public class AcceptFood : MonoBehaviour
+namespace SojaExiles
 {
-    [SerializeField]
-    private TextHide textHide;
-
-    [SerializeField]
-    private FoodType acceptedFoodType = FoodType.pizza;
-
-    private void OnTriggerEnter(Collider other)
+    public class AcceptFood : MonoBehaviour
     {
-        if (other.gameObject.CompareTag("Food"))
+        [SerializeField]
+        private TextHide textHide;
+
+        [SerializeField]
+        private FoodType acceptedFoodType = FoodType.pizza;
+
+        private CustomerAnimationController animationController;
+
+        private void Start()
         {
-            FoodScript foodScript = other.gameObject.GetComponent<FoodScript>();
-            if (foodScript == null)
+            animationController = GetComponent<CustomerAnimationController>();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Food"))
             {
-                Debug.LogError("FoodScript component not found on the Food GameObject.");
-                return;
+                FoodScript foodScript = other.gameObject.GetComponent<FoodScript>();
+                if (foodScript == null)
+                {
+                    Debug.LogError("FoodScript component not found on the Food GameObject.");
+                    return;
+                }
+
+                FoodType incomingFoodType = foodScript.FoodType;
+
+                if (incomingFoodType != acceptedFoodType)
+                {
+                    textHide.ShowText("FUCK OFF");
+                }
+                else
+                {
+                    textHide.ShowText("Food accepted");
+                    Debug.Log("Food accepted");
+                }
             }
+        }
 
-            FoodType incomingFoodType = foodScript.FoodType;
-
-            if (incomingFoodType != acceptedFoodType)
+        public bool AcceptFoodItem(FoodType type, GameObject heldFood)
+        {
+            if (type != acceptedFoodType)
             {
                 textHide.ShowText("FUCK OFF");
+                return false;
             }
             else
             {
                 textHide.ShowText("Food accepted");
-                Debug.Log("Food accepted");
+                Destroy(heldFood);
+                // Play happy animation when food is accepted
+                if (animationController != null)
+                {
+                    animationController.PlayHappyAnimation();
+                }
+                return true;
             }
-        }
-    }
-
-    public bool AcceptFoodItem(FoodType type, GameObject heldFood)
-    {
-        if (type != acceptedFoodType)
-        {
-            textHide.ShowText("FUCK OFF");
-            return false;
-        }
-        else
-        {
-            textHide.ShowText("Food accepted");
-            Destroy(heldFood);
-            return true;
         }
     }
 }
