@@ -7,6 +7,9 @@ namespace SojaExiles
     {
         [SerializeField]
         private UnityEvent onServeCustomer;
+        
+        [SerializeField]
+        private string foodToServe = "burger"; // Default food type
 
         private RegisterQueueManager queueManager;
 
@@ -38,11 +41,17 @@ namespace SojaExiles
             {
                 if (queueManager.IsFirstInQueue(npc))
                 {
-                    npc.FinishOrder();
+                    npc.ServeFood(foodToServe);
                     onServeCustomer?.Invoke();
                     break;
                 }
             }
+        }
+
+        // Method to change what food will be served
+        public void SetFoodType(string foodType)
+        {
+            foodToServe = foodType;
         }
     }
 }

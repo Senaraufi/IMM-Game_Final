@@ -1,63 +1,65 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class TextHide : MonoBehaviour
+namespace SojaExiles
 {
-
-    [SerializeField]
-    public TextMeshProUGUI text;
-    public TextMeshProUGUI pressE;
-
-    // Start is called before the first frame update
-    void Start()
-    { 
-        HideAllText();
-    }
-
-    // Method to show text
-    public void ShowText(string message)
+    public class TextHide : MonoBehaviour
     {
-        if(text != null)
-        {
-            text.text = message;
-            text.enabled = true;
-            Debug.Log($"Text displayed: {message}");
-        }
-        else
-        {
-            Debug.LogError("TextMeshProUGUI component is not assigned.");
-        }
-    }
+        public static TextHide Instance { get; private set; }
 
-    // Method to hide text
-    public void HideText()
-    {
-        if(text != null)
-        {
-            text.text = "";
-            text.enabled = false;
-            Debug.Log("Text has been hidden.");
-        }
-        else
-        {
-            Debug.LogError("TextMeshProUGUI component is not assigned.");
-        }
-    }
+        [SerializeField]
+        private TextMeshProUGUI messageText;
+        [SerializeField]
+        private TextMeshProUGUI pressEText;
 
-    private void HideAllText()
-    {
-        if(text != null)
+        private void Awake()
         {
-            text.text = "";
-            text.enabled = false;
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+
+            if (messageText != null) messageText.enabled = false;
+            if (pressEText != null) pressEText.enabled = false;
         }
 
-        if(pressE != null)
+        public void ShowText(string message)
         {
-            pressE.text = "";
-            pressE.enabled = false;
+            if (messageText != null)
+            {
+                messageText.text = message;
+                messageText.enabled = true;
+            }
+        }
+
+        public void ShowPressE()
+        {
+            if (pressEText != null)
+            {
+                pressEText.text = "Press E to pick up food";
+                pressEText.enabled = true;
+            }
+        }
+
+        public void HideText()
+        {
+            if (messageText != null)
+            {
+                messageText.enabled = false;
+            }
+        }
+
+        public void HidePressE()
+        {
+            if (pressEText != null)
+            {
+                pressEText.enabled = false;
+            }
         }
     }
 }
