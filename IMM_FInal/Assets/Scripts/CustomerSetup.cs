@@ -8,6 +8,8 @@ namespace SojaExiles
     {
         private Animator animator;
         private RuntimeAnimatorController defaultController;
+        private RegisterQueueManager queueManager;
+        private animal_people_wolf_1 wolfComponent;
 
         void Awake()
         {
@@ -34,6 +36,32 @@ namespace SojaExiles
             if (GetComponent<CustomerAnimationController>() == null)
             {
                 gameObject.AddComponent<CustomerAnimationController>();
+            }
+        }
+
+        void Start()
+        {
+            // Get queue manager
+            queueManager = RegisterQueueManager.Instance;
+            if (queueManager == null)
+            {
+                Debug.LogError($"[{gameObject.name}] RegisterQueueManager not found!");
+                return;
+            }
+
+            // Get wolf component
+            wolfComponent = GetComponent<animal_people_wolf_1>();
+            if (wolfComponent == null)
+            {
+                Debug.LogError($"[{gameObject.name}] animal_people_wolf_1 component not found!");
+                return;
+            }
+
+            // Register with queue manager
+            if (CompareTag("Customer"))
+            {
+                Debug.Log($"[{gameObject.name}] Registering with queue manager");
+                queueManager.RegisterCustomer(wolfComponent);
             }
         }
     }
