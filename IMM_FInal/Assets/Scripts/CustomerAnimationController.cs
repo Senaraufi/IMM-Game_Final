@@ -30,17 +30,6 @@ namespace SojaExiles
                 return;
             }
 
-            // Log initial setup
-            Debug.Log($"[{gameObject.name}] Animator initialized successfully");
-            Debug.Log($"[{gameObject.name}] Controller: {animator.runtimeAnimatorController.name}");
-            Debug.Log($"[{gameObject.name}] Apply Root Motion: {animator.applyRootMotion}");
-
-            // Log all parameters
-            foreach (var param in animator.parameters)
-            {
-                Debug.Log($"[{gameObject.name}] Parameter found: {param.name} ({param.type})");
-            }
-
             // Store initial position
             lastPosition = transform.position;
         }
@@ -55,25 +44,20 @@ namespace SojaExiles
             bool wasMoving = isMoving;
             isMoving = movement > 0.001f;
 
-            // Log movement changes
-            if (wasMoving != isMoving)
-            {
-                Debug.Log($"[{gameObject.name}] Movement changed: {(isMoving ? "Started moving" : "Stopped moving")}");
-                Debug.Log($"[{gameObject.name}] Movement distance: {movement}");
-            }
-
             // Set animation parameters
             animator.SetBool(IS_WALKING, isMoving);
             animator.SetBool(IS_IDLE, !isMoving);
 
-            // Log current animation state
-            var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (isMoving)
-            {
-                Debug.Log($"[{gameObject.name}] Current State: {stateInfo.shortNameHash}, IsWalking: {animator.GetBool(IS_WALKING)}");
-            }
-
             lastPosition = currentPosition;
+        }
+
+        public void SetWalking(bool walking)
+        {
+            if (animator != null)
+            {
+                animator.SetBool(IS_WALKING, walking);
+                animator.SetBool(IS_IDLE, !walking);
+            }
         }
 
         public void PlayHappyAnimation()
@@ -84,13 +68,7 @@ namespace SojaExiles
                 return;
             }
 
-            Debug.Log($"[{gameObject.name}] TRIGGERING WAVE ANIMATION");
             animator.SetTrigger(WAVE);
-
-            // Log animation state after triggering wave
-            var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            Debug.Log($"[{gameObject.name}] After wave trigger - State hash: {stateInfo.shortNameHash}");
-            Debug.Log($"[{gameObject.name}] Is wave parameter triggered: {animator.GetBool(WAVE)}");
         }
     }
 }

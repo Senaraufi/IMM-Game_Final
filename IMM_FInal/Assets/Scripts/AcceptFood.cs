@@ -56,21 +56,17 @@ namespace SojaExiles
 
                 if (incomingFoodType != acceptedFoodType)
                 {
-                    ShowMessage("Wrong order!");
-                    if (animationController != null)
-                    {
-                        animationController.PlayAngryAnimation();
-                    }
+                    ShowMessage("FUCK OFF");
                 }
                 else
                 {
-                    ShowMessage("Thank you!");
+                    ShowMessage("Food accepted");
+                    // Play happy animation when correct food enters trigger
                     if (animationController != null)
                     {
                         animationController.PlayHappyAnimation();
-                        Debug.Log($"[{gameObject.name}] Playing happy animation for correct food");
+                        Debug.Log($"[{gameObject.name}] Triggering wave animation from OnTriggerEnter");
                     }
-                    Destroy(other.gameObject);
                 }
             }
         }
@@ -79,26 +75,30 @@ namespace SojaExiles
         {
             if (type != acceptedFoodType)
             {
-                ShowMessage("Wrong order!");
-                if (animationController != null)
-                {
-                    animationController.PlayAngryAnimation();
-                }
+                ShowMessage("FUCK OFF");
                 return false;
             }
-            
-            ShowMessage("Thank you!");
-            if (animationController != null)
+            else
             {
-                animationController.PlayHappyAnimation();
-                Debug.Log($"[{gameObject.name}] Playing happy animation for accepted food");
+                ShowMessage("Food accepted");
+                
+                // Play happy animation when food is accepted
+                if (animationController != null)
+                {
+                    animationController.PlayHappyAnimation();
+                    Debug.Log($"[{gameObject.name}] Triggering wave animation from AcceptFoodItem");
+                }
+                else
+                {
+                    Debug.LogError($"[{gameObject.name}] Animation controller not found!");
+                }
+                
+                if (heldFood != null)
+                {
+                    Destroy(heldFood);
+                }
+                return true;
             }
-            
-            if (heldFood != null)
-            {
-                Destroy(heldFood);
-            }
-            return true;
         }
     }
 }

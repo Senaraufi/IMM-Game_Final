@@ -1,151 +1,157 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI; // Required for NavMeshAgent
-using TMPro; // Required for TextMeshPro
+using UnityEngine.AI;
+using TMPro;
+using System.Collections;
 
 namespace SojaExiles
 {
     public class animal_people_wolf_1 : MonoBehaviour
     {
-        public float proximityThreshold = 1f;
+        public float proximityThreshold = 0.5f;
         public string requestMessage = "Can I have a burger, please?";
         public TMP_Text uiText;
+        public float messageDisplayTime = 2f; // How long to show messages
 
-        private NavMeshAgent npcAgent;
-        private bool moveToTrigger = false;
-        private Transform playerTransform;
-        private Vector3 targetPosition;
-        private bool isInQueue = false;
+        private NavMeshAgent agent;
         private RegisterQueueManager queueManager;
-        private bool isRegistered = false;
+        private CustomerAnimationController animController;
+        private bool isWaitingInQueue = false;
+        private bool hasBeenServed = false;
+        private Vector3 startPosition;
+        private Coroutine messageCoroutine;
 
         void Start()
         {
-            npcAgent = GetComponent<NavMeshAgent>();
-            if (npcAgent == null)
-            {
-                Debug.LogError("NavMeshAgent component not found on NPC!");
-            }
-
+            agent = GetComponent<NavMeshAgent>();
+            animController = GetComponent<CustomerAnimationController>();
             queueManager = RegisterQueueManager.Instance;
-            if (queueManager == null)
-            {
-                Debug.LogError("RegisterQueueManager not found in the scene!");
-            }
-            else if (!isRegistered && CompareTag("Customer"))
-            {
-                // Register with the queue manager if we're a customer
-                queueManager.RegisterCustomer(this);
-                isRegistered = true;
-            }
 
+            if (agent == null || queueManager == null) return;
+
+            startPosition = transform.position;
+            
+            // Show initial request message
             if (uiText != null)
             {
-                uiText.text = "";
-            }
-
-            GameObject playerObject = GameObject.FindWithTag("Player");
-            if (playerObject != null)
-            {
-                playerTransform = playerObject.transform;
-            }
-            else
-            {
-                Debug.LogError("Player object with tag 'Player' not found!");
+                ShowMessage(requestMessage);
             }
         }
 
         void Update()
         {
-            if (moveToTrigger && npcAgent != null && queueManager != null)
+            if (!hasBeenServed && isWaitingInQueue && queueManager != null)
             {
-                if (!isInQueue)
+                Vector3 targetPosition = queueManager.GetPositionInQueue(this);
+                float distance = Vector3.Distance(transform.position, targetPosition);
+                
+                if (distance > proximityThreshold)
                 {
-                    targetPosition = queueManager.GetQueuePosition(this);
-                    isInQueue = true;
-                }
+                    agent.SetDestination(targetPosition);
+                    animController?.SetWalking(true);
 
-                if (npcAgent.isActiveAndEnabled)
-                {
-                    npcAgent.SetDestination(targetPosition);
-
-                    if (Vector3.Distance(transform.position, targetPosition) <= proximityThreshold)
+                    Vector3 moveDirection = (targetPosition - transform.position).normalized;
+                    if (moveDirection != Vector3.zero)
                     {
-                        if (queueManager.IsFirstInQueue(this))
+                        transform.rotation = Quaternion.LookRotation(moveDirection);
+                    }
+                }
+                else
+                {
+                    agent.ResetPath();
+                    animController?.SetWalking(false);
+                    
+                    if (Camera.main != null)
+                    {
+                        Vector3 directionToCamera = Camera.main.transform.position - transform.position;
+                        directionToCamera.y = 0;
+                        if (directionToCamera != Vector3.zero)
                         {
-                            AskForBurger();
-                            FacePlayer();
+                            transform.rotation = Quaternion.LookRotation(directionToCamera);
                         }
                     }
                 }
             }
-
-            FacePlayer();
         }
 
         public void StartMovingToRegister()
         {
-            if (!moveToTrigger && npcAgent != null && npcAgent.isActiveAndEnabled)
+            if (!CompareTag("Customer") || queueManager == null) return;
+
+            isWaitingInQueue = true;
+            queueManager.RegisterCustomer(this);
+        }
+
+        public void ServeFood(string foodServed)
+        {
+            if (!queueManager.IsFirstInQueue(this)) return;
+
+            // Check if correct food was served
+            bool isCorrectFood = foodServed.ToLower().Contains("burger");
+            
+            // Show appropriate message
+            if (isCorrectFood)
             {
-                moveToTrigger = true;
-                if (uiText != null)
-                {
-                    uiText.text = "";
-                }
+                ShowMessage("Thank you!");
+                StartCoroutine(LeaveAfterDelay(1f)); // Leave after saying thank you
+            }
+            else
+            {
+                ShowMessage("NO!");
+                // Don't leave, wait for correct food
+                return;
+            }
+
+            hasBeenServed = isCorrectFood;
+            if (isCorrectFood)
+            {
+                isWaitingInQueue = false;
+                queueManager.CustomerLeaving(this);
             }
         }
 
-        public void UpdateQueuePosition(Vector3 newPosition)
+        private IEnumerator LeaveAfterDelay(float delay)
         {
-            targetPosition = newPosition;
-            if (npcAgent != null && npcAgent.isActiveAndEnabled && moveToTrigger)
-            {
-                npcAgent.SetDestination(targetPosition);
-            }
+            yield return new WaitForSeconds(delay);
+            StartCoroutine(LeaveAndDestroy());
         }
 
-        void AskForBurger()
+        private void ShowMessage(string message)
         {
-            if (uiText != null && string.IsNullOrEmpty(uiText.text))
+            if (uiText == null) return;
+
+            // Stop any existing message coroutine
+            if (messageCoroutine != null)
             {
-                uiText.text = requestMessage;
+                StopCoroutine(messageCoroutine);
             }
+
+            // Start new message coroutine
+            messageCoroutine = StartCoroutine(ShowMessageCoroutine(message));
         }
 
-        void FacePlayer()
+        private IEnumerator ShowMessageCoroutine(string message)
         {
-            if (playerTransform != null)
-            {
-                Vector3 direction = (playerTransform.position - transform.position).normalized;
-                direction.y = 0;
-                if (direction != Vector3.zero)
-                {
-                    Quaternion lookRotation = Quaternion.LookRotation(direction);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
-                }
-            }
+            uiText.text = message;
+            uiText.gameObject.SetActive(true);
+            
+            yield return new WaitForSeconds(messageDisplayTime);
+            
+            uiText.gameObject.SetActive(false);
         }
 
-        public void FinishOrder()
+        private IEnumerator LeaveAndDestroy()
         {
-            if (queueManager != null)
+            agent.SetDestination(startPosition);
+            animController?.SetWalking(true);
+
+            float timeout = 5f;
+            while (Vector3.Distance(transform.position, startPosition) > proximityThreshold && timeout > 0)
             {
-                queueManager.RemoveFromQueue(this);
-                moveToTrigger = false;
-                isInQueue = false;
-                if (uiText != null)
-                {
-                    uiText.text = "";
-                }
-                
-                // Optional: Make NPC leave after being served
-                if (npcAgent != null && npcAgent.isActiveAndEnabled)
-                {
-                    Vector3 exitPosition = transform.position - transform.forward * 5f;
-                    npcAgent.SetDestination(exitPosition);
-                }
+                timeout -= Time.deltaTime;
+                yield return null;
             }
+
+            Destroy(gameObject);
         }
     }
 }
