@@ -116,23 +116,12 @@ namespace SojaExiles
                 Debug.Log($"[{gameObject.name}] Requested Food: {requestedFood}");
                 Debug.Log($"[{gameObject.name}] Served Food String: {foodServed}");
                 
-                // Try to parse the food type, ignoring case
+                // Try to parse the food type
                 if (System.Enum.TryParse<FoodType>(foodServed, true, out servedFood))
                 {
                     Debug.Log($"[{gameObject.name}] Successfully parsed served food to: {servedFood}");
-                    
-                    // Try multiple comparison methods
-                    bool enumEqual = servedFood == requestedFood;
-                    bool stringEqual = servedFood.ToString().Equals(requestedFood.ToString(), System.StringComparison.OrdinalIgnoreCase);
-                    bool valueEqual = (int)servedFood == (int)requestedFood;
-                    
-                    Debug.Log($"[{gameObject.name}] Comparison Results:");
-                    Debug.Log($"  - Enum Equality: {enumEqual}");
-                    Debug.Log($"  - String Equality: {stringEqual}");
-                    Debug.Log($"  - Value Equality: {valueEqual}");
-                    
-                    bool isCorrectFood = enumEqual || stringEqual || valueEqual;
-                    Debug.Log($"[{gameObject.name}] Final Result - Is correct food? {isCorrectFood}");
+                    bool isCorrectFood = servedFood == requestedFood;
+                    Debug.Log($"[{gameObject.name}] Is correct food? {isCorrectFood}");
                     
                     // Show response first
                     customerRequest.ShowResponse(isCorrectFood);

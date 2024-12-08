@@ -43,24 +43,26 @@ namespace SojaExiles
 
         private void OnTriggerEnter(Collider other)
         {
+            Debug.Log($"[{gameObject.name}] OnTriggerEnter with: {other.gameObject.name}");
+            
             if (!other.gameObject.CompareTag("Food"))
             {
-                Debug.Log($"[{gameObject.name}] Non-food object entered trigger: {other.gameObject.name} with tag {other.gameObject.tag}");
-                return;
-            }
-            
-            Debug.Log($"[{gameObject.name}] Food object entered trigger: {other.gameObject.name}");
-            
-            // Check if this customer is first in queue
-            if (queueManager == null)
-            {
-                Debug.LogError($"[{gameObject.name}] Queue manager is null!");
+                Debug.Log($"[{gameObject.name}] Not a food object, ignoring");
                 return;
             }
 
-            if (wolfComponent == null)
+            // Get components
+            FoodScript foodScript = other.gameObject.GetComponent<FoodScript>();
+            if (foodScript == null)
             {
-                Debug.LogError($"[{gameObject.name}] Wolf component is null!");
+                Debug.LogError($"[{gameObject.name}] No FoodScript on food object!");
+                return;
+            }
+
+            // Queue check
+            if (queueManager == null || wolfComponent == null)
+            {
+                Debug.LogError($"[{gameObject.name}] Missing queue manager or wolf component!");
                 return;
             }
 
@@ -70,74 +72,46 @@ namespace SojaExiles
                 return;
             }
 
-            FoodScript foodScript = other.gameObject.GetComponent<FoodScript>();
-            if (foodScript == null)
-            {
-                Debug.LogError($"[{gameObject.name}] FoodScript component not found on the Food GameObject.");
-                return;
-            }
+            // Get food types
+            FoodType incomingFood = foodScript.FoodType;
+            FoodType wantedFood = customerFoodRequest.GetDesiredFood();
 
-            if (customerFoodRequest == null)
-            {
-                Debug.LogError($"[{gameObject.name}] CustomerFoodRequest is null!");
-                return;
-            }
-
-            FoodType incomingFoodType = foodScript.FoodType;
-            FoodType desiredFood = customerFoodRequest.GetDesiredFood();
+            // Simple direct comparison
+            bool isCorrectFood = incomingFood == wantedFood;
             
-            Debug.Log($"[{gameObject.name}] ========= FOOD COMPARISON =========");
-            Debug.Log($"[{gameObject.name}] Desired Food Details:");
-            Debug.Log($"  - Type: {desiredFood}");
-            Debug.Log($"  - Enum Value: {(int)desiredFood}");
-            Debug.Log($"  - String Value: {desiredFood.ToString()}");
-            Debug.Log($"[{gameObject.name}] Incoming Food Details:");
-            Debug.Log($"  - Type: {incomingFoodType}");
-            Debug.Log($"  - Enum Value: {(int)incomingFoodType}");
-            Debug.Log($"  - String Value: {incomingFoodType.ToString()}");
-            
-            // Try multiple comparison methods
-            bool enumEqual = incomingFoodType == desiredFood;
-            bool stringEqual = incomingFoodType.ToString().Equals(desiredFood.ToString(), System.StringComparison.OrdinalIgnoreCase);
-            bool valueEqual = (int)incomingFoodType == (int)desiredFood;
-            
-            Debug.Log($"[{gameObject.name}] Comparison Results:");
-            Debug.Log($"  - Enum Equality: {enumEqual}");
-            Debug.Log($"  - String Equality: {stringEqual}");
-            Debug.Log($"  - Value Equality: {valueEqual}");
-            
-            bool isCorrectFood = enumEqual || stringEqual || valueEqual;
-            Debug.Log($"[{gameObject.name}] Final Result - Is correct food? {isCorrectFood}");
+            Debug.Log($"[{gameObject.name}] Food comparison:");
+            Debug.Log($"  Wanted: {wantedFood} ({(int)wantedFood})");
+            Debug.Log($"  Got: {incomingFood} ({(int)incomingFood})");
+            Debug.Log($"  Match? {isCorrectFood}");
 
             if (isCorrectFood)
             {
-                Debug.Log($"[{gameObject.name}] Correct food received, serving...");
-                // Play happy animation when correct food enters trigger
+                Debug.Log($"[{gameObject.name}] Correct food! Serving...");
+                
+                // Show response first
+                customerFoodRequest.ShowResponse(true);
+                
+                // Play animation
                 if (animationController != null)
                 {
                     animationController.PlayHappyAnimation();
-                    Debug.Log($"[{gameObject.name}] Triggering wave animation");
                 }
                 
-                // Show response and serve food
-                customerFoodRequest.ShowResponse(true);
-                wolfComponent.ServeFood(incomingFoodType.ToString());
-                
-                // Destroy the food object
+                // Serve and cleanup
+                wolfComponent.ServeFood(incomingFood.ToString());
                 Destroy(other.gameObject);
             }
             else
             {
-                Debug.Log($"[{gameObject.name}] Wrong food received, showing angry response");
+                Debug.Log($"[{gameObject.name}] Wrong food!");
                 
-                // Show angry response
+                // Show response first
                 customerFoodRequest.ShowResponse(false);
                 
-                // Play angry animation if available
+                // Play animation
                 if (animationController != null)
                 {
                     animationController.PlayAngryAnimation();
-                    Debug.Log($"[{gameObject.name}] Triggering angry animation");
                 }
             }
         }
