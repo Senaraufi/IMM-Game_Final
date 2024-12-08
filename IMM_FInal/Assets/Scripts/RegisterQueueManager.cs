@@ -78,6 +78,31 @@ namespace SojaExiles
             }
         }
 
+        public void RemoveCustomer(animal_people_wolf_1 customer)
+        {
+            Debug.Log($"[{name}] Removing customer {customer.name} from queue");
+            if (queuePositions.ContainsKey(customer))
+            {
+                queuePositions.Remove(customer);
+                
+                // Remove from queue
+                var tempQueue = new Queue<animal_people_wolf_1>();
+                while (npcQueue.Count > 0)
+                {
+                    var npc = npcQueue.Dequeue();
+                    if (npc != customer)
+                    {
+                        tempQueue.Enqueue(npc);
+                    }
+                }
+                npcQueue = tempQueue;
+                
+                // Update positions for remaining customers
+                UpdateQueuePositions();
+                Debug.Log($"[{name}] Customer removed, remaining in queue: {npcQueue.Count}");
+            }
+        }
+
         private void UpdateQueuePositions()
         {
             if (registerPosition == null) return;

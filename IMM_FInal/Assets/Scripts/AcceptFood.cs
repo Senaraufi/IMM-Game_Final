@@ -8,43 +8,38 @@ namespace SojaExiles
 {
     public class AcceptFood : MonoBehaviour
     {
-        [SerializeField]
-        private TextHide textHide;
-
-        [SerializeField]
-        private FoodType acceptedFoodType = FoodType.pizza;
-
+        private CustomerFoodRequest customerFoodRequest;
         private CustomerAnimationController animationController;
+        private animal_people_wolf_1 wolfComponent;
 
         private void Start()
         {
+            customerFoodRequest = GetComponent<CustomerFoodRequest>();
             animationController = GetComponent<CustomerAnimationController>();
+            wolfComponent = GetComponent<animal_people_wolf_1>();
             
-            // Check if TextHide is assigned
-            if (textHide == null)
+            if (customerFoodRequest == null)
             {
-                Debug.LogError($"[{gameObject.name}] TextHide component not assigned in inspector!");
+                Debug.LogError($"[{gameObject.name}] CustomerFoodRequest component not found!");
             }
             
             if (animationController == null)
             {
                 Debug.LogError($"[{gameObject.name}] CustomerAnimationController not found!");
             }
-        }
 
-        private void ShowMessage(string message)
-        {
-            if (textHide != null)
+            if (wolfComponent == null)
             {
-                textHide.ShowText(message);
+                Debug.LogError($"[{gameObject.name}] animal_people_wolf_1 component not found!");
             }
-            Debug.Log($"[{gameObject.name}] {message}");
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Food"))
             {
+                Debug.Log($"[{gameObject.name}] Food object entered trigger: {other.gameObject.name}");
+                
                 FoodScript foodScript = other.gameObject.GetComponent<FoodScript>();
                 if (foodScript == null)
                 {
@@ -53,52 +48,59 @@ namespace SojaExiles
                 }
 
                 FoodType incomingFoodType = foodScript.FoodType;
-
-                if (incomingFoodType != acceptedFoodType)
+                FoodType desiredFood = customerFoodRequest.GetDesiredFood();
+                
+                Debug.Log($"[{gameObject.name}] Food type comparison:");
+                Debug.Log($"  - Desired food (enum value): {desiredFood} ({(int)desiredFood})");
+                Debug.Log($"  - Received food (enum value): {incomingFoodType} ({(int)incomingFoodType})");
+                
+                bool isCorrectFood = incomingFoodType == desiredFood;
+                Debug.Log($"[{gameObject.name}] Is correct food? {isCorrectFood}");
+                
+                customerFoodRequest.ShowResponse(isCorrectFood);
+                
+                if (isCorrectFood && wolfComponent != null)
                 {
-                    ShowMessage("FUCK OFF");
-                }
-                else
-                {
-                    ShowMessage("Food accepted");
                     // Play happy animation when correct food enters trigger
                     if (animationController != null)
                     {
                         animationController.PlayHappyAnimation();
                         Debug.Log($"[{gameObject.name}] Triggering wave animation from OnTriggerEnter");
                     }
+                    
+                    // Serve food and trigger leaving sequence
+                    wolfComponent.ServeFood(incomingFoodType.ToString());
                 }
             }
         }
 
         public bool AcceptFoodItem(FoodType type, GameObject heldFood)
         {
-            if (type != acceptedFoodType)
+            if (customerFoodRequest == null || wolfComponent == null) return false;
+
+            bool isCorrectFood = (type == customerFoodRequest.GetDesiredFood());
+            customerFoodRequest.ShowResponse(isCorrectFood);
+            
+            if (isCorrectFood)
             {
-                ShowMessage("FUCK OFF");
-                return false;
-            }
-            else
-            {
-                ShowMessage("Food accepted");
-                
                 // Play happy animation when food is accepted
                 if (animationController != null)
                 {
                     animationController.PlayHappyAnimation();
                     Debug.Log($"[{gameObject.name}] Triggering wave animation from AcceptFoodItem");
                 }
-                else
-                {
-                    Debug.LogError($"[{gameObject.name}] Animation controller not found!");
-                }
                 
                 if (heldFood != null)
                 {
                     Destroy(heldFood);
                 }
+                
+                // Serve food and trigger leaving sequence
+                wolfComponent.ServeFood(type.ToString());
                 return true;
             }
+            
+            return false;
         }
     }
 }
