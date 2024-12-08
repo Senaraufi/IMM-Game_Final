@@ -66,13 +66,17 @@ namespace SojaExiles
                     isInQueue = true;
                 }
 
-                npcAgent.SetDestination(targetPosition);
-
-                if (Vector3.Distance(transform.position, targetPosition) <= proximityThreshold)
+                if (npcAgent.isActiveAndEnabled)
                 {
-                    if (queueManager.IsFirstInQueue(this))
+                    npcAgent.SetDestination(targetPosition);
+
+                    if (Vector3.Distance(transform.position, targetPosition) <= proximityThreshold)
                     {
-                        AskForBurger();
+                        if (queueManager.IsFirstInQueue(this))
+                        {
+                            AskForBurger();
+                            FacePlayer();
+                        }
                     }
                 }
             }
@@ -82,16 +86,20 @@ namespace SojaExiles
 
         public void StartMovingToRegister()
         {
-            if (!moveToTrigger)
+            if (!moveToTrigger && npcAgent != null && npcAgent.isActiveAndEnabled)
             {
                 moveToTrigger = true;
+                if (uiText != null)
+                {
+                    uiText.text = "";
+                }
             }
         }
 
         public void UpdateQueuePosition(Vector3 newPosition)
         {
             targetPosition = newPosition;
-            if (npcAgent != null && moveToTrigger)
+            if (npcAgent != null && npcAgent.isActiveAndEnabled && moveToTrigger)
             {
                 npcAgent.SetDestination(targetPosition);
             }
@@ -99,7 +107,7 @@ namespace SojaExiles
 
         void AskForBurger()
         {
-            if (uiText != null)
+            if (uiText != null && string.IsNullOrEmpty(uiText.text))
             {
                 uiText.text = requestMessage;
             }
@@ -111,8 +119,11 @@ namespace SojaExiles
             {
                 Vector3 direction = (playerTransform.position - transform.position).normalized;
                 direction.y = 0;
-                Quaternion lookRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                if (direction != Vector3.zero)
+                {
+                    Quaternion lookRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                }
             }
         }
 
@@ -126,6 +137,13 @@ namespace SojaExiles
                 if (uiText != null)
                 {
                     uiText.text = "";
+                }
+                
+                // Optional: Make NPC leave after being served
+                if (npcAgent != null && npcAgent.isActiveAndEnabled)
+                {
+                    Vector3 exitPosition = transform.position - transform.forward * 5f;
+                    npcAgent.SetDestination(exitPosition);
                 }
             }
         }
