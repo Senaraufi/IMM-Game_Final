@@ -114,10 +114,13 @@ namespace SojaExiles
             
             foreach (var npc in npcQueue)
             {
-                Vector3 newPosition = registerPosition.position - (registerPosition.forward * spacingBetweenNPCs * index);
-                queuePositions[npc] = newPosition;
-                npc.UpdateQueuePosition(newPosition);
-                index++;
+                if (npc != null)
+                {
+                    Vector3 newPosition = registerPosition.position - (registerPosition.forward * spacingBetweenNPCs * index);
+                    queuePositions[npc] = newPosition;
+                    npc.UpdateQueuePosition(newPosition);
+                    index++;
+                }
             }
         }
 
@@ -128,13 +131,13 @@ namespace SojaExiles
 
         public void TriggerAllCustomersToRegister()
         {
-            foreach (var customer in availableCustomers)
+            foreach (var customer in availableCustomers.ToArray())
             {
-                if (!npcQueue.Contains(customer))
+                if (customer != null && !npcQueue.Contains(customer))
                 {
                     customer.StartMovingToRegister();
                 }
             }
         }
     }
-} 
+}
