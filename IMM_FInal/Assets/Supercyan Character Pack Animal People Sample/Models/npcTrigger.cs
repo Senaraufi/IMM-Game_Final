@@ -98,7 +98,9 @@ namespace SojaExiles
         public void ServeFood(string foodServed)
         {
             Debug.Log($"[{gameObject.name}] ServeFood called with: {foodServed}");
-            if (!queueManager.IsFirstInQueue(this))
+            
+            // Double check that we're first in queue
+            if (queueManager == null || !queueManager.IsFirstInQueue(this))
             {
                 Debug.Log($"[{gameObject.name}] Not first in queue, ignoring serve");
                 return;
@@ -109,24 +111,58 @@ namespace SojaExiles
             {
                 FoodType requestedFood = customerRequest.GetDesiredFood();
                 FoodType servedFood;
-                if (System.Enum.TryParse(foodServed, true, out servedFood))
+                
+                Debug.Log($"[{gameObject.name}] ========= SERVE FOOD COMPARISON =========");
+                Debug.Log($"[{gameObject.name}] Requested Food: {requestedFood}");
+                Debug.Log($"[{gameObject.name}] Served Food String: {foodServed}");
+                
+                // Try to parse the food type, ignoring case
+                if (System.Enum.TryParse<FoodType>(foodServed, true, out servedFood))
                 {
-                    bool isCorrectFood = servedFood == requestedFood;
-                    Debug.Log($"[{gameObject.name}] Food comparison - Requested: {requestedFood}, Served: {servedFood}, Correct? {isCorrectFood}");
-                    customerRequest.ShowResponse(isCorrectFood);
-                    hasBeenServed = true;
-                    isWaitingInQueue = false; // No longer waiting in queue
+                    Debug.Log($"[{gameObject.name}] Successfully parsed served food to: {servedFood}");
                     
-                    if (isCorrectFood)
+                    // Try multiple comparison methods
+                    bool enumEqual = servedFood == requestedFood;
+                    bool stringEqual = servedFood.ToString().Equals(requestedFood.ToString(), System.StringComparison.OrdinalIgnoreCase);
+                    bool valueEqual = (int)servedFood == (int)requestedFood;
+                    
+                    Debug.Log($"[{gameObject.name}] Comparison Results:");
+                    Debug.Log($"  - Enum Equality: {enumEqual}");
+                    Debug.Log($"  - String Equality: {stringEqual}");
+                    Debug.Log($"  - Value Equality: {valueEqual}");
+                    
+                    bool isCorrectFood = enumEqual || stringEqual || valueEqual;
+                    Debug.Log($"[{gameObject.name}] Final Result - Is correct food? {isCorrectFood}");
+                    
+                    // Show response first
+                    customerRequest.ShowResponse(isCorrectFood);
+                    
+                    if (isCorrectFood && !hasBeenServed)
                     {
+                        // Mark as served and start leaving sequence
+                        hasBeenServed = true;
+                        isWaitingInQueue = false;
                         Debug.Log($"[{gameObject.name}] Starting leave sequence after correct food");
+                        
+                        // Remove from queue immediately
+                        if (queueManager != null)
+                        {
+                            queueManager.RemoveCustomer(this);
+                        }
+                        
+                        // Start leave sequence with a short delay
                         StartCoroutine(LeaveAfterDelay(2f));
                     }
+                }
+                else
+                {
+                    Debug.LogError($"[{gameObject.name}] Failed to parse food type from string: {foodServed}");
+                    customerRequest.ShowResponse(false);
                 }
             }
             else
             {
-                Debug.LogError($"CustomerFoodRequest component missing on {gameObject.name}");
+                Debug.LogError($"[{gameObject.name}] CustomerFoodRequest component missing on {gameObject.name}");
             }
         }
 
@@ -157,11 +193,15 @@ namespace SojaExiles
                 {
                     if (agent == null) break; // Safety check
                     
-                    agent.SetDestination(pathToRegister[i]);
+                    Vector3 targetPoint = pathToRegister[i];
+                    agent.SetDestination(targetPoint);
                     animController?.SetWalking(true);
 
+                    // Wait until we reach the point or timeout
                     float pointTimeout = 3f;
-                    while (agent != null && Vector3.Distance(transform.position, pathToRegister[i]) > proximityThreshold && pointTimeout > 0)
+                    while (agent != null && !agent.pathStatus.Equals(NavMeshPathStatus.PathInvalid) && 
+                           Vector3.Distance(transform.position, targetPoint) > proximityThreshold && 
+                           pointTimeout > 0)
                     {
                         pointTimeout -= Time.deltaTime;
                         yield return null;
@@ -176,12 +216,18 @@ namespace SojaExiles
                 agent.SetDestination(startPosition);
                 animController?.SetWalking(true);
 
+                // Wait until we reach the start position or timeout
                 float timeout = 5f;
-                while (agent != null && Vector3.Distance(transform.position, startPosition) > proximityThreshold && timeout > 0)
+                while (agent != null && !agent.pathStatus.Equals(NavMeshPathStatus.PathInvalid) && 
+                       Vector3.Distance(transform.position, startPosition) > proximityThreshold && 
+                       timeout > 0)
                 {
                     timeout -= Time.deltaTime;
                     yield return null;
                 }
+
+                // Stop walking animation
+                animController?.SetWalking(false);
 
                 // Set final rotation before destroying
                 transform.rotation = startRotation;

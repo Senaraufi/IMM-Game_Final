@@ -12,6 +12,7 @@ namespace SojaExiles
         private const string IS_WALKING = "IsWalking";
         private const string IS_IDLE = "IsIdle";
         private const string WAVE = "Wave";
+        private const string ANGRY = "Angry";
 
         void Start()
         {
@@ -78,6 +79,21 @@ namespace SojaExiles
             }
 
             animator.SetTrigger(WAVE);
+            Debug.Log($"[{gameObject.name}] Playing happy (wave) animation");
+        }
+
+        public void PlayAngryAnimation()
+        {
+            if (animator == null)
+            {
+                Debug.LogError($"[{gameObject.name}] Cannot play angry animation - No animator!");
+                return;
+            }
+
+            // For now, we'll just use the wave animation since that's what we have
+            // You can replace this with a proper angry animation trigger when you have one
+            animator.SetTrigger(WAVE);
+            Debug.Log($"[{gameObject.name}] Playing angry animation (using wave for now)");
         }
     }
 }
