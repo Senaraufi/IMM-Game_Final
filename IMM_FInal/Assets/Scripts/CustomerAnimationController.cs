@@ -19,19 +19,22 @@ namespace SojaExiles
             animator = GetComponent<Animator>();
             if (animator == null)
             {
-                Debug.LogError($"[{gameObject.name}] NO ANIMATOR FOUND ON OBJECT!");
-                return;
+                Debug.LogError($"[{gameObject.name}] NO ANIMATOR FOUND ON OBJECT! Adding one now...");
+                animator = gameObject.AddComponent<Animator>();
             }
 
             // Verify animator controller
             if (animator.runtimeAnimatorController == null)
             {
-                Debug.LogError($"[{gameObject.name}] NO ANIMATOR CONTROLLER ASSIGNED!");
+                Debug.LogError($"[{gameObject.name}] NO ANIMATOR CONTROLLER ASSIGNED! Please assign an Animator Controller in the Unity Inspector.");
                 return;
             }
 
             // Store initial position
             lastPosition = transform.position;
+            
+            // Debug log to confirm initialization
+            Debug.Log($"[{gameObject.name}] CustomerAnimationController initialized successfully!");
         }
 
         void Update()
@@ -43,6 +46,12 @@ namespace SojaExiles
             float movement = Vector3.Distance(currentPosition, lastPosition);
             bool wasMoving = isMoving;
             isMoving = movement > 0.001f;
+
+            // Log state changes for debugging
+            if (wasMoving != isMoving)
+            {
+                Debug.Log($"[{gameObject.name}] Movement state changed: {(isMoving ? "Started moving" : "Stopped moving")}");
+            }
 
             // Set animation parameters
             animator.SetBool(IS_WALKING, isMoving);

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SojaExiles
 {
@@ -18,6 +19,8 @@ namespace SojaExiles
         private bool isWaitingInQueue = false;
         private bool hasBeenServed = false;
         private Vector3 startPosition;
+        private Quaternion startRotation;
+        private List<Vector3> pathToRegister = new List<Vector3>();
         private Coroutine messageCoroutine;
 
         void Start()
@@ -28,7 +31,9 @@ namespace SojaExiles
 
             if (agent == null || queueManager == null) return;
 
+            // Store initial position and rotation
             startPosition = transform.position;
+            startRotation = transform.rotation;
             
             // Show initial request message
             if (uiText != null)
@@ -46,6 +51,13 @@ namespace SojaExiles
                 
                 if (distance > proximityThreshold)
                 {
+                    // Record path points while walking to register
+                    if (!hasBeenServed && pathToRegister.Count == 0 || 
+                        (pathToRegister.Count > 0 && Vector3.Distance(pathToRegister[pathToRegister.Count - 1], transform.position) > 1f))
+                    {
+                        pathToRegister.Add(transform.position);
+                    }
+
                     agent.SetDestination(targetPosition);
                     animController?.SetWalking(true);
 
@@ -78,54 +90,117 @@ namespace SojaExiles
             if (!CompareTag("Customer") || queueManager == null) return;
 
             isWaitingInQueue = true;
+            pathToRegister.Clear(); // Clear path before starting new journey
+            pathToRegister.Add(startPosition); // Add starting position
             queueManager.RegisterCustomer(this);
         }
 
         public void ServeFood(string foodServed)
         {
-            if (!queueManager.IsFirstInQueue(this)) return;
-
-            // Check if correct food was served
-            bool isCorrectFood = foodServed.ToLower().Contains("burger");
-            
-            // Show appropriate message
-            if (isCorrectFood)
+            Debug.Log($"[{gameObject.name}] ServeFood called with: {foodServed}");
+            if (!queueManager.IsFirstInQueue(this))
             {
-                ShowMessage("Thank you!");
-                StartCoroutine(LeaveAfterDelay(1f)); // Leave after saying thank you
-            }
-            else
-            {
-                ShowMessage("NO!");
-                // Don't leave, wait for correct food
+                Debug.Log($"[{gameObject.name}] Not first in queue, ignoring serve");
                 return;
             }
 
-            hasBeenServed = isCorrectFood;
-            if (isCorrectFood)
+            var customerRequest = GetComponent<CustomerFoodRequest>();
+            if (customerRequest != null)
             {
-                isWaitingInQueue = false;
-                queueManager.CustomerLeaving(this);
+                FoodType requestedFood = customerRequest.GetDesiredFood();
+                FoodType servedFood;
+                if (System.Enum.TryParse(foodServed, true, out servedFood))
+                {
+                    bool isCorrectFood = servedFood == requestedFood;
+                    Debug.Log($"[{gameObject.name}] Food comparison - Requested: {requestedFood}, Served: {servedFood}, Correct? {isCorrectFood}");
+                    customerRequest.ShowResponse(isCorrectFood);
+                    hasBeenServed = true;
+                    isWaitingInQueue = false; // No longer waiting in queue
+                    
+                    if (isCorrectFood)
+                    {
+                        Debug.Log($"[{gameObject.name}] Starting leave sequence after correct food");
+                        StartCoroutine(LeaveAfterDelay(2f));
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError($"CustomerFoodRequest component missing on {gameObject.name}");
             }
         }
 
         private IEnumerator LeaveAfterDelay(float delay)
         {
+            Debug.Log($"[{gameObject.name}] LeaveAfterDelay started with delay: {delay}");
             yield return new WaitForSeconds(delay);
+            Debug.Log($"[{gameObject.name}] Delay finished, starting LeaveAndDestroy");
+            
+            // Remove from queue before starting to leave
+            if (queueManager != null)
+            {
+                queueManager.RemoveCustomer(this);
+            }
+            
             StartCoroutine(LeaveAndDestroy());
+        }
+
+        private IEnumerator LeaveAndDestroy()
+        {
+            Debug.Log($"[{gameObject.name}] LeaveAndDestroy started. Path points: {pathToRegister.Count}");
+            
+            // First walk through recorded path points in reverse
+            if (pathToRegister.Count > 1)
+            {
+                Debug.Log($"[{gameObject.name}] Walking through {pathToRegister.Count} path points in reverse");
+                for (int i = pathToRegister.Count - 1; i >= 0; i--)
+                {
+                    if (agent == null) break; // Safety check
+                    
+                    agent.SetDestination(pathToRegister[i]);
+                    animController?.SetWalking(true);
+
+                    float pointTimeout = 3f;
+                    while (agent != null && Vector3.Distance(transform.position, pathToRegister[i]) > proximityThreshold && pointTimeout > 0)
+                    {
+                        pointTimeout -= Time.deltaTime;
+                        yield return null;
+                    }
+                }
+            }
+
+            Debug.Log($"[{gameObject.name}] Returning to start position: {startPosition}");
+            // Finally return to start position with original rotation
+            if (agent != null)
+            {
+                agent.SetDestination(startPosition);
+                animController?.SetWalking(true);
+
+                float timeout = 5f;
+                while (agent != null && Vector3.Distance(transform.position, startPosition) > proximityThreshold && timeout > 0)
+                {
+                    timeout -= Time.deltaTime;
+                    yield return null;
+                }
+
+                // Set final rotation before destroying
+                transform.rotation = startRotation;
+                yield return new WaitForSeconds(0.5f);
+            }
+            
+            Debug.Log($"[{gameObject.name}] Destroying customer object");
+            Destroy(gameObject);
         }
 
         private void ShowMessage(string message)
         {
             if (uiText == null) return;
 
-            // Stop any existing message coroutine
             if (messageCoroutine != null)
             {
                 StopCoroutine(messageCoroutine);
             }
 
-            // Start new message coroutine
             messageCoroutine = StartCoroutine(ShowMessageCoroutine(message));
         }
 
@@ -137,21 +212,6 @@ namespace SojaExiles
             yield return new WaitForSeconds(messageDisplayTime);
             
             uiText.gameObject.SetActive(false);
-        }
-
-        private IEnumerator LeaveAndDestroy()
-        {
-            agent.SetDestination(startPosition);
-            animController?.SetWalking(true);
-
-            float timeout = 5f;
-            while (Vector3.Distance(transform.position, startPosition) > proximityThreshold && timeout > 0)
-            {
-                timeout -= Time.deltaTime;
-                yield return null;
-            }
-
-            Destroy(gameObject);
         }
     }
 }
