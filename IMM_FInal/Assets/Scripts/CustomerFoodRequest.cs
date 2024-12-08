@@ -40,7 +40,10 @@ namespace SojaExiles
         {
             desiredFood = Random.value < 0.5f ? FoodType.pizza : FoodType.hotdog;
             hasOrder = true;
-            Debug.Log($"[{gameObject.name}] Generated new order: {desiredFood}");
+            Debug.Log($"[{gameObject.name}] Generated new order:");
+            Debug.Log($"  - Food Type: {desiredFood}");
+            Debug.Log($"  - Food Type Value: {(int)desiredFood}");
+            Debug.Log($"  - Food Type String: {desiredFood.ToString()}");
             UpdateRequestDisplay();
         }
 
@@ -56,6 +59,10 @@ namespace SojaExiles
 
         public FoodType GetDesiredFood()
         {
+            Debug.Log($"[{gameObject.name}] GetDesiredFood called:");
+            Debug.Log($"  - Returning Food Type: {desiredFood}");
+            Debug.Log($"  - Food Type Value: {(int)desiredFood}");
+            Debug.Log($"  - Food Type String: {desiredFood.ToString()}");
             return desiredFood;
         }
 
