@@ -4946,7 +4946,7 @@ Animator:
   m_GameObject: {fileID: 729341707}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d196d39411c9c1240940bbcee1f08238, type: 2}
+  m_Controller: {fileID: 9100000, guid: 345cf0031920ef23ab5b3846137600cf, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -7732,7 +7732,7 @@ Animator:
   m_GameObject: {fileID: 1028237409}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d196d39411c9c1240940bbcee1f08238, type: 2}
+  m_Controller: {fileID: 9100000, guid: 345cf0031920ef23ab5b3846137600cf, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -8848,7 +8848,7 @@ Animator:
   m_GameObject: {fileID: 1230386602}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d196d39411c9c1240940bbcee1f08238, type: 2}
+  m_Controller: {fileID: 9100000, guid: 345cf0031920ef23ab5b3846137600cf, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -16865,6 +16865,14 @@ PrefabInstance:
     - target: {fileID: 185773859868474882, guid: 33cc7075490f68e3c81640bd2168e22e, type: 3}
       propertyPath: textHide
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4196318035310235473, guid: 33cc7075490f68e3c81640bd2168e22e, type: 3}
+      propertyPath: m_Speed
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4196318035310235473, guid: 33cc7075490f68e3c81640bd2168e22e, type: 3}
+      propertyPath: m_AngularSpeed
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 4196318035310235473, guid: 33cc7075490f68e3c81640bd2168e22e, type: 3}
       propertyPath: m_StoppingDistance
