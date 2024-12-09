@@ -10,9 +10,9 @@ Available memory:        15900 MB
 Using pre-set license
 Pro License: YES
 
-(Unity:118340): Gtk-CRITICAL **: 21:12:35.895: gtk_window_set_default_icon: assertion 'GDK_IS_PIXBUF (icon)' failed
+(Unity:126299): Gtk-CRITICAL **: 22:01:48.864: gtk_window_set_default_icon: assertion 'GDK_IS_PIXBUF (icon)' failed
 
-(Unity:118340): GLib-GObject-CRITICAL **: 21:12:35.895: g_object_unref: assertion 'G_IS_OBJECT (object)' failed
+(Unity:126299): GLib-GObject-CRITICAL **: 22:01:48.864: g_object_unref: assertion 'G_IS_OBJECT (object)' failed
 Desktop is 1366 x 768 @ 60 Hz
 Initialize udev device monitor.
 
@@ -28,7 +28,7 @@ AssetImportWorker1
 -logFile
 Logs/AssetImportWorker1.log
 -srvPort
-33097
+45215
 Successfully changed project path to: /home/senaraufi/Desktop/IMM_FinalGame/IMM-Game_Final/IMM_FInal
 /home/senaraufi/Desktop/IMM_FinalGame/IMM-Game_Final/IMM_FInal
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
@@ -62,16 +62,16 @@ Successfully changed project path to: /home/senaraufi/Desktop/IMM_FinalGame/IMM-
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [140557082002432]  Target information:
+Player connection [139825739826176]  Target information:
 
-Player connection [140557082002432]  * "[IP] 192.168.1.13 [Port] 0 [Flags] 2 [Guid] 2747775288 [EditorId] 2747775288 [Version] 1048832 [Id] LinuxEditor(16,192.168.1.13) [Debug] 1 [PackageName] LinuxEditor [ProjectName] Editor" 
+Player connection [139825739826176]  * "[IP] 192.168.1.13 [Port] 0 [Flags] 2 [Guid] 284264928 [EditorId] 284264928 [Version] 1048832 [Id] LinuxEditor(16,192.168.1.13) [Debug] 1 [PackageName] LinuxEditor [ProjectName] Editor" 
 
-Player connection [140557082002432]  * "[IP] 172.17.0.1 [Port] 0 [Flags] 2 [Guid] 2747775288 [EditorId] 2747775288 [Version] 1048832 [Id] LinuxEditor(16,192.168.1.13) [Debug] 1 [PackageName] LinuxEditor [ProjectName] Editor" 
+Player connection [139825739826176]  * "[IP] 172.17.0.1 [Port] 0 [Flags] 2 [Guid] 284264928 [EditorId] 284264928 [Version] 1048832 [Id] LinuxEditor(16,192.168.1.13) [Debug] 1 [PackageName] LinuxEditor [ProjectName] Editor" 
 
-Player connection [140557082002432] Host joined multi-casting on [225.0.0.222:54997]...
-Player connection [140557082002432] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [139825739826176] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [139825739826176] Host joined alternative multi-casting on [225.0.0.222:34997]...
 [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
-Refreshing native plugins compatible for Editor in 5.76 ms, found 0 plugins.
+Refreshing native plugins compatible for Editor in 3.66 ms, found 0 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2022.3.47f1 (88c277b85d21)
 [Subsystems] Discovering subsystems at path /home/senaraufi/Unity/Hub/Editor/2022.3.47f1/Editor/Data/Resources/UnitySubsystems
@@ -87,51 +87,51 @@ fer_access_behavior GL_ARB_robustness GL_ARB_sample_shading GL_ARB_sampler_objec
 _ARB_texture_filter_anisotropic GL_ARB_texture_float GL_ARB_texture_gather GL_ARB_texture_mirror_clamp_to_edge GL_ARB_texture_multisample GL_ARB_texture_non_power_of_two GL_ARB_texture_query_levels GL_ARB_texture_query_lod GL_ARB_texture_rectangle GL_ARB_texture_rg GL_ARB_texture_rgb10_a2ui GL_ARB_texture_stencil8 GL_ARB_texture_storage GL_ARB_texture_storage_multisample GL_ARB_texture_swizzle GL_ARB_texture_view GL_ARB_timer_query GL_ARB_transform_feedback2 GL_ARB_transform_feedback3 GL_ARB_transform_feedback_instanced GL_ARB_transform_feedback_overflow_query GL_ARB_uniform_buffer_object GL_ARB_vertex_array_bgra GL_ARB_vertex_array_object GL_ARB_vertex_attrib_64bit GL_ARB_vertex_attrib_binding GL_ARB_vertex_buffer_object GL_ARB_vertex_shader GL_ARB_vertex_type_10f_11f_11f_rev GL_ARB_vertex_type_2_10_10_10_rev GL_ARB_viewport_array GL_ATI_blend_equation_separate GL_ATI_texture_float GL_EXT_EGL_image_storage GL_EXT_EGL_sync GL_EXT_abgr GL_EXT_blend_equation_separate GL_EXT_debug_label GL_EXT_demote_to_helper_
 invocation GL_EXT_draw_buffers2 GL_EXT_draw_instanced GL_EXT_framebuffer_blit GL_EXT_framebuffer_multisample GL_EXT_framebuffer_multisample_blit_scaled GL_EXT_framebuffer_object GL_EXT_framebuffer_sRGB GL_EXT_memory_object GL_EXT_memory_object_fd GL_EXT_packed_depth_stencil GL_EXT_packed_float GL_EXT_pixel_buffer_object GL_EXT_polygon_offset_clamp GL_EXT_provoking_vertex GL_EXT_semaphore GL_EXT_semaphore_fd GL_EXT_shader_framebuffer_fetch_non_coherent GL_EXT_shader_integer_mix GL_EXT_shader_samples_identical GL_EXT_texture_array GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_rgtc GL_EXT_texture_compression_s3tc GL_EXT_texture_filter_anisotropic GL_EXT_texture_integer GL_EXT_texture_sRGB GL_EXT_texture_sRGB_R8 GL_EXT_texture_sRGB_decode GL_EXT_texture_shadow_lod GL_EXT_texture_shared_exponent GL_EXT_texture_snorm GL_EXT_texture_storage GL_EXT_texture_swizzle GL_EXT_timer_query GL_EXT_transform_feedback GL_EXT_vertex_array_bgra GL_EXT_vertex_attrib_64bit GL_IBM_multimode_draw_arrays GL_INTEL_blackh
 ole_render GL_INTEL_performance_query GL_KHR_blend_equation_advanced GL_KHR_context_flush_control GL_KHR_debug GL_KHR_no_error GL_KHR_parallel_shader_compile GL_KHR_robust_buffer_access_behavior GL_KHR_robustness GL_KHR_texture_compression_astc_ldr GL_KHR_texture_compression_astc_sliced_3d GL_MESA_framebuffer_flip_y GL_MESA_pack_invert GL_MESA_shader_integer_functions GL_MESA_texture_signed_rgba GL_NV_alpha_to_coverage_dither_control GL_NV_compute_shader_derivatives GL_NV_conditional_render GL_NV_copy_image GL_NV_depth_clamp GL_NV_packed_depth_stencil GL_NV_texture_barrier GL_OES_EGL_image GL_S3_s3tc
-OPENGL LOG: Creating OpenGL 4.6 graphics device ; Context level  <OpenGL 4.5> ; Context handle 1967238464
+OPENGL LOG: Creating OpenGL 4.6 graphics device ; Context level  <OpenGL 4.5> ; Context handle 608473712
 Initialize mono
 Mono path[0] = '/home/senaraufi/Unity/Hub/Editor/2022.3.47f1/Editor/Data/Managed'
 Mono path[1] = '/home/senaraufi/Unity/Hub/Editor/2022.3.47f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-linux'
 Mono config path = '/home/senaraufi/Unity/Hub/Editor/2022.3.47f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56340
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56299
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: /home/senaraufi/Unity/Hub/Editor/2022.3.47f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
 Register platform support module: /home/senaraufi/Unity/Hub/Editor/2022.3.47f1/Editor/Data/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll
-Registered in 0.019633 seconds.
-- Loaded All Assemblies, in  0.804 seconds
+Registered in 0.018556 seconds.
+- Loaded All Assemblies, in  0.502 seconds
 Native extension for LinuxStandalone target not found
 Native extension for WebGL target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.518 seconds
-Domain Reload Profiling: 1322ms
-	BeginReloadAssembly (166ms)
+- Finished resetting the current domain, in  0.424 seconds
+Domain Reload Profiling: 926ms
+	BeginReloadAssembly (111ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (2ms)
-	RebuildCommonClasses (92ms)
-	RebuildNativeTypeToScriptingClass (23ms)
-	initialDomainReloadingComplete (146ms)
-	LoadAllAssembliesAndSetupDomain (375ms)
-		LoadAssemblies (165ms)
+		CreateAndSetChildDomain (1ms)
+	RebuildCommonClasses (50ms)
+	RebuildNativeTypeToScriptingClass (12ms)
+	initialDomainReloadingComplete (105ms)
+	LoadAllAssembliesAndSetupDomain (223ms)
+		LoadAssemblies (110ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (372ms)
-			TypeCache.Refresh (369ms)
-				TypeCache.ScanAssembly (339ms)
-			ScanForSourceGeneratedMonoScriptInfo (1ms)
+		AnalyzeDomain (221ms)
+			TypeCache.Refresh (219ms)
+				TypeCache.ScanAssembly (197ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
 			ResolveRequiredComponents (1ms)
-	FinalizeReload (518ms)
+	FinalizeReload (425ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (414ms)
+		SetupLoadedEditorAssemblies (352ms)
 			LogAssemblyErrors (0ms)
 			InitializePlatformSupportModulesInManaged (17ms)
 			SetLoadedEditorAssemblies (9ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (5ms)
-			ProcessInitializeOnLoadAttributes (277ms)
-			ProcessInitializeOnLoadMethodAttributes (106ms)
+			BeforeProcessingInitializeOnLoad (4ms)
+			ProcessInitializeOnLoadAttributes (248ms)
+			ProcessInitializeOnLoadMethodAttributes (73ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -140,7 +140,7 @@ Domain Reload Profiling: 1322ms
 Worker process is ready to serve import requests
 Caller must complete domain reload
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.955 seconds
+- Loaded All Assemblies, in  0.929 seconds
 Native extension for LinuxStandalone target not found
 Native extension for WebGL target not found
 Package Manager log level set to [2]
@@ -148,243 +148,48 @@ Package Manager log level set to [2]
 [Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
 [Package Manager] Cannot connect to Unity Package Manager local server
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.998 seconds
-Domain Reload Profiling: 1952ms
-	BeginReloadAssembly (232ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (9ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (40ms)
-	RebuildCommonClasses (74ms)
-	RebuildNativeTypeToScriptingClass (12ms)
-	initialDomainReloadingComplete (79ms)
-	LoadAllAssembliesAndSetupDomain (556ms)
-		LoadAssemblies (422ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (263ms)
-			TypeCache.Refresh (230ms)
-				TypeCache.ScanAssembly (209ms)
-			ScanForSourceGeneratedMonoScriptInfo (24ms)
-			ResolveRequiredComponents (7ms)
-	FinalizeReload (998ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (775ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (12ms)
-			SetLoadedEditorAssemblies (5ms)
-			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (87ms)
-			ProcessInitializeOnLoadAttributes (624ms)
-			ProcessInitializeOnLoadMethodAttributes (38ms)
-			AfterProcessingInitializeOnLoad (8ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (7ms)
-Launched and connected shader compiler UnityShaderCompiler after 0.02 seconds
-Refreshing native plugins compatible for Editor in 2.21 ms, found 0 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3345 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 31 unused Assets / (215.3 KB). Loaded Objects now: 3805.
-Memory consumption went from 135.4 MB to 135.2 MB.
-Total: 8.303539 ms (FindLiveObjects: 0.442630 ms CreateObjectMapping: 0.530308 ms MarkObjects: 6.796928 ms  DeleteObjects: 0.531505 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:CustomObjectIndexerAttribute: 232f87dd983dbecb2a4e21e08eb2cef8 -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
-  custom:AudioImporter_EditorPlatform: 2f0ff77a95e0ac474e3e8eeba4e2f7cb -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-========================================================================
-Received Prepare
-Caller must complete domain reload
-Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.551 seconds
-Native extension for LinuxStandalone target not found
-Native extension for WebGL target not found
-[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
-[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
-[Package Manager] Cannot connect to Unity Package Manager local server
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.323 seconds
-Domain Reload Profiling: 1873ms
-	BeginReloadAssembly (203ms)
+- Finished resetting the current domain, in  0.969 seconds
+Domain Reload Profiling: 1898ms
+	BeginReloadAssembly (217ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (10ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (61ms)
-	RebuildCommonClasses (45ms)
-	RebuildNativeTypeToScriptingClass (11ms)
-	initialDomainReloadingComplete (41ms)
-	LoadAllAssembliesAndSetupDomain (249ms)
-		LoadAssemblies (315ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (17ms)
-			TypeCache.Refresh (7ms)
-				TypeCache.ScanAssembly (0ms)
-			ScanForSourceGeneratedMonoScriptInfo (0ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (1324ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (865ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (14ms)
-			SetLoadedEditorAssemblies (5ms)
-			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (104ms)
-			ProcessInitializeOnLoadAttributes (688ms)
-			ProcessInitializeOnLoadMethodAttributes (45ms)
-			AfterProcessingInitializeOnLoad (9ms)
-			EditorAssembliesLoaded (0ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 1.84 ms, found 0 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3296 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 26 unused Assets / (195.3 KB). Loaded Objects now: 3808.
-Memory consumption went from 124.3 MB to 124.1 MB.
-Total: 8.358152 ms (FindLiveObjects: 0.971033 ms CreateObjectMapping: 0.802366 ms MarkObjects: 6.463623 ms  DeleteObjects: 0.117891 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:CustomObjectIndexerAttribute: 232f87dd983dbecb2a4e21e08eb2cef8 -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
-  custom:AudioImporter_EditorPlatform: 2f0ff77a95e0ac474e3e8eeba4e2f7cb -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-========================================================================
-Received Prepare
-Caller must complete domain reload
-Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.635 seconds
-Native extension for LinuxStandalone target not found
-Native extension for WebGL target not found
-[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
-[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
-[Package Manager] Cannot connect to Unity Package Manager local server
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.226 seconds
-Domain Reload Profiling: 1859ms
-	BeginReloadAssembly (173ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (6ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (45ms)
-	RebuildCommonClasses (85ms)
-	RebuildNativeTypeToScriptingClass (21ms)
-	initialDomainReloadingComplete (60ms)
-	LoadAllAssembliesAndSetupDomain (292ms)
-		LoadAssemblies (358ms)
-		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (18ms)
-			TypeCache.Refresh (8ms)
-				TypeCache.ScanAssembly (0ms)
-			ScanForSourceGeneratedMonoScriptInfo (0ms)
-			ResolveRequiredComponents (8ms)
-	FinalizeReload (1227ms)
-		ReleaseScriptCaches (0ms)
-		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (778ms)
-			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (11ms)
-			SetLoadedEditorAssemblies (4ms)
-			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (85ms)
-			ProcessInitializeOnLoadAttributes (625ms)
-			ProcessInitializeOnLoadMethodAttributes (42ms)
-			AfterProcessingInitializeOnLoad (9ms)
-			EditorAssembliesLoaded (1ms)
-		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 1.75 ms, found 0 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3296 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 26 unused Assets / (195.2 KB). Loaded Objects now: 3811.
-Memory consumption went from 124.3 MB to 124.1 MB.
-Total: 8.825136 ms (FindLiveObjects: 0.401709 ms CreateObjectMapping: 0.348937 ms MarkObjects: 7.918567 ms  DeleteObjects: 0.153669 ms)
-
-Prepare: number of updated asset objects reloaded= 0
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:CustomObjectIndexerAttribute: 232f87dd983dbecb2a4e21e08eb2cef8 -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
-  custom:AudioImporter_EditorPlatform: 2f0ff77a95e0ac474e3e8eeba4e2f7cb -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-========================================================================
-Received Prepare
-Caller must complete domain reload
-Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.578 seconds
-Native extension for LinuxStandalone target not found
-Native extension for WebGL target not found
-[Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
-[Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
-[Package Manager] Cannot connect to Unity Package Manager local server
-Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.431 seconds
-Domain Reload Profiling: 2008ms
-	BeginReloadAssembly (180ms)
-		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (10ms)
-		BackupInstance (0ms)
-		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (62ms)
-	RebuildCommonClasses (46ms)
+	RebuildCommonClasses (48ms)
 	RebuildNativeTypeToScriptingClass (12ms)
-	initialDomainReloadingComplete (38ms)
-	LoadAllAssembliesAndSetupDomain (301ms)
-		LoadAssemblies (354ms)
+	initialDomainReloadingComplete (60ms)
+	LoadAllAssembliesAndSetupDomain (591ms)
+		LoadAssemblies (351ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (17ms)
-			TypeCache.Refresh (7ms)
-				TypeCache.ScanAssembly (0ms)
-			ScanForSourceGeneratedMonoScriptInfo (0ms)
-			ResolveRequiredComponents (9ms)
-	FinalizeReload (1431ms)
+		AnalyzeDomain (324ms)
+			TypeCache.Refresh (292ms)
+				TypeCache.ScanAssembly (269ms)
+			ScanForSourceGeneratedMonoScriptInfo (24ms)
+			ResolveRequiredComponents (7ms)
+	FinalizeReload (970ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (982ms)
+		SetupLoadedEditorAssemblies (741ms)
 			LogAssemblyErrors (0ms)
 			InitializePlatformSupportModulesInManaged (11ms)
-			SetLoadedEditorAssemblies (5ms)
+			SetLoadedEditorAssemblies (6ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (99ms)
-			ProcessInitializeOnLoadAttributes (819ms)
-			ProcessInitializeOnLoadMethodAttributes (39ms)
-			AfterProcessingInitializeOnLoad (9ms)
+			BeforeProcessingInitializeOnLoad (88ms)
+			ProcessInitializeOnLoadAttributes (576ms)
+			ProcessInitializeOnLoadMethodAttributes (53ms)
+			AfterProcessingInitializeOnLoad (8ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (8ms)
-Refreshing native plugins compatible for Editor in 1.99 ms, found 0 plugins.
+		AwakeInstancesAfterBackupRestoration (9ms)
+Launched and connected shader compiler UnityShaderCompiler after 0.01 seconds
+Refreshing native plugins compatible for Editor in 1.77 ms, found 0 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3296 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 26 unused Assets / (195.2 KB). Loaded Objects now: 3814.
-Memory consumption went from 124.3 MB to 124.1 MB.
-Total: 9.777012 ms (FindLiveObjects: 0.599738 ms CreateObjectMapping: 0.576475 ms MarkObjects: 8.187591 ms  DeleteObjects: 0.410044 ms)
+Unloading 3345 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 31 unused Assets / (215.1 KB). Loaded Objects now: 3805.
+Memory consumption went from 133.0 MB to 132.8 MB.
+Total: 8.430868 ms (FindLiveObjects: 0.322197 ms CreateObjectMapping: 0.195364 ms MarkObjects: 7.338623 ms  DeleteObjects: 0.572838 ms)
 
-Prepare: number of updated asset objects reloaded= 0
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
   custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
@@ -399,280 +204,322 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  Time since last request: 28339.745268 seconds.
-  path: Assets/Brick Project Studio/_BPS Basic Assets/_Prefabs/Base Scene/BA_First Person Player.prefab
-  artifactKey: Guid(a9b081014bad86f4a80b60284279d21b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Brick Project Studio/_BPS Basic Assets/_Prefabs/Base Scene/BA_First Person Player.prefab using Guid(a9b081014bad86f4a80b60284279d21b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '598fb4918d340bffdecacd55aa676b9e') in 0.002976 seconds
+  Time since last request: 30644.012685 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit
+  artifactKey: Guid(05363b88e1e33b44fbe43896bf4804ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit using Guid(05363b88e1e33b44fbe43896bf4804ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: 'e67385d5be76b75b89b29050915c5cf2') in 0.003018 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000028 seconds.
-  path: Assets/Brick Project Studio/_BPS Basic Assets/_Prefabs/Base Scene
-  artifactKey: Guid(1ccf763dc0d9fbf4cafdb919842ae4eb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Brick Project Studio/_BPS Basic Assets/_Prefabs/Base Scene using Guid(1ccf763dc0d9fbf4cafdb919842ae4eb) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: 'f932f3c14356269b404d7b5a6274f291') in 0.000611 seconds
+  Time since last request: 0.000044 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs
+  artifactKey: Guid(cc39acf2acaed994a8169effabca20b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs using Guid(cc39acf2acaed994a8169effabca20b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: 'dcb3bd95321476748b239dbb3893484f') in 0.000659 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000078 seconds.
-  path: Assets/Brick Project Studio/_BPS Basic Assets/_Prefabs/Base Scene/BA_Simple Cursor.prefab
-  artifactKey: Guid(f29f229ca7700404abfeb5f8c1859d62) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Brick Project Studio/_BPS Basic Assets/_Prefabs/Base Scene/BA_Simple Cursor.prefab using Guid(f29f229ca7700404abfeb5f8c1859d62) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '8a556fa9a4e18a5349eab97fc9a7b602') in 0.000611 seconds
+  Time since last request: 0.032811 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit/Int_Ext
+  artifactKey: Guid(a0815ec783dd4b54e8365f488fc846ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit/Int_Ext using Guid(a0815ec783dd4b54e8365f488fc846ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '2ec05c8d339d3a1ced2fdceda7956521') in 0.000607 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 ========================================================================
 Received Import Request.
-  Time since last request: 264.309572 seconds.
-  path: Assets/Supercyan Character Pack Animal People Sample/Models/npcTrigger.cs
-  artifactKey: Guid(d40851cf579a0c7df9c7729cc2fca357) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Supercyan Character Pack Animal People Sample/Models/npcTrigger.cs using Guid(d40851cf579a0c7df9c7729cc2fca357) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '7d352d8019840b35132759d0ac9c1d51') in 0.185519 seconds
+  Time since last request: 0.066460 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit/Int_Ext/ExtInt_FFK_Entrance_01_01.prefab
+  artifactKey: Guid(a1c30a26aa98a394b83668e45d9044be) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit/Int_Ext/ExtInt_FFK_Entrance_01_01.prefab using Guid(a1c30a26aa98a394b83668e45d9044be) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: 'c7fb511cef5e078c6bcb3ace3ca09eb9') in 0.209673 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 51
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000101 seconds.
-  path: Assets/Supercyan Character Pack Animal People Sample/Scripts/AccessoryWearLogic.cs
-  artifactKey: Guid(d7b3916f6e92d3745b68b9e3fb6987fd) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Supercyan Character Pack Animal People Sample/Scripts/AccessoryWearLogic.cs using Guid(d7b3916f6e92d3745b68b9e3fb6987fd) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '3ac623fba3c7adad34258090fc83d140') in 0.005941 seconds
+  Time since last request: 0.000040 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit/Int_Ext/ExtInt_FFK_Entrance_02_01.prefab
+  artifactKey: Guid(89ff244a58c1b4e40b2905013ad3b107) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit/Int_Ext/ExtInt_FFK_Entrance_02_01.prefab using Guid(89ff244a58c1b4e40b2905013ad3b107) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '6612d84eb2d72b0f2062c5c536c1a11a') in 0.013950 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 51
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000075 seconds.
-  path: Assets/Scripts/CustomerFoodRequest.cs
-  artifactKey: Guid(8f251fb3da11241d7be474f4e551b4b6) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Scripts/CustomerFoodRequest.cs using Guid(8f251fb3da11241d7be474f4e551b4b6) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '56a9b24a3406bd2079844dda2c5ab08b') in 0.006482 seconds
+  Time since last request: 0.000037 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit/Int_Ext/ExtInt_FFK_Wall_04_01.prefab
+  artifactKey: Guid(d9c4e4719d7f3af46bc76b0585fe3f90) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit/Int_Ext/ExtInt_FFK_Wall_04_01.prefab using Guid(d9c4e4719d7f3af46bc76b0585fe3f90) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '09a3d04b6bcb44033d6c238583a749e1') in 0.016236 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 25
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000198 seconds.
-  path: Assets/Scripts/FoodScript.cs
-  artifactKey: Guid(a4aab1350c467ea8f9c6d046a650e8ce) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Scripts/FoodScript.cs using Guid(a4aab1350c467ea8f9c6d046a650e8ce) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '60155eed4db9da1cb192ba82de9e8b30') in 0.005294 seconds
+  Time since last request: 0.000040 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit/Int_Ext/ExtInt_FFK_Wall_01_01.prefab
+  artifactKey: Guid(8ac7ecdbda8cff84cac06dc1b9b33100) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit/Int_Ext/ExtInt_FFK_Wall_01_01.prefab using Guid(8ac7ecdbda8cff84cac06dc1b9b33100) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '72a95bfdc8d9ac22b718ae10c427b135') in 0.012452 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 25
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000098 seconds.
-  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/Scene/BPS Fast Food Restaurant Kit.txt
-  artifactKey: Guid(5282890d38d83164bbbba5a3c67d331c) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/Scene/BPS Fast Food Restaurant Kit.txt using Guid(5282890d38d83164bbbba5a3c67d331c) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: 'b6a09fc6e8b7e1100a8653b8243ef000') in 0.006101 seconds
+  Time since last request: 0.000035 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit/Int_Ext/ExtInt_FFK_Wall_03_01.prefab
+  artifactKey: Guid(57e11b61f7f21a44ab797b7d95ea1b37) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Fast Food Build Kit/Int_Ext/ExtInt_FFK_Wall_03_01.prefab using Guid(57e11b61f7f21a44ab797b7d95ea1b37) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '41ca7bc9a0115ecc31b1b69b22f6b585') in 0.014216 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 25
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000025 seconds.
-  path: Assets/Scripts/CustomerPosition.cs
-  artifactKey: Guid(da20582b83753a6519a819b13efc137b) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Scripts/CustomerPosition.cs using Guid(da20582b83753a6519a819b13efc137b) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: 'bc23cd2b95b318b5c97333791b59b87f') in 0.005548 seconds
+  Time since last request: 144.559955 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Lamps/FFK_Lamp_Ceiling_02_01.prefab
+  artifactKey: Guid(286146f4a0d184142a2f4d6ca546a9c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Lamps/FFK_Lamp_Ceiling_02_01.prefab using Guid(286146f4a0d184142a2f4d6ca546a9c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: 'd8ed4071609ab762107ee86e00de1a18') in 0.013728 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 21
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000024 seconds.
-  path: Assets/animal_people_wolf_1.prefab
-  artifactKey: Guid(33cc7075490f68e3c81640bd2168e22e) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/animal_people_wolf_1.prefab using Guid(33cc7075490f68e3c81640bd2168e22e) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '12827b42ca7063497228036a8baf47a9') in 0.003026 seconds
+  Time since last request: 0.000036 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Lamps/FFK_Lamp_Ceiling_02_02.prefab
+  artifactKey: Guid(228c3c0cdb5ccaf439f341dfc8616c64) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Lamps/FFK_Lamp_Ceiling_02_02.prefab using Guid(228c3c0cdb5ccaf439f341dfc8616c64) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: 'beaf53fd7bdb49ec613c81f6cbed9cc2') in 0.010002 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 0
+Number of asset objects unloaded after import = 21
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000102 seconds.
-  path: Assets/Supercyan Character Pack Animal People Sample/Scripts/SimpleSampleCharacterControl.cs
-  artifactKey: Guid(e292e05258fa8f9488f1321cb014a57c) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Supercyan Character Pack Animal People Sample/Scripts/SimpleSampleCharacterControl.cs using Guid(e292e05258fa8f9488f1321cb014a57c) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '4453ee350c17458dc903b20de89ab594') in 0.005076 seconds
+  Time since last request: 0.000035 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Lamps/FFK_Lamp_Ceiling_03_01.prefab
+  artifactKey: Guid(0d95f73c56599284c879061ca174d51d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Lamps/FFK_Lamp_Ceiling_03_01.prefab using Guid(0d95f73c56599284c879061ca174d51d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: 'dbacb1abf4019ccfa3d8ce39e3e372ff') in 0.012954 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 21
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000073 seconds.
-  path: Assets/Scripts/PressEcollision.cs
-  artifactKey: Guid(40dee644eb6e1de07b4c07aee77436ac) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Scripts/PressEcollision.cs using Guid(40dee644eb6e1de07b4c07aee77436ac) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '04e2405bcedffb6b1acdd8c3286e809e') in 0.008221 seconds
+  Time since last request: 0.000049 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Lamps/FFK_Lamp_Ceiling_03_03.prefab
+  artifactKey: Guid(b96da0c0b7583164889302d9a1366807) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Lamps/FFK_Lamp_Ceiling_03_03.prefab using Guid(b96da0c0b7583164889302d9a1366807) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '9ae2e313310329f90fe1c329d70a4420') in 0.010142 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 21
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000084 seconds.
-  path: Assets/CustomerAnimator.controller
-  artifactKey: Guid(345cf0031920ef23ab5b3846137600cf) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/CustomerAnimator.controller using Guid(345cf0031920ef23ab5b3846137600cf) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '6030523de16ee74a36719fe50ee68360') in 0.011132 seconds
+  Time since last request: 10.018482 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Misc/FFK_Display_01_01.prefab
+  artifactKey: Guid(3ce60c1a67d0c1943bb31f0d9720a665) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Misc/FFK_Display_01_01.prefab using Guid(3ce60c1a67d0c1943bb31f0d9720a665) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '7f00d16953149f2568a73d462febbf11') in 0.020263 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 12
+Number of asset objects unloaded after import = 97
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000346 seconds.
-  path: Assets/Brick Project Studio/_BPS Basic Assets/Common/Scripts and Animations/First Person Player/PlayerMovement.cs
-  artifactKey: Guid(c84cdf898723e1a4b9e4954eb5a76a33) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Brick Project Studio/_BPS Basic Assets/Common/Scripts and Animations/First Person Player/PlayerMovement.cs using Guid(c84cdf898723e1a4b9e4954eb5a76a33) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: 'a2b5f46d14e0d372bfcaf877268cf5cb') in 0.004486 seconds
+  Time since last request: 0.000034 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Misc/FFK_ServicePlate_01_01.prefab
+  artifactKey: Guid(034ec88d9b7b7ea479dc4a30583a6929) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Misc/FFK_ServicePlate_01_01.prefab using Guid(034ec88d9b7b7ea479dc4a30583a6929) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '4c87895009691da27794e9191d56a163') in 0.013726 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 10
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000149 seconds.
-  path: Assets/Scripts/KitchenTriggerHandler.cs
-  artifactKey: Guid(0ffd7d30c6f28c93c9d3240a80bd2320) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Scripts/KitchenTriggerHandler.cs using Guid(0ffd7d30c6f28c93c9d3240a80bd2320) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: 'c26eddf8b4c33f9b5635415f65207991') in 0.006606 seconds
+  Time since last request: 0.000415 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Misc/FFK_DrinkMachine_01_01.prefab
+  artifactKey: Guid(28f3adadfa8e13d41bd2af81c2170f85) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Misc/FFK_DrinkMachine_01_01.prefab using Guid(28f3adadfa8e13d41bd2af81c2170f85) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: 'cf913398d3167511ad576b1a4586fd86') in 0.060307 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 68
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000233 seconds.
-  path: Assets/Brick Project Studio/_BPS Basic Assets/Common/Scripts and Animations/Drawer/X Axis/Drawer_Pull_X.cs
-  artifactKey: Guid(e0d5557a01f4e0740bd53d6ed2ab7327) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Brick Project Studio/_BPS Basic Assets/Common/Scripts and Animations/Drawer/X Axis/Drawer_Pull_X.cs using Guid(e0d5557a01f4e0740bd53d6ed2ab7327) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '675a4590a1870f6b742386b8555eaf91') in 0.007195 seconds
+  Time since last request: 5.875544 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Tray Setup/Tray_01_Setup_02.prefab
+  artifactKey: Guid(fa58b74384495f44b8de38874da8e6e5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Tray Setup/Tray_01_Setup_02.prefab using Guid(fa58b74384495f44b8de38874da8e6e5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '06c27c3b2a1211712216a63096ba429d') in 0.090920 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 251
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000354 seconds.
-  path: Assets/Scripts/FoodType.cs
-  artifactKey: Guid(176442883f92debb0801b819789eae50) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Scripts/FoodType.cs using Guid(176442883f92debb0801b819789eae50) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '449e5afeba31b91899d8641148631799') in 0.005268 seconds
+  Time since last request: 0.000054 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Tray Setup/Tray_01_Setup_03.prefab
+  artifactKey: Guid(84c8c2118345b9540bd9d13ef487b00f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Tray Setup/Tray_01_Setup_03.prefab using Guid(84c8c2118345b9540bd9d13ef487b00f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: 'd75e7861f6da70019b3a89d41a342db8') in 0.035501 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 241
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/Scripts/CustomerOrder.cs
-  artifactKey: Guid(c176f153d636042f19faeaaacb2b6daf) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Scripts/CustomerOrder.cs using Guid(c176f153d636042f19faeaaacb2b6daf) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '17094615fa99a1353ae912091e35092c') in 0.009767 seconds
+  Time since last request: 4.595697 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Big Burger_01_Empty.prefab
+  artifactKey: Guid(440b75fd42ecb5f41b94162dfa6b7593) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Big Burger_01_Empty.prefab using Guid(440b75fd42ecb5f41b94162dfa6b7593) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '963979b7d0e8721495d8faae372022a6') in 0.013356 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
-========================================================================
-Received Import Request.
-  Time since last request: 0.000025 seconds.
-  path: Assets/Scripts/CustomerSetup.cs
-  artifactKey: Guid(98cfe9d109485e7de94ffb51c97dc211) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Scripts/CustomerSetup.cs using Guid(98cfe9d109485e7de94ffb51c97dc211) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: 'ed48a45036140bb725f3960c61c4bb47') in 0.008948 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 16
 ========================================================================
 Received Import Request.
   Time since last request: 0.000026 seconds.
-  path: Assets/Supercyan Character Pack Animal People Sample/Shaders/SupercyanShaderLighting.cginc
-  artifactKey: Guid(67feb2b9d2f2e3341b94f96df1b1a908) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Supercyan Character Pack Animal People Sample/Shaders/SupercyanShaderLighting.cginc using Guid(67feb2b9d2f2e3341b94f96df1b1a908) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: 'af274cd32f5ba3071d9139db6c98f529') in 0.005126 seconds
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Nugget_04.prefab
+  artifactKey: Guid(8c192caf4df5a4c4ba9847a271ecc28a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Nugget_04.prefab using Guid(8c192caf4df5a4c4ba9847a271ecc28a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: 'a0a475a9fe1cb79acfecb931f0d0a3eb') in 0.010532 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 11
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000059 seconds.
-  path: Assets/FoodSpawner.cs
-  artifactKey: Guid(0c2908f23511c0ff690043c686db0cc7) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/FoodSpawner.cs using Guid(0c2908f23511c0ff690043c686db0cc7) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: 'd91df43217757a8df3504c80c7b87e73') in 0.005826 seconds
+  Time since last request: 0.000026 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Nugget_05.prefab
+  artifactKey: Guid(d59d1708b196d3e4fb458a2aa72ef222) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Nugget_05.prefab using Guid(d59d1708b196d3e4fb458a2aa72ef222) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: 'f8aa704e9867298093e5b675753d5406') in 0.015603 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 11
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000072 seconds.
-  path: Assets/Brick Project Studio/_BPS Basic Assets/Common/Scripts and Animations/Doors/opencloseDoor1.cs
-  artifactKey: Guid(4b5e0617227fa4743be84f23d9e5cb42) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Brick Project Studio/_BPS Basic Assets/Common/Scripts and Animations/Doors/opencloseDoor1.cs using Guid(4b5e0617227fa4743be84f23d9e5cb42) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '17f48ad2eb1bbc727011368dcf476fb2') in 0.004864 seconds
+  Time since last request: 0.000033 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Fries Box_01_Empty.prefab
+  artifactKey: Guid(84ee3b7292548af4692e417d58c7d8cf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Fries Box_01_Empty.prefab using Guid(84ee3b7292548af4692e417d58c7d8cf) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '4e9f11f6ae8f659ceca2124e54880ba2') in 0.012176 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 9
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000207 seconds.
-  path: Assets/Scripts/FoodDestroy.cs
-  artifactKey: Guid(2e96fbcdca29d1763b1bf4668dff4aef) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/Scripts/FoodDestroy.cs using Guid(2e96fbcdca29d1763b1bf4668dff4aef) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '24407ab5099c91e92e9ed9492a5396e7') in 0.007116 seconds
+  Time since last request: 0.000022 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Fries Box_01.prefab
+  artifactKey: Guid(494ce0ae26952704c8a93fd02d125112) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Fries Box_01.prefab using Guid(494ce0ae26952704c8a93fd02d125112) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: 'da0c17a8054ae86cac9cdf38c3ec1da7') in 0.011295 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 17
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000077 seconds.
-  path: Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt
-  artifactKey: Guid(381dcb09d5029d14897e55f98031fca5) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt using Guid(381dcb09d5029d14897e55f98031fca5) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: 'f4be5366e4a6c1bc648e4f70353c4f75') in 0.004899 seconds
+  Time since last request: 0.000048 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Burger_01.prefab
+  artifactKey: Guid(9e0e728ad620bf244b89e34930b844b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Burger_01.prefab using Guid(9e0e728ad620bf244b89e34930b844b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '1b346f51a111f741caf48500fe0d98f5') in 0.022057 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 11
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000147 seconds.
-  path: Assets/New_Recording_3 (1).m4a
-  artifactKey: Guid(713cd56088f0fe11eb724752ab38be01) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23)
-Start importing Assets/New_Recording_3 (1).m4a using Guid(713cd56088f0fe11eb724752ab38be01) Importer(2089858483,0ecaa5967403d082aa24f35e1b516d23) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
- -> (artifact id: '4ff5c3c0498109323e2ae5608c3ad797') in 0.005184 seconds
+  Time since last request: 0.000044 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Nugget_03.prefab
+  artifactKey: Guid(8317c1969d237eb4282e3d1192beca65) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Nugget_03.prefab using Guid(8317c1969d237eb4282e3d1192beca65) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '4248e2e6db8433be1a260f6e16659311') in 0.009776 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 1
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000029 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Nugget_02.prefab
+  artifactKey: Guid(a87fc52c6ca0854438ce7218986b6f01) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Food/Nugget_02.prefab using Guid(a87fc52c6ca0854438ce7218986b6f01) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '444475a61413c4016c28198a1e334d4b') in 0.008253 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 90.073323 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Tray Setup/Tray_01_Setup_02.prefab
+  artifactKey: Guid(fa58b74384495f44b8de38874da8e6e5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Tray Setup/Tray_01_Setup_02.prefab using Guid(fa58b74384495f44b8de38874da8e6e5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '0f155f64825c96400cefd3131e7dae98') in 0.012994 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 44
+========================================================================
+Received Import Request.
+  Time since last request: 0.000032 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Tray Setup/Tray_01_Setup_04.prefab
+  artifactKey: Guid(f6360d41b10f70443a06913e69e61563) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Tray Setup/Tray_01_Setup_04.prefab using Guid(f6360d41b10f70443a06913e69e61563) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '68f2d3c331b0ecde19cc816c53d34196') in 0.010708 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 35
 ========================================================================
 Received Prepare
 Caller must complete domain reload
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.613 seconds
+- Loaded All Assemblies, in  0.619 seconds
 Native extension for LinuxStandalone target not found
 Native extension for WebGL target not found
 [Package Manager] Server::EnsureServerProcessIsRunning -- launch failed, reason: Unity was launched with the -noUpm command-line argument
 [Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
 [Package Manager] Cannot connect to Unity Package Manager local server
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.277 seconds
-Domain Reload Profiling: 1890ms
-	BeginReloadAssembly (163ms)
+- Finished resetting the current domain, in  1.355 seconds
+Domain Reload Profiling: 1974ms
+	BeginReloadAssembly (177ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (6ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (50ms)
-	RebuildCommonClasses (66ms)
-	RebuildNativeTypeToScriptingClass (12ms)
-	initialDomainReloadingComplete (38ms)
-	LoadAllAssembliesAndSetupDomain (332ms)
-		LoadAssemblies (376ms)
+		CreateAndSetChildDomain (56ms)
+	RebuildCommonClasses (64ms)
+	RebuildNativeTypeToScriptingClass (11ms)
+	initialDomainReloadingComplete (40ms)
+	LoadAllAssembliesAndSetupDomain (326ms)
+		LoadAssemblies (382ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (27ms)
+		AnalyzeDomain (22ms)
 			TypeCache.Refresh (10ms)
 				TypeCache.ScanAssembly (0ms)
 			ScanForSourceGeneratedMonoScriptInfo (0ms)
-			ResolveRequiredComponents (14ms)
-	FinalizeReload (1278ms)
+			ResolveRequiredComponents (10ms)
+	FinalizeReload (1356ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (774ms)
+		SetupLoadedEditorAssemblies (882ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (11ms)
-			SetLoadedEditorAssemblies (5ms)
+			InitializePlatformSupportModulesInManaged (17ms)
+			SetLoadedEditorAssemblies (7ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (81ms)
-			ProcessInitializeOnLoadAttributes (623ms)
-			ProcessInitializeOnLoadMethodAttributes (47ms)
-			AfterProcessingInitializeOnLoad (8ms)
+			BeforeProcessingInitializeOnLoad (105ms)
+			ProcessInitializeOnLoadAttributes (703ms)
+			ProcessInitializeOnLoadMethodAttributes (39ms)
+			AfterProcessingInitializeOnLoad (11ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (7ms)
-Refreshing native plugins compatible for Editor in 1.48 ms, found 0 plugins.
+		AwakeInstancesAfterBackupRestoration (9ms)
+Refreshing native plugins compatible for Editor in 1.58 ms, found 0 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 3295 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 26 unused Assets / (195.3 KB). Loaded Objects now: 3817.
+Unloading 26 unused Assets / (195.3 KB). Loaded Objects now: 3816.
 Memory consumption went from 124.1 MB to 123.9 MB.
-Total: 14.296977 ms (FindLiveObjects: 0.468473 ms CreateObjectMapping: 0.463405 ms MarkObjects: 13.241795 ms  DeleteObjects: 0.121225 ms)
+Total: 7.746424 ms (FindLiveObjects: 0.363832 ms CreateObjectMapping: 0.317477 ms MarkObjects: 6.964764 ms  DeleteObjects: 0.098254 ms)
 
 Prepare: number of updated asset objects reloaded= 0
 AssetImportParameters requested are different than current active one (requested -> active):
@@ -687,3 +534,33 @@ AssetImportParameters requested are different than current active one (requested
   custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 65.905073 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Electronics/FFK_Kiosk_ServicePlate_01_01.prefab
+  artifactKey: Guid(22083d3c7778346438a911c3b30e2116) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Electronics/FFK_Kiosk_ServicePlate_01_01.prefab using Guid(22083d3c7778346438a911c3b30e2116) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '6ace9e6aa8d88a4a3b9cc8c6dc5694ed') in 0.156624 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 142
+========================================================================
+Received Import Request.
+  Time since last request: 0.000092 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Electronics/FFK_Register.prefab
+  artifactKey: Guid(4f2bbe3a2f1a9bd4581b2d9d53ed42ca) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Electronics/FFK_Register.prefab using Guid(4f2bbe3a2f1a9bd4581b2d9d53ed42ca) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '1934abfe5459bb15c102ee6a34ec400b') in 0.024483 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 36
+========================================================================
+Received Import Request.
+  Time since last request: 0.000059 seconds.
+  path: Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Electronics/FFK_ReceiptPrinter_01_01.prefab
+  artifactKey: Guid(229d90e951634f543b0a9e106dc0ee37) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Brick Project Studio/Fast Food Restaurant Kit/_Prefabs/Props/Electronics/FFK_ReceiptPrinter_01_01.prefab using Guid(229d90e951634f543b0a9e106dc0ee37) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 8 workers.
+ -> (artifact id: '843480d7f78d3e7cc035f8d1b4fc37c7') in 0.023008 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 17
