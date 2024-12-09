@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1312
     height: 713
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Game
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 321}
   m_MaxSize: {x: 10000, y: 10000}
@@ -392,7 +392,7 @@ MonoBehaviour:
     x: 314
     y: 85
     width: 754
-    height: 585
+    height: 274
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -409,7 +409,7 @@ MonoBehaviour:
   m_ShowGizmos: 0
   m_TargetDisplay: 0
   m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
-  m_TargetSize: {x: 754, y: 564}
+  m_TargetSize: {x: 754, y: 253}
   m_TextureFilterMode: 0
   m_TextureHideFlags: 61
   m_RenderIMGUI: 1
@@ -426,8 +426,8 @@ MonoBehaviour:
     vZoomLockedByDefault: 0
     m_HBaseRangeMin: -377
     m_HBaseRangeMax: 377
-    m_VBaseRangeMin: -282
-    m_VBaseRangeMax: 282
+    m_VBaseRangeMin: -126.5
+    m_VBaseRangeMax: 126.5
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
@@ -446,9 +446,9 @@ MonoBehaviour:
       x: 0
       y: 21
       width: 754
-      height: 564
+      height: 253
     m_Scale: {x: 1, y: 1}
-    m_Translation: {x: 377, y: 282}
+    m_Translation: {x: 377, y: 126.5}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
@@ -456,12 +456,12 @@ MonoBehaviour:
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
       x: -377
-      y: -282
+      y: -126.5
       width: 754
-      height: 564
+      height: 253
     m_MinimalGUI: 1
   m_defaultScale: 1
-  m_LastWindowPixelSize: {x: 754, y: 585}
+  m_LastWindowPixelSize: {x: 754, y: 274}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
@@ -504,23 +504,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 20f3ffff
-      m_LastClickedID: -3296
-      m_ExpandedIDs: 06fbffff2e5e0000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: 06fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: animal_people_wolf_1
-        m_OriginalName: animal_people_wolf_1
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 24190
+        m_UserData: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 8}
       m_SearchString: 
@@ -873,9 +873,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 17.477762, y: 0.52823734, z: -0.5690999}
+    m_Target: {x: 13.974596, y: 0.7457023, z: -0.11299968}
     speed: 2
-    m_Value: {x: 17.477762, y: 0.52823734, z: -0.5690999}
+    m_Value: {x: 13.974596, y: 0.7457023, z: -0.11299968}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -921,9 +921,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.0052270596, y: -0.98426545, z: 0.029536612, w: -0.17418583}
+    m_Target: {x: 0.00045225443, y: -0.95345044, z: 0.0014299679, w: 0.3015767}
     speed: 2
-    m_Value: {x: -0.0051826998, y: -0.9845163, z: 0.029544143, w: -0.17270762}
+    m_Value: {x: 0.00045225027, y: -0.9534417, z: 0.0014299548, w: 0.30157393}
   m_Size:
     m_Target: 1.9087561
     speed: 2
@@ -1014,7 +1014,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: de6e0000
     m_LastClickedID: 28382
-    m_ExpandedIDs: 00000000de6e000020a9000000ca9a3bffffff7f
+    m_ExpandedIDs: 00000000e06e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1042,7 +1042,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000de6e0000
+    m_ExpandedIDs: 00000000e06e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
