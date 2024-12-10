@@ -12,32 +12,18 @@ namespace SojaExiles
         private CustomerAnimationController animationController;
         private animal_people_wolf_1 wolfComponent;
         private RegisterQueueManager queueManager;
+        private bool isProcessingDelivery = false;
 
-        private void Start()
+        void Start()
         {
             customerFoodRequest = GetComponent<CustomerFoodRequest>();
             animationController = GetComponent<CustomerAnimationController>();
             wolfComponent = GetComponent<animal_people_wolf_1>();
             queueManager = RegisterQueueManager.Instance;
             
-            if (customerFoodRequest == null)
+            if (customerFoodRequest == null || wolfComponent == null || queueManager == null)
             {
-                Debug.LogError($"[{gameObject.name}] CustomerFoodRequest component not found!");
-            }
-            
-            if (animationController == null)
-            {
-                Debug.LogError($"[{gameObject.name}] CustomerAnimationController not found!");
-            }
-
-            if (wolfComponent == null)
-            {
-                Debug.LogError($"[{gameObject.name}] animal_people_wolf_1 component not found!");
-            }
-
-            if (queueManager == null)
-            {
-                Debug.LogError($"[{gameObject.name}] RegisterQueueManager not found!");
+                Debug.LogError($"[{gameObject.name}] Missing required components!");
             }
         }
 
@@ -118,54 +104,53 @@ namespace SojaExiles
 
         public bool AcceptFoodItem(FoodType type, GameObject heldFood)
         {
-            if (customerFoodRequest == null || wolfComponent == null)
+            if (isProcessingDelivery)
             {
-                Debug.LogError($"[{gameObject.name}] Missing required components!");
-                return false;
-            }
-            
-            // Check if this customer is first in queue
-            if (queueManager == null || !queueManager.IsFirstInQueue(wolfComponent))
-            {
-                Debug.Log($"[{gameObject.name}] Not first in queue or queue manager missing, ignoring food");
+                Debug.LogWarning($"[{gameObject.name}] Already processing a delivery!");
                 return false;
             }
 
-            FoodType desiredFood = customerFoodRequest.GetDesiredFood();
-            Debug.Log($"[{gameObject.name}] Detailed food comparison (AcceptFoodItem):");
-            Debug.Log($"  - Desired food: {desiredFood} (type: {desiredFood.GetType()}, value: {(int)desiredFood})");
-            Debug.Log($"  - Received food: {type} (type: {type.GetType()}, value: {(int)type})");
-            Debug.Log($"  - Direct equality: {type == desiredFood}");
-            Debug.Log($"  - String comparison: {type.ToString() == desiredFood.ToString()}");
-
-            bool isCorrectFood = (type == desiredFood);
-            Debug.Log($"[{gameObject.name}] Is correct food? {isCorrectFood}");
-            
-            if (isCorrectFood)
+            if (!queueManager.IsFirstInQueue(wolfComponent))
             {
-                Debug.Log($"[{gameObject.name}] Correct food received, serving...");
-                // Play happy animation when food is accepted
-                if (animationController != null)
-                {
-                    animationController.PlayHappyAnimation();
-                    Debug.Log($"[{gameObject.name}] Triggering wave animation");
-                }
-                
-                if (heldFood != null)
-                {
-                    Destroy(heldFood);
-                }
-                
-                // Show response and serve food
-                customerFoodRequest.ShowResponse(true);
-                wolfComponent.ServeFood(type.ToString());
-                return true;
-            }
-            else
-            {
-                Debug.Log($"[{gameObject.name}] Wrong food received, showing angry response");
-                customerFoodRequest.ShowResponse(false);
+                Debug.Log($"[{gameObject.name}] Not first in queue, ignoring food");
                 return false;
+            }
+
+            isProcessingDelivery = true;
+            try
+            {
+                FoodType desiredFood = customerFoodRequest.GetDesiredFood();
+                
+                Debug.Log($"[{gameObject.name}] Food comparison:");
+                Debug.Log($"  Wanted: {desiredFood} ({(int)desiredFood})");
+                Debug.Log($"  Got: {type} ({(int)type})");
+                Debug.Log($"  Match? {type == desiredFood}");
+
+                bool isCorrectFood = (type == desiredFood);
+                
+                if (isCorrectFood)
+                {
+                    customerFoodRequest.ShowResponse(true);
+                    if (animationController != null)
+                    {
+                        animationController.PlayHappyAnimation();
+                    }
+                    wolfComponent.ServeFood(type.ToString());
+                    return true;
+                }
+                else
+                {
+                    customerFoodRequest.ShowResponse(false);
+                    if (animationController != null)
+                    {
+                        animationController.PlayAngryAnimation();
+                    }
+                    return false;
+                }
+            }
+            finally
+            {
+                isProcessingDelivery = false;
             }
         }
     }

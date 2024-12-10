@@ -14,6 +14,10 @@ namespace SojaExiles
 
         void Start()
         {
+            if (requestText == null)
+            {
+                Debug.LogError("RequestText is not assigned!");
+            }
             GenerateRandomFoodRequest();
             
             if (requestText != null)
@@ -36,6 +40,17 @@ namespace SojaExiles
             }
         }
 
+        private void UpdateRequestDisplay()
+        {
+            if (requestText != null && hasOrder)
+            {
+                requestText.gameObject.SetActive(true);
+                requestText.text = $"I want a {desiredFood}!";
+                requestText.color = Color.white;
+                Debug.Log($"[{gameObject.name}] Updated display text: {requestText.text}");
+            }
+        }
+
         public void GenerateRandomFoodRequest()
         {
             desiredFood = Random.value < 0.5f ? FoodType.pizza : FoodType.hotdog;
@@ -45,16 +60,6 @@ namespace SojaExiles
             Debug.Log($"  - Food Type Value: {(int)desiredFood}");
             Debug.Log($"  - Food Type String: {desiredFood.ToString()}");
             UpdateRequestDisplay();
-        }
-
-        private void UpdateRequestDisplay()
-        {
-            if (requestText != null && hasOrder)
-            {
-                requestText.text = $"I want {desiredFood}";
-                requestText.color = Color.black;
-                Debug.Log($"[{gameObject.name}] Updated display text: {requestText.text}");
-            }
         }
 
         public FoodType GetDesiredFood()
