@@ -6,48 +6,94 @@ namespace SojaExiles
 {
     public class CustomerFoodRequest : MonoBehaviour
     {
-        [SerializeField]
         private TextMeshPro requestText;
-        
         private FoodType desiredFood;
         private bool hasOrder = false;
 
-        void Start()
+        void Awake()
         {
+            InitializeTextComponent();
+            GenerateRandomFoodRequest(); // Generate initial food request
+            SetTextActive(true); // Make sure text is visible immediately
+        }
+
+        private void InitializeTextComponent()
+        {
+            // First try to find existing TextMeshPro component
+            requestText = GetComponentInChildren<TextMeshPro>();
+            
             if (requestText == null)
             {
-                Debug.LogError("RequestText is not assigned!");
+                // Create a new GameObject for the text
+                GameObject textObj = new GameObject("RequestText");
+                textObj.transform.SetParent(transform);
+                
+                // Position it above the customer's head
+                textObj.transform.localPosition = Vector3.up * 2.5f;
+                textObj.transform.localRotation = Quaternion.identity;
+                
+                // Add TextMeshPro component
+                requestText = textObj.AddComponent<TextMeshPro>();
+                
+                // Configure the text component
+                requestText.alignment = TextAlignmentOptions.Center;
+                requestText.fontSize = 4f;
+                requestText.color = Color.black;
+                
+                // Set font settings
+                requestText.enableWordWrapping = false;
+                requestText.overflowMode = TextOverflowModes.Overflow;
+                requestText.margin = new Vector4(2, 2, 2, 2);
+                requestText.horizontalAlignment = HorizontalAlignmentOptions.Center;
+                requestText.verticalAlignment = VerticalAlignmentOptions.Middle;
+                
+                Debug.Log($"[{gameObject.name}] Created new TextMeshPro component");
             }
-            GenerateRandomFoodRequest();
             
+            // Set initial text
             if (requestText != null)
             {
-                requestText.gameObject.SetActive(false);
-                Debug.Log($"[{gameObject.name}] CustomerFoodRequest initialized with text component");
+                requestText.text = "Deciding what to order...";
+                SetTextActive(true);
             }
-            else
+        }
+
+        private void SetTextActive(bool active)
+        {
+            if (requestText != null && requestText.gameObject != null)
             {
-                Debug.LogError($"[{gameObject.name}] Request text component is not assigned!");
+                requestText.gameObject.SetActive(active);
+                Debug.Log($"[{gameObject.name}] Set text visibility to: {active}");
             }
+        }
+
+        void Start()
+        {
+            // Verify text component
+            if (requestText == null)
+            {
+                Debug.LogError($"[{gameObject.name}] TextMeshPro component is missing!");
+                InitializeTextComponent();
+            }
+            
+            // Make sure order is displayed
+            UpdateRequestDisplay();
+            SetTextActive(true);
         }
 
         public void SetAtCounter(bool atCounter)
         {
-            if (requestText != null)
+            if (requestText == null)
             {
-                requestText.gameObject.SetActive(atCounter && hasOrder);
-                Debug.Log($"[{gameObject.name}] Text visibility set to: {atCounter && hasOrder}");
+                Debug.LogError($"[{gameObject.name}] TextMeshPro component is missing!");
+                return;
             }
-        }
 
-        private void UpdateRequestDisplay()
-        {
-            if (requestText != null && hasOrder)
+            UpdateRequestDisplay();
+            SetTextActive(atCounter && hasOrder);
+            if (atCounter && hasOrder)
             {
-                requestText.gameObject.SetActive(true);
-                requestText.text = $"I want a {desiredFood}!";
-                requestText.color = Color.white;
-                Debug.Log($"[{gameObject.name}] Updated display text: {requestText.text}");
+                UpdateRequestDisplay();
             }
         }
 
@@ -55,66 +101,112 @@ namespace SojaExiles
         {
             desiredFood = Random.value < 0.5f ? FoodType.pizza : FoodType.hotdog;
             hasOrder = true;
-            Debug.Log($"[{gameObject.name}] Generated new order:");
-            Debug.Log($"  - Food Type: {desiredFood}");
-            Debug.Log($"  - Food Type Value: {(int)desiredFood}");
-            Debug.Log($"  - Food Type String: {desiredFood.ToString()}");
+            Debug.Log($"[{gameObject.name}] Generated new order: {desiredFood}");
             UpdateRequestDisplay();
+            SetTextActive(true); // Make sure text is visible after generating order
+        }
+
+        private void UpdateRequestDisplay()
+        {
+            if (requestText == null)
+            {
+                Debug.LogError($"[{gameObject.name}] TextMeshPro component is missing!");
+                return;
+            }
+
+            // Set the request text
+            requestText.text = $"I want {desiredFood}!";
+            requestText.color = Color.black;
+            requestText.fontSize = 4f;
+            
+            // Make text face the camera
+            if (Camera.main != null)
+            {
+                requestText.transform.rotation = Camera.main.transform.rotation;
+            }
+            
+            Debug.Log($"[{gameObject.name}] Updated display text: {requestText.text}");
         }
 
         public FoodType GetDesiredFood()
         {
-            Debug.Log($"[{gameObject.name}] GetDesiredFood called:");
-            Debug.Log($"  - Returning Food Type: {desiredFood}");
-            Debug.Log($"  - Food Type Value: {(int)desiredFood}");
-            Debug.Log($"  - Food Type String: {desiredFood.ToString()}");
             return desiredFood;
         }
 
-        public void ShowResponse(bool correctOrder)
+        public void ShowResponse(bool isCorrectOrder)
         {
-            Debug.Log($"[{gameObject.name}] ShowResponse called - correctOrder: {correctOrder}");
-            
-            if (requestText != null)
+            if (requestText == null)
             {
-                requestText.gameObject.SetActive(true);
-                
-                if (correctOrder)
-                {
-                    requestText.text = "Thank you!";
-                    requestText.color = Color.green;
-                    Debug.Log($"[{gameObject.name}] Showing thank you message");
-                }
-                else
-                {
-                    requestText.text = "Screw you!";
-                    requestText.color = Color.red;
-                    Debug.Log($"[{gameObject.name}] Showing angry message");
-                }
-                
-                StartCoroutine(HideTextAfterDelay(2f));
+                Debug.LogError($"[{gameObject.name}] TextMeshPro component is missing!");
+                return;
+            }
+
+            SetTextActive(true);
+            
+            if (isCorrectOrder)
+            {
+                requestText.text = "Thank you!";
+                requestText.color = Color.green;
             }
             else
             {
-                Debug.LogError($"[{gameObject.name}] Cannot show response - text component is missing!");
+                requestText.text = "Wrong food!";
+                requestText.color = Color.red;
             }
+            requestText.fontSize = 5f;
+
+            // Make text face the camera
+            if (Camera.main != null)
+            {
+                requestText.transform.rotation = Camera.main.transform.rotation;
+            }
+            
+            Debug.Log($"[{gameObject.name}] Showing response: {requestText.text}");
+            StartCoroutine(HideTextAfterDelay(2f));
         }
 
         private IEnumerator HideTextAfterDelay(float delay)
         {
-            Debug.Log($"[{gameObject.name}] Starting delay to hide text");
             yield return new WaitForSeconds(delay);
-            Debug.Log($"[{gameObject.name}] Hiding text after delay");
             ClearRequest();
         }
 
         public void ClearRequest()
         {
-            hasOrder = false;
-            if (requestText != null)
+            if (requestText == null)
             {
-                requestText.gameObject.SetActive(false);
-                Debug.Log($"[{gameObject.name}] Request cleared and text hidden");
+                Debug.LogError($"[{gameObject.name}] TextMeshPro component is missing!");
+                return;
+            }
+
+            hasOrder = false;
+            SetTextActive(false);
+            Debug.Log($"[{gameObject.name}] Request cleared and text hidden");
+        }
+
+        void Update()
+        {
+            // Keep text facing the camera
+            if (requestText != null && requestText.gameObject.activeInHierarchy && Camera.main != null)
+            {
+                requestText.transform.rotation = Camera.main.transform.rotation;
+                
+                // If text is not visible but should be, make it visible
+                if (!requestText.gameObject.activeSelf && hasOrder)
+                {
+                    SetTextActive(true);
+                    UpdateRequestDisplay();
+                }
+            }
+        }
+
+        void OnEnable()
+        {
+            // Make sure text is visible when object is enabled
+            if (hasOrder)
+            {
+                SetTextActive(true);
+                UpdateRequestDisplay();
             }
         }
     }

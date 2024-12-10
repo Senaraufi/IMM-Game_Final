@@ -7,93 +7,184 @@ namespace SojaExiles
         private Animator animator;
         private Vector3 lastPosition;
         private bool isMoving;
+        private bool isRunning;
 
         // Animation parameter names as constants
         private const string IS_WALKING = "IsWalking";
+        private const string IS_RUNNING = "IsRunning";
         private const string IS_IDLE = "IsIdle";
         private const string WAVE = "Wave";
+        private const string HAPPY = "Happy";
         private const string ANGRY = "Angry";
+
+        void Awake()
+        {
+            SetupAnimator();
+        }
 
         void Start()
         {
-            // Get and verify animator
-            animator = GetComponent<Animator>();
-            if (animator == null)
+            // Verify animator is properly set up
+            if (animator == null || animator.runtimeAnimatorController == null)
             {
-                Debug.LogError($"[{gameObject.name}] NO ANIMATOR FOUND ON OBJECT! Adding one now...");
-                animator = gameObject.AddComponent<Animator>();
-            }
-
-            // Verify animator controller
-            if (animator.runtimeAnimatorController == null)
-            {
-                Debug.LogError($"[{gameObject.name}] NO ANIMATOR CONTROLLER ASSIGNED! Please assign an Animator Controller in the Unity Inspector.");
-                return;
+                Debug.LogError($"[{gameObject.name}] Animator or controller is still null in Start! Attempting to fix...");
+                SetupAnimator();
             }
 
             // Store initial position
             lastPosition = transform.position;
             
             // Debug log to confirm initialization
-            Debug.Log($"[{gameObject.name}] CustomerAnimationController initialized successfully!");
+            if (animator != null && animator.runtimeAnimatorController != null)
+            {
+                Debug.Log($"[{gameObject.name}] CustomerAnimationController initialized successfully!");
+            }
+            else
+            {
+                Debug.LogError($"[{gameObject.name}] Failed to initialize animator properly!");
+            }
+        }
+
+        private void SetupAnimator()
+        {
+            // Get and verify animator
+            animator = GetComponent<Animator>();
+            if (animator == null)
+            {
+                Debug.Log($"[{gameObject.name}] No Animator found - adding one");
+                animator = gameObject.AddComponent<Animator>();
+            }
+
+            // Try to find the animator controller if it's not set
+            if (animator.runtimeAnimatorController == null)
+            {
+                Debug.Log($"[{gameObject.name}] Looking for animator controller...");
+                
+                // First try Resources folder
+                RuntimeAnimatorController controller = Resources.Load<RuntimeAnimatorController>("FreeAnimations");
+                
+                if (controller == null)
+                {
+                    Debug.Log($"[{gameObject.name}] Controller not found in Resources, checking original location...");
+                    // Try original location
+                    controller = Resources.Load<RuntimeAnimatorController>("Supercyan Character Pack Animal People Sample/AnimatorControllers/FreeAnimations");
+                }
+
+                if (controller != null)
+                {
+                    animator.runtimeAnimatorController = controller;
+                    Debug.Log($"[{gameObject.name}] Successfully loaded animator controller!");
+                }
+                else
+                {
+                    Debug.LogError($"[{gameObject.name}] Failed to find animator controller in any location!");
+                }
+            }
+            
+            // Set default animation state
+            if (animator.runtimeAnimatorController != null)
+            {
+                animator.SetBool(IS_IDLE, true);
+                animator.SetBool(IS_WALKING, false);
+                animator.SetBool(IS_RUNNING, false);
+            }
         }
 
         void Update()
         {
-            if (animator == null) return;
+            if (animator == null || animator.runtimeAnimatorController == null) return;
 
-            // Check movement
+            // Check if position has changed
             Vector3 currentPosition = transform.position;
-            float movement = Vector3.Distance(currentPosition, lastPosition);
-            bool wasMoving = isMoving;
-            isMoving = movement > 0.001f;
-
-            // Log state changes for debugging
-            if (wasMoving != isMoving)
+            float moveSpeed = Vector3.Distance(currentPosition, lastPosition) / Time.deltaTime;
+            isMoving = moveSpeed > 0.01f;
+            
+            // Update animations based on movement speed
+            if (isMoving)
             {
-                Debug.Log($"[{gameObject.name}] Movement state changed: {(isMoving ? "Started moving" : "Stopped moving")}");
+                // If moving faster than 2 units per second, use running animation
+                isRunning = moveSpeed > 2f;
+                animator.SetBool(IS_RUNNING, isRunning);
+                animator.SetBool(IS_WALKING, !isRunning);
+                animator.SetBool(IS_IDLE, false);
             }
-
-            // Set animation parameters
-            animator.SetBool(IS_WALKING, isMoving);
-            animator.SetBool(IS_IDLE, !isMoving);
-
+            else
+            {
+                // If not moving, go to idle
+                animator.SetBool(IS_IDLE, true);
+                animator.SetBool(IS_WALKING, false);
+                animator.SetBool(IS_RUNNING, false);
+            }
+            
+            // Update last position
             lastPosition = currentPosition;
         }
 
-        public void SetWalking(bool walking)
+        public void SetMovementState(float speed)
         {
-            if (animator != null)
+            if (animator == null || animator.runtimeAnimatorController == null)
             {
-                animator.SetBool(IS_WALKING, walking);
-                animator.SetBool(IS_IDLE, !walking);
+                Debug.LogError($"[{gameObject.name}] Cannot set movement state - No animator!");
+                return;
+            }
+
+            if (speed <= 0)
+            {
+                // Idle
+                animator.SetBool(IS_IDLE, true);
+                animator.SetBool(IS_WALKING, false);
+                animator.SetBool(IS_RUNNING, false);
+            }
+            else if (speed <= 2f)
+            {
+                // Walking
+                animator.SetBool(IS_IDLE, false);
+                animator.SetBool(IS_WALKING, true);
+                animator.SetBool(IS_RUNNING, false);
+            }
+            else
+            {
+                // Running
+                animator.SetBool(IS_IDLE, false);
+                animator.SetBool(IS_WALKING, false);
+                animator.SetBool(IS_RUNNING, true);
             }
         }
 
         public void PlayHappyAnimation()
         {
-            if (animator == null)
+            if (animator == null || animator.runtimeAnimatorController == null)
             {
-                Debug.LogError($"[{gameObject.name}] Cannot play wave - No animator!");
+                Debug.LogError($"[{gameObject.name}] Cannot play happy animation - No animator!");
+                return;
+            }
+
+            animator.SetTrigger(HAPPY);
+            Debug.Log($"[{gameObject.name}] Playing happy animation");
+        }
+
+        public void PlayWaveAnimation()
+        {
+            if (animator == null || animator.runtimeAnimatorController == null)
+            {
+                Debug.LogError($"[{gameObject.name}] Cannot play wave animation - No animator!");
                 return;
             }
 
             animator.SetTrigger(WAVE);
-            Debug.Log($"[{gameObject.name}] Playing happy (wave) animation");
+            Debug.Log($"[{gameObject.name}] Playing wave animation");
         }
 
         public void PlayAngryAnimation()
         {
-            if (animator == null)
+            if (animator == null || animator.runtimeAnimatorController == null)
             {
                 Debug.LogError($"[{gameObject.name}] Cannot play angry animation - No animator!");
                 return;
             }
 
-            // For now, we'll just use the wave animation since that's what we have
-            // You can replace this with a proper angry animation trigger when you have one
-            animator.SetTrigger(WAVE);
-            Debug.Log($"[{gameObject.name}] Playing angry animation (using wave for now)");
+            animator.SetTrigger(ANGRY);
+            Debug.Log($"[{gameObject.name}] Playing angry animation");
         }
     }
 }

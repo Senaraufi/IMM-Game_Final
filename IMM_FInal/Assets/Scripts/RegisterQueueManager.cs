@@ -21,6 +21,9 @@ namespace SojaExiles
 
         [SerializeField]
         private UnityEvent<animal_people_wolf_1> onCustomerRegistered;
+        
+        [SerializeField]
+        private UnityEvent<animal_people_wolf_1> onCustomerLeaving;
 
         void Awake()
         {
@@ -46,66 +49,48 @@ namespace SojaExiles
                     availableCustomers.Add(customer);
                 }
             }
+            Debug.Log($"Found {availableCustomers.Count} customers in the scene");
         }
 
         public void RegisterCustomer(animal_people_wolf_1 customer)
         {
-            if (customer == null || !customer.CompareTag("Customer")) return;
-            
             if (!npcQueue.Contains(customer))
             {
                 npcQueue.Enqueue(customer);
+                onCustomerRegistered?.Invoke(customer);
                 UpdateQueuePositions();
+                Debug.Log($"Customer {customer.name} registered in queue. Queue size: {npcQueue.Count}");
             }
+        }
+
+        public bool IsFirstInQueue(animal_people_wolf_1 customer)
+        {
+            return npcQueue.Count > 0 && npcQueue.Peek() == customer;
         }
 
         public void CustomerLeaving(animal_people_wolf_1 customer)
         {
-            if (queuePositions.ContainsKey(customer))
+            if (npcQueue.Count > 0 && npcQueue.Peek() == customer)
             {
-                queuePositions.Remove(customer);
-                var tempQueue = new Queue<animal_people_wolf_1>();
-                while (npcQueue.Count > 0)
-                {
-                    var npc = npcQueue.Dequeue();
-                    if (npc != customer)
-                    {
-                        tempQueue.Enqueue(npc);
-                    }
-                }
-                npcQueue = tempQueue;
+                npcQueue.Dequeue();
+                onCustomerLeaving?.Invoke(customer);
                 UpdateQueuePositions();
+                Debug.Log($"Customer {customer.name} left the queue. Queue size: {npcQueue.Count}");
             }
         }
 
-        public void RemoveCustomer(animal_people_wolf_1 customer)
+        public bool GetIsFirstInQueue(animal_people_wolf_1 customer)
         {
-            Debug.Log($"[{name}] Removing customer {customer.name} from queue");
-            if (queuePositions.ContainsKey(customer))
-            {
-                queuePositions.Remove(customer);
-                
-                // Remove from queue
-                var tempQueue = new Queue<animal_people_wolf_1>();
-                while (npcQueue.Count > 0)
-                {
-                    var npc = npcQueue.Dequeue();
-                    if (npc != customer)
-                    {
-                        tempQueue.Enqueue(npc);
-                    }
-                }
-                npcQueue = tempQueue;
-                
-                // Update positions for remaining customers
-                UpdateQueuePositions();
-                Debug.Log($"[{name}] Customer removed, remaining in queue: {npcQueue.Count}");
-            }
+            return IsFirstInQueue(customer);
         }
 
         private void UpdateQueuePositions()
         {
-            if (registerPosition == null) return;
+            if (registerPosition == null)
+            {
+                Debug.LogError("Register position is not set!");
+                return;
+            }
 
             queuePositions.Clear();
             Vector3 basePosition = registerPosition.position;
@@ -121,34 +106,21 @@ namespace SojaExiles
                 queuePositions[npc] = queuePosition;
                 index++;
             }
+            
+            Debug.Log($"Updated queue positions for {queuePositions.Count} customers");
         }
 
-        public Vector3 GetPositionInQueue(animal_people_wolf_1 customer)
+        public Vector3 GetQueuePosition(animal_people_wolf_1 npc)
         {
-            if (customer == null)
+            if (queuePositions.TryGetValue(npc, out Vector3 position))
             {
-                Debug.LogError("Trying to get position for null customer!");
-                return Vector3.zero;
+                return position;
             }
-
-            return queuePositions.TryGetValue(customer, out Vector3 position) ? position : customer.transform.position;
-        }
-
-        public bool IsFirstInQueue(animal_people_wolf_1 customer)
-        {
-            if (customer == null)
-            {
-                Debug.LogError("Checking if null customer is first in queue!");
-                return false;
-            }
-
-            return npcQueue.Count > 0 && npcQueue.Peek() == customer;
-        }
-
-        public Vector3 GetStartPosition()
-        {
+            
             // Return a position where customers start from (entrance)
-            return registerPosition.position + (registerPosition.right * 10f);
+            return registerPosition != null 
+                ? registerPosition.position + (registerPosition.right * 10f) 
+                : npc.transform.position;
         }
     }
 }

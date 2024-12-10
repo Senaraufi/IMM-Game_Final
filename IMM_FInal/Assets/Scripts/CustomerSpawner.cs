@@ -23,6 +23,19 @@ namespace SojaExiles
         private bool isSpawning = true;
         private int currentWaitingSpot = 0;
 
+        void Awake()
+        {
+            // If no customer prefab is assigned, try to load it
+            if (customerPrefab == null)
+            {
+                customerPrefab = Resources.Load<GameObject>("animal_people_wolf_1");
+                if (customerPrefab == null)
+                {
+                    Debug.LogError("Customer prefab not found! Please assign it in the inspector.");
+                }
+            }
+        }
+
         void Start()
         {
             queueManager = RegisterQueueManager.Instance;
@@ -65,43 +78,76 @@ namespace SojaExiles
             }
         }
 
+        private void SetupCustomerComponents(GameObject customer)
+        {
+            // Add required components if they don't exist
+            if (!customer.GetComponent<Animator>())
+            {
+                customer.AddComponent<Animator>();
+            }
+
+            if (!customer.GetComponent<animal_people_wolf_1>())
+            {
+                customer.AddComponent<animal_people_wolf_1>();
+            }
+
+            if (!customer.GetComponent<CustomerAnimationController>())
+            {
+                customer.AddComponent<CustomerAnimationController>();
+            }
+
+            if (!customer.GetComponent<CustomerFoodRequest>())
+            {
+                customer.AddComponent<CustomerFoodRequest>();
+            }
+
+            if (!customer.GetComponent<AcceptFood>())
+            {
+                customer.AddComponent<AcceptFood>();
+            }
+
+            // Set the customer tag
+            customer.tag = "Customer";
+
+            // Try to load and set the animator controller
+            var animator = customer.GetComponent<Animator>();
+            if (animator && animator.runtimeAnimatorController == null)
+            {
+                RuntimeAnimatorController controller = Resources.Load<RuntimeAnimatorController>("FreeAnimations");
+                if (controller != null)
+                {
+                    animator.runtimeAnimatorController = controller;
+                }
+            }
+        }
+
+        private GameObject SpawnCustomer()
+        {
+            if (customerPrefab == null) return null;
+
+            Vector3 spawnPosition = transform.position;
+            GameObject customer = Instantiate(customerPrefab, spawnPosition, Quaternion.identity);
+            
+            SetupCustomerComponents(customer);
+            
+            return customer;
+        }
+
         IEnumerator SpawnCustomersRoutine()
         {
             while (isSpawning)
             {
                 if (spawnedCustomers.Count < maxCustomers)
                 {
-                    SpawnCustomer();
+                    GameObject customerObj = SpawnCustomer();
+                    if (customerObj != null)
+                    {
+                        PositionNPC(customerObj);
+                        spawnedCustomers.Add(customerObj.GetComponent<animal_people_wolf_1>());
+                    }
                 }
                 yield return new WaitForSeconds(spawnInterval);
             }
-        }
-
-        private void SpawnCustomer()
-        {
-            if (customerPrefab == null || currentWaitingSpot >= waitingPositions.Length)
-            {
-                Debug.LogError("Cannot spawn customer: missing prefab or no waiting positions left");
-                return;
-            }
-
-            // Spawn the customer at the next waiting position
-            GameObject customerObj = Instantiate(customerPrefab, waitingPositions[currentWaitingSpot].position, 
-                                              waitingPositions[currentWaitingSpot].rotation);
-            
-            // Get the customer script component
-            var customer = customerObj.GetComponent<animal_people_wolf_1>();
-            if (customer == null)
-            {
-                Debug.LogError("Spawned customer prefab doesn't have animal_people_wolf_1 component!");
-                Destroy(customerObj);
-                return;
-            }
-
-            // Set up the customer
-            customerObj.tag = "Customer";
-            spawnedCustomers.Add(customer);
-            currentWaitingSpot++;
         }
 
         public void RemoveCustomer(animal_people_wolf_1 customer)

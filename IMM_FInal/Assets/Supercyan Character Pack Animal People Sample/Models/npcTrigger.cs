@@ -29,24 +29,24 @@ namespace SojaExiles
             animController = GetComponent<CustomerAnimationController>();
             queueManager = RegisterQueueManager.Instance;
 
-            if (agent == null || queueManager == null) return;
+            if (agent == null || queueManager == null)
+            {
+                Debug.LogError($"[{gameObject.name}] Missing required components!");
+                return;
+            }
 
             // Store initial position and rotation
             startPosition = transform.position;
             startRotation = transform.rotation;
             
-            // Show initial request message
-            if (uiText != null)
-            {
-                ShowMessage(requestMessage);
-            }
+            Debug.Log($"[{gameObject.name}] Initialized at position: {startPosition}");
         }
 
         void Update()
         {
             if (!hasBeenServed && isWaitingInQueue && queueManager != null)
             {
-                Vector3 targetPosition = queueManager.GetPositionInQueue(this);
+                Vector3 targetPosition = queueManager.GetQueuePosition(this);
                 float distance = Vector3.Distance(transform.position, targetPosition);
                 
                 if (distance > proximityThreshold)
@@ -58,9 +58,28 @@ namespace SojaExiles
                         pathToRegister.Add(transform.position);
                     }
 
+                    // Set destination and calculate speed
                     agent.SetDestination(targetPosition);
-                    animController?.SetWalking(true);
+                    float currentSpeed = agent.velocity.magnitude;
+                    
+                    // Update animation based on speed and distance
+                    if (animController != null)
+                    {
+                        // Run if we're far from the target, walk if we're close
+                        float runDistance = 5f; // Distance at which to start running
+                        if (distance > runDistance)
+                        {
+                            agent.speed = 5f; // Increase speed for running
+                            animController.SetMovementState(3f); // Running
+                        }
+                        else
+                        {
+                            agent.speed = 2f; // Normal walking speed
+                            animController.SetMovementState(1f); // Walking
+                        }
+                    }
 
+                    // Update rotation
                     Vector3 moveDirection = (targetPosition - transform.position).normalized;
                     if (moveDirection != Vector3.zero)
                     {
@@ -70,7 +89,10 @@ namespace SojaExiles
                 else
                 {
                     agent.ResetPath();
-                    animController?.SetWalking(false);
+                    if (animController != null)
+                    {
+                        animController.SetMovementState(0f); // Idle
+                    }
                     
                     if (Camera.main != null)
                     {
@@ -87,166 +109,122 @@ namespace SojaExiles
 
         public void StartMovingToRegister()
         {
-            if (!CompareTag("Customer") || queueManager == null) return;
+            if (!CompareTag("Customer") || queueManager == null)
+            {
+                Debug.LogError($"[{gameObject.name}] Cannot move to register - invalid setup");
+                return;
+            }
 
             isWaitingInQueue = true;
             pathToRegister.Clear(); // Clear path before starting new journey
             pathToRegister.Add(startPosition); // Add starting position
             queueManager.RegisterCustomer(this);
+            Debug.Log($"[{gameObject.name}] Started moving to register");
         }
 
         public void ServeFood(string foodServed)
         {
             Debug.Log($"[{gameObject.name}] ServeFood called with: {foodServed}");
             
-            // Double check that we're first in queue
-            if (queueManager == null || !queueManager.IsFirstInQueue(this))
+            if (queueManager != null)
             {
-                Debug.Log($"[{gameObject.name}] Not first in queue, ignoring serve");
-                return;
+                queueManager.CustomerLeaving(this);
             }
 
-            var customerRequest = GetComponent<CustomerFoodRequest>();
-            if (customerRequest != null)
+            hasBeenServed = true;
+            isWaitingInQueue = false;
+
+            // Start returning to original position
+            StartCoroutine(ReturnToStart());
+        }
+
+        private IEnumerator ReturnToStart()
+        {
+            Debug.Log($"[{gameObject.name}] Starting return journey");
+
+            // Reverse the path we took to get here
+            pathToRegister.Reverse();
+            
+            foreach (Vector3 point in pathToRegister)
             {
-                FoodType requestedFood = customerRequest.GetDesiredFood();
-                FoodType servedFood;
+                agent.SetDestination(point);
+                float distance = Vector3.Distance(transform.position, point);
                 
-                Debug.Log($"[{gameObject.name}] ========= SERVE FOOD COMPARISON =========");
-                Debug.Log($"[{gameObject.name}] Requested Food: {requestedFood}");
-                Debug.Log($"[{gameObject.name}] Served Food String: {foodServed}");
-                
-                // Try to parse the food type
-                if (System.Enum.TryParse<FoodType>(foodServed, true, out servedFood))
+                // Run if we're far from the point
+                if (distance > 5f)
                 {
-                    Debug.Log($"[{gameObject.name}] Successfully parsed served food to: {servedFood}");
-                    bool isCorrectFood = servedFood == requestedFood;
-                    Debug.Log($"[{gameObject.name}] Is correct food? {isCorrectFood}");
-                    
-                    // Show response first
-                    customerRequest.ShowResponse(isCorrectFood);
-                    
-                    if (isCorrectFood && !hasBeenServed)
-                    {
-                        // Mark as served and start leaving sequence
-                        hasBeenServed = true;
-                        isWaitingInQueue = false;
-                        Debug.Log($"[{gameObject.name}] Starting leave sequence after correct food");
-                        
-                        // Remove from queue immediately
-                        if (queueManager != null)
-                        {
-                            queueManager.RemoveCustomer(this);
-                        }
-                        
-                        // Start leave sequence with a short delay
-                        StartCoroutine(LeaveAfterDelay(2f));
-                    }
+                    agent.speed = 5f;
+                    animController?.SetMovementState(3f); // Running
                 }
                 else
                 {
-                    Debug.LogError($"[{gameObject.name}] Failed to parse food type from string: {foodServed}");
-                    customerRequest.ShowResponse(false);
+                    agent.speed = 2f;
+                    animController?.SetMovementState(1f); // Walking
                 }
+
+                while (Vector3.Distance(transform.position, point) > proximityThreshold)
+                {
+                    yield return null;
+                }
+            }
+
+            // Finally return to exact start position and rotation
+            agent.SetDestination(startPosition);
+            float finalDistance = Vector3.Distance(transform.position, startPosition);
+            
+            // Run back to start position if far enough
+            if (finalDistance > 5f)
+            {
+                agent.speed = 5f;
+                animController?.SetMovementState(3f);
             }
             else
             {
-                Debug.LogError($"[{gameObject.name}] CustomerFoodRequest component missing on {gameObject.name}");
+                agent.speed = 2f;
+                animController?.SetMovementState(1f);
             }
-        }
 
-        private IEnumerator LeaveAfterDelay(float delay)
-        {
-            Debug.Log($"[{gameObject.name}] LeaveAfterDelay started with delay: {delay}");
-            yield return new WaitForSeconds(delay);
-            Debug.Log($"[{gameObject.name}] Delay finished, starting LeaveAndDestroy");
-            
-            // Remove from queue before starting to leave
-            if (queueManager != null)
+            while (Vector3.Distance(transform.position, startPosition) > proximityThreshold)
             {
-                queueManager.RemoveCustomer(this);
-            }
-            
-            StartCoroutine(LeaveAndDestroy());
-        }
-
-        private IEnumerator LeaveAndDestroy()
-        {
-            Debug.Log($"[{gameObject.name}] LeaveAndDestroy started. Path points: {pathToRegister.Count}");
-            
-            // First walk through recorded path points in reverse
-            if (pathToRegister.Count > 1)
-            {
-                Debug.Log($"[{gameObject.name}] Walking through {pathToRegister.Count} path points in reverse");
-                for (int i = pathToRegister.Count - 1; i >= 0; i--)
-                {
-                    if (agent == null) break; // Safety check
-                    
-                    Vector3 targetPoint = pathToRegister[i];
-                    agent.SetDestination(targetPoint);
-                    animController?.SetWalking(true);
-
-                    // Wait until we reach the point or timeout
-                    float pointTimeout = 3f;
-                    while (agent != null && !agent.pathStatus.Equals(NavMeshPathStatus.PathInvalid) && 
-                           Vector3.Distance(transform.position, targetPoint) > proximityThreshold && 
-                           pointTimeout > 0)
-                    {
-                        pointTimeout -= Time.deltaTime;
-                        yield return null;
-                    }
-                }
+                yield return null;
             }
 
-            Debug.Log($"[{gameObject.name}] Returning to start position: {startPosition}");
-            // Finally return to start position with original rotation
-            if (agent != null)
-            {
-                agent.SetDestination(startPosition);
-                animController?.SetWalking(true);
-
-                // Wait until we reach the start position or timeout
-                float timeout = 5f;
-                while (agent != null && !agent.pathStatus.Equals(NavMeshPathStatus.PathInvalid) && 
-                       Vector3.Distance(transform.position, startPosition) > proximityThreshold && 
-                       timeout > 0)
-                {
-                    timeout -= Time.deltaTime;
-                    yield return null;
-                }
-
-                // Stop walking animation
-                animController?.SetWalking(false);
-
-                // Set final rotation before destroying
-                transform.rotation = startRotation;
-                yield return new WaitForSeconds(0.5f);
-            }
+            transform.rotation = startRotation;
+            animController?.SetMovementState(0f); // Set to idle at the end
             
-            Debug.Log($"[{gameObject.name}] Destroying customer object");
-            Destroy(gameObject);
+            // Reset state
+            pathToRegister.Clear();
+            hasBeenServed = false;
+            
+            Debug.Log($"[{gameObject.name}] Returned to start position");
         }
 
         private void ShowMessage(string message)
         {
-            if (uiText == null) return;
-
-            if (messageCoroutine != null)
+            if (uiText != null)
             {
-                StopCoroutine(messageCoroutine);
+                if (messageCoroutine != null)
+                {
+                    StopCoroutine(messageCoroutine);
+                }
+                messageCoroutine = StartCoroutine(ShowMessageCoroutine(message));
             }
-
-            messageCoroutine = StartCoroutine(ShowMessageCoroutine(message));
         }
 
         private IEnumerator ShowMessageCoroutine(string message)
         {
-            uiText.text = message;
-            uiText.gameObject.SetActive(true);
-            
-            yield return new WaitForSeconds(messageDisplayTime);
-            
-            uiText.gameObject.SetActive(false);
+            if (uiText != null)
+            {
+                uiText.text = message;
+                uiText.gameObject.SetActive(true);
+                yield return new WaitForSeconds(messageDisplayTime);
+                uiText.gameObject.SetActive(false);
+            }
+        }
+
+        public bool GetIsFirstInQueue()
+        {
+            return queueManager != null && queueManager.IsFirstInQueue(this);
         }
     }
 }

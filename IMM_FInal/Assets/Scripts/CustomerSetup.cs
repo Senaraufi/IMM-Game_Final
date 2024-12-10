@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEditor;
+using TMPro;
 
 namespace SojaExiles
 {
-    [RequireComponent(typeof(Animator))]
     public class CustomerSetup : MonoBehaviour
     {
         private Animator animator;
@@ -13,29 +13,74 @@ namespace SojaExiles
 
         void Awake()
         {
-            // Get the animator component
+            // Add wolf component first if it doesn't exist
+            wolfComponent = GetComponent<animal_people_wolf_1>();
+            if (wolfComponent == null)
+            {
+                wolfComponent = gameObject.AddComponent<animal_people_wolf_1>();
+                Debug.Log($"[{gameObject.name}] Added wolf component");
+            }
+            
+            // Get or add the animator component
             animator = GetComponent<Animator>();
+            if (animator == null)
+            {
+                animator = gameObject.AddComponent<Animator>();
+                Debug.Log($"[{gameObject.name}] Added animator component");
+            }
             
             // Try to find the animator controller if it's not set
             if (animator.runtimeAnimatorController == null)
             {
-                // Try to find the controller in its original location
-                defaultController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>("Assets/Supercyan Character Pack Animal People Sample/AnimatorControllers/FreeAnimations.controller");
+                // First try to load from Resources
+                defaultController = Resources.Load<RuntimeAnimatorController>("CustomerAnimator");
+                
+                if (defaultController == null)
+                {
+                    // Fallback to loading from original location
+                    defaultController = Resources.Load<RuntimeAnimatorController>("FreeAnimations");
+                }
                 
                 if (defaultController != null)
                 {
                     animator.runtimeAnimatorController = defaultController;
+                    Debug.Log($"[{gameObject.name}] Assigned animator controller: {defaultController.name}");
                 }
                 else
                 {
-                    Debug.LogError("Could not find animator controller! Make sure it exists in: Assets/Supercyan Character Pack Animal People Sample/AnimatorControllers/FreeAnimations.controller");
+                    Debug.LogError($"[{gameObject.name}] Could not find animator controller in Resources folder!");
                 }
             }
 
             // Add CustomerAnimationController if it doesn't exist
-            if (GetComponent<CustomerAnimationController>() == null)
+            var animController = GetComponent<CustomerAnimationController>();
+            if (animController == null)
             {
-                gameObject.AddComponent<CustomerAnimationController>();
+                animController = gameObject.AddComponent<CustomerAnimationController>();
+                Debug.Log($"[{gameObject.name}] Added CustomerAnimationController");
+            }
+
+            // Add CustomerFoodRequest if it doesn't exist
+            var foodRequest = GetComponent<CustomerFoodRequest>();
+            if (foodRequest == null)
+            {
+                foodRequest = gameObject.AddComponent<CustomerFoodRequest>();
+                Debug.Log($"[{gameObject.name}] Added CustomerFoodRequest");
+            }
+
+            // Add AcceptFood if it doesn't exist
+            var acceptFood = GetComponent<AcceptFood>();
+            if (acceptFood == null)
+            {
+                acceptFood = gameObject.AddComponent<AcceptFood>();
+                Debug.Log($"[{gameObject.name}] Added AcceptFood");
+            }
+
+            // Set the tag
+            if (!CompareTag("Customer"))
+            {
+                gameObject.tag = "Customer";
+                Debug.Log($"[{gameObject.name}] Set tag to Customer");
             }
         }
 
@@ -49,19 +94,11 @@ namespace SojaExiles
                 return;
             }
 
-            // Get wolf component
-            wolfComponent = GetComponent<animal_people_wolf_1>();
-            if (wolfComponent == null)
-            {
-                Debug.LogError($"[{gameObject.name}] animal_people_wolf_1 component not found!");
-                return;
-            }
-
-            // Register with queue manager
+            // Register with queue manager if we're a customer
             if (CompareTag("Customer"))
             {
-                Debug.Log($"[{gameObject.name}] Registering with queue manager");
                 queueManager.RegisterCustomer(wolfComponent);
+                Debug.Log($"[{gameObject.name}] Registered with queue manager");
             }
         }
     }

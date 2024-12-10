@@ -74,8 +74,11 @@ namespace SojaExiles
             {
                 Debug.Log($"[{gameObject.name}] Correct food! Serving...");
                 
-                // Show response first
-                customerFoodRequest.ShowResponse(true);
+                // Show response only if customer is first in queue
+                if (queueManager.IsFirstInQueue(wolfComponent))
+                {
+                    customerFoodRequest.ShowResponse(true);
+                }
                 
                 // Play animation
                 if (animationController != null)
@@ -91,14 +94,21 @@ namespace SojaExiles
             {
                 Debug.Log($"[{gameObject.name}] Wrong food!");
                 
-                // Show response first
-                customerFoodRequest.ShowResponse(false);
+                // Show response only if customer is first in queue
+                if (queueManager.IsFirstInQueue(wolfComponent))
+                {
+                    customerFoodRequest.ShowResponse(false);
+                }
                 
                 // Play animation
                 if (animationController != null)
                 {
                     animationController.PlayAngryAnimation();
                 }
+
+                // Make the customer leave even with wrong food
+                wolfComponent.ServeFood("WrongFood");
+                Destroy(other.gameObject);
             }
         }
 
