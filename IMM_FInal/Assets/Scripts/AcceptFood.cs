@@ -106,21 +106,30 @@ namespace SojaExiles
             // Show response
             customerFoodRequest.ShowResponse(isCorrectFood);
             
-            // Start coroutine to process delivery
-            StartCoroutine(ProcessDeliveryComplete(foodObject, isCorrectFood));
+            // Play appropriate animation
+            if (customerBehavior != null)
+            {
+                if (isCorrectFood)
+                {
+                    customerBehavior.PlayHappyAnimation();
+                }
+                else
+                {
+                    customerBehavior.PlayAngryAnimation();
+                }
+            }
+            
+            // Destroy the food object after a delay
+            StartCoroutine(DestroyFoodAfterDelay(foodObject, 1f));
             return isCorrectFood;
         }
 
-        private IEnumerator ProcessDeliveryComplete(GameObject foodObject, bool wasCorrectOrder)
+        private IEnumerator DestroyFoodAfterDelay(GameObject foodObject, float delay)
         {
-            Debug.Log($"Processing delivery completion for {gameObject.name}");
-            
-            // Wait for response to be visible
-            yield return new WaitForSeconds(2f);
-            
-            // Destroy the food object
+            yield return new WaitForSeconds(delay);
             if (foodObject != null)
                 Destroy(foodObject);
+<<<<<<< Updated upstream
 
             // Wait a bit more before leaving
             yield return new WaitForSeconds(1f);
@@ -132,6 +141,9 @@ namespace SojaExiles
                 customerBehavior.StartReturnToStart();
             }
             
+=======
+            }
+>>>>>>> Stashed changes
             isProcessingDelivery = false;
         }
     }

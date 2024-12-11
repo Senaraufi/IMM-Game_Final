@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.AI;
-using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -9,36 +8,28 @@ namespace SojaExiles
     public class CustomerBehavior : MonoBehaviour
     {
         public float proximityThreshold = 0.5f;
-        public string requestMessage = "Can I have a burger, please?";
-        public TMP_Text uiText;
-        public float messageDisplayTime = 2f; // How long to show messages
+        public float messageDisplayTime = 2f;
+        public float greetingWaveTime = 2f;  // How long to wave when reaching counter
+        public float responseWaitTime = 2f;   // How long to wait after waving/showing response
 
         private NavMeshAgent agent;
+        private Animator animator;
         private RegisterQueueManager queueManager;
-        private Animator animController;
         private bool isWaitingInQueue = false;
         private bool hasBeenServed = false;
-        private string servedFood = ""; // Added to track what food was served
         private Vector3 startPosition;
         private Quaternion startRotation;
-        private List<Vector3> pathToRegister = new List<Vector3>();
-        private Coroutine messageCoroutine;
+        private bool hasGreeted = false;
 
         void Start()
         {
             agent = GetComponent<NavMeshAgent>();
-            animController = GetComponent<Animator>();
+            animator = GetComponent<Animator>();
             queueManager = RegisterQueueManager.Instance;
 
-            // Initialize the food request when the customer spawns
-            var foodRequest = GetComponent<CustomerFoodRequest>();
-            if (foodRequest != null)
+            if (animator == null)
             {
-                foodRequest.GenerateRandomFoodRequest();
-            }
-
-            if (agent == null || queueManager == null)
-            {
+                Debug.LogError($"[{gameObject.name}] Missing Animator component!");
                 return;
             }
 
@@ -56,34 +47,18 @@ namespace SojaExiles
                 
                 if (distance > proximityThreshold)
                 {
-                    // Only record path points if we're far enough from the last recorded point
-                    if (pathToRegister.Count == 0 || 
-                        Vector3.Distance(pathToRegister[pathToRegister.Count - 1], transform.position) > 2f)
-                    {
-                        pathToRegister.Add(transform.position);
-                    }
-
-                    // Set destination and calculate speed
                     agent.SetDestination(targetPosition);
                     
-                    // Update animation and speed based on distance
-                    if (animController != null)
+                    // Update animation based on movement
+                    if (animator != null)
                     {
-                        bool shouldWalk = distance > proximityThreshold;
-                        if (shouldWalk != animController.GetBool("Walk"))
-                        {
-                            animController.SetBool("Walk", shouldWalk);
-                            animController.SetBool("Idle", !shouldWalk);
-                            agent.speed = distance > 5f ? 5f : 2f;
-                        }
-                    }
-
-                    // Only update rotation if we need to move
-                    Vector3 moveDirection = (targetPosition - transform.position).normalized;
-                    if (moveDirection != Vector3.zero)
-                    {
-                        transform.rotation = Quaternion.Slerp(transform.rotation, 
-                            Quaternion.LookRotation(moveDirection), Time.deltaTime * 5f);
+                        bool isMoving = agent.velocity.magnitude > 0.1f;
+                        SetAnimationState(isMoving);
+                        
+                        // Adjust speed based on distance
+                        float speedMultiplier = distance > 5f ? 1.5f : 1f;
+                        agent.speed = 3.5f * speedMultiplier;
+                        hasGreeted = false; // Reset greeting flag while moving
                     }
                 }
                 else
@@ -91,145 +66,135 @@ namespace SojaExiles
                     if (agent.hasPath)
                     {
                         agent.ResetPath();
-                        if (animController != null)
+                        if (animator != null)
                         {
-                            animController.SetBool("Walk", false);
-                            animController.SetBool("Idle", true);
-                        }
-                    }
-                    
-                    // Only update camera facing when needed
-                    if (Camera.main != null)
-                    {
-                        Vector3 directionToCamera = Camera.main.transform.position - transform.position;
-                        directionToCamera.y = 0;
-                        if (directionToCamera != Vector3.zero)
-                        {
-                            transform.rotation = Quaternion.Slerp(transform.rotation,
-                                Quaternion.LookRotation(directionToCamera), Time.deltaTime * 5f);
+                            SetAnimationState(false);
+                            
+                            // Wave when first reaching the counter
+                            if (!hasGreeted)
+                            {
+                                StartCoroutine(GreetingSequence());
+                                hasGreeted = true;
+                            }
                         }
                     }
                 }
             }
+            else
+            {
+                if (agent != null)
+                {
+                    // Set walking animation based on whether the agent is moving
+                    SetAnimationState(agent.velocity.magnitude > 0.1f);
+                }
+            }
         }
 
-        public void StartMovingToRegister()
+        private void SetAnimationState(bool isWalking)
         {
-            if (!CompareTag("Customer") || queueManager == null)
+            if (animator != null)
             {
-                return;
+                animator.SetBool("Walk", isWalking);
             }
+        }
 
-            isWaitingInQueue = true;
-            pathToRegister.Clear();
-            pathToRegister.Add(startPosition);
-            queueManager.RegisterCustomer(this);
-
-            // Show the food request when starting to move
+        private IEnumerator GreetingSequence()
+        {
+            // Wave when reaching counter
+            PlayWaveAnimation();
+            
+            // Wait for wave animation
+            yield return new WaitForSeconds(greetingWaveTime);
+            
+            // Generate and show food request
             var foodRequest = GetComponent<CustomerFoodRequest>();
             if (foodRequest != null)
             {
-                foodRequest.GenerateRandomFoodRequest(); // Generate a new request
-                foodRequest.ShowRequest(); // Show it immediately
+                foodRequest.GenerateRandomFoodRequest();
+                foodRequest.ShowRequest();
             }
         }
 
-        public void ServeFood(string foodServed)
+        public void PlayWaveAnimation()
         {
-            if (hasBeenServed) return;
-
-            hasBeenServed = true;
-            servedFood = foodServed;
-            isWaitingInQueue = false;
-
-            // Leave the queue
-            if (queueManager != null)
+            if (animator != null)
             {
-                queueManager.CustomerLeaving(this);
+                animator.SetTrigger("Wave");
             }
         }
 
-        private IEnumerator HideRequestAfterDelay(CustomerFoodRequest request, float delay)
+        public void PlayHappyAnimation()
         {
-            yield return new WaitForSeconds(delay);
-            request.HideRequest();
+            if (animator != null)
+            {
+                animator.SetTrigger("Happy");
+            }
         }
 
-        public bool HasBeenServed()
+        public void PlayAngryAnimation()
         {
-            return hasBeenServed;
+            if (animator != null)
+            {
+                animator.SetTrigger("Angry");
+            }
         }
 
-        public string GetServedFood()
+        public void PlayHappyAnimationOld()
         {
-            return servedFood;
+            if (animator != null)
+            {
+                animator.SetTrigger("Wave");
+                animator.SetBool("Walk", false);
+                animator.SetBool("Run", false);
+                StartCoroutine(WaitAfterResponse());
+            }
         }
 
-        public void ResetServed()
+        public void PlayAngryAnimationOld()
         {
-            hasBeenServed = false;
-            servedFood = "";
+            if (animator != null)
+            {
+                animator.SetTrigger("No");
+                animator.SetBool("Walk", false);
+                animator.SetBool("Run", false);
+                StartCoroutine(WaitAfterResponse());
+            }
+        }
+
+        private IEnumerator WaitAfterResponse()
+        {
+            // Wait for response animation to complete
+            yield return new WaitForSeconds(responseWaitTime);
+            
+            // Start returning
+            StartReturnToStart();
         }
 
         public void StartReturnToStart()
         {
-            StartCoroutine(ReturnToStart());
+            if (!hasBeenServed)
+            {
+                hasBeenServed = true;
+                if (queueManager != null)
+                {
+                    queueManager.CustomerLeaving(this);
+                }
+
+                // Start moving back
+                if (agent != null)
+                {
+                    agent.SetDestination(startPosition);
+                    StartCoroutine(WaitForReturnToStart());
+                }
+            }
         }
 
-        private IEnumerator ReturnToStart()
+        private IEnumerator WaitForReturnToStart()
         {
-            // Reverse the path we took to get here
-            pathToRegister.Reverse();
-            
-            foreach (Vector3 point in pathToRegister)
+            // Set walking animation while returning
+            if (animator != null)
             {
-                agent.SetDestination(point);
-                float distance = Vector3.Distance(transform.position, point);
-                
-                // Set speed and animation based on distance
-                if (distance > 5f)
-                {
-                    agent.speed = 5f;
-                    if (animController != null)
-                    {
-                        animController.SetBool("Walk", true);
-                        animController.SetBool("Idle", false);
-                    }
-                }
-                else
-                {
-                    agent.speed = 2f;
-                    if (animController != null)
-                    {
-                        animController.SetBool("Walk", true);
-                        animController.SetBool("Idle", false);
-                    }
-                }
-
-                while (Vector3.Distance(transform.position, point) > proximityThreshold)
-                {
-                    yield return null;
-                }
-            }
-
-            // Finally return to exact start position and rotation
-            agent.SetDestination(startPosition);
-            float finalDistance = Vector3.Distance(transform.position, startPosition);
-            
-            // Set speed and animation for final return
-            if (finalDistance > 5f)
-            {
-                agent.speed = 5f;
-            }
-            else
-            {
-                agent.speed = 2f;
-            }
-
-            if (animController != null)
-            {
-                animController.SetBool("Walk", true);
-                animController.SetBool("Idle", false);
+                SetAnimationState(true);
             }
 
             while (Vector3.Distance(transform.position, startPosition) > proximityThreshold)
@@ -237,67 +202,54 @@ namespace SojaExiles
                 yield return null;
             }
 
-            transform.rotation = startRotation;
-            if (animController != null)
+            // Reached start position
+            if (animator != null)
             {
-                animController.SetBool("Walk", false);
-                animController.SetBool("Idle", true);
+                SetAnimationState(false);
             }
             
+            // Reset rotation
+            transform.rotation = startRotation;
+            
             // Reset state
-            pathToRegister.Clear();
-            yield return new WaitForSeconds(3.0f); // Wait for response animation to complete
-            Destroy(gameObject, 0.5f);
+            hasBeenServed = false;
+            isWaitingInQueue = false;
+            hasGreeted = false;
         }
 
-        private void ShowMessage(string message)
+        public void EnterQueue()
         {
-            if (uiText != null)
-            {
-                if (messageCoroutine != null)
-                {
-                    StopCoroutine(messageCoroutine);
-                }
-                messageCoroutine = StartCoroutine(ShowMessageCoroutine(message));
-            }
+            if (hasBeenServed || isWaitingInQueue) return;
+            
+            isWaitingInQueue = true;
+            queueManager.RegisterCustomer(this);
         }
 
-        private IEnumerator ShowMessageCoroutine(string message)
+        public bool HasBeenServed()
         {
-            if (uiText != null)
-            {
-                uiText.text = message;
-                uiText.enabled = true;
-                yield return new WaitForSeconds(messageDisplayTime);
-                uiText.text = "";
-                uiText.enabled = false;
-            }
+            return hasBeenServed;
         }
 
-        public void PlayHappyAnimation()
+        public void ResetServed()
         {
-            if (animController != null)
-            {
-                animController.SetBool("Happy", true);
-                StartCoroutine(ResetAnimation("Happy"));
-            }
+            hasBeenServed = false;
         }
 
-        public void PlayAngryAnimation()
+        public void StartMovingToRegister()  // Adding this back for compatibility
         {
-            if (animController != null)
-            {
-                animController.SetBool("Angry", true);
-                StartCoroutine(ResetAnimation("Angry"));
-            }
+            EnterQueue();
         }
 
-        private IEnumerator ResetAnimation(string animationName)
+        public void ServeFood(string foodServed)  // Adding this back for compatibility
         {
-            yield return new WaitForSeconds(2f);
-            if (animController != null)
+            if (hasBeenServed) return;
+
+            hasBeenServed = true;
+            isWaitingInQueue = false;
+
+            if (queueManager != null)
             {
-                animController.SetBool(animationName, false);
+                queueManager.CustomerLeaving(this);
             }
         }
     }
