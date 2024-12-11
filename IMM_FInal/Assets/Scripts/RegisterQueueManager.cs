@@ -16,15 +16,15 @@ namespace SojaExiles
         [SerializeField]
         private float spacing = 1.5f;
         
-        private Queue<animal_people_wolf_1> npcQueue = new Queue<animal_people_wolf_1>();
-        private Dictionary<animal_people_wolf_1, Vector3> queuePositions = new Dictionary<animal_people_wolf_1, Vector3>();
-        private List<animal_people_wolf_1> availableCustomers = new List<animal_people_wolf_1>();
+        private Queue<CustomerBehavior> npcQueue = new Queue<CustomerBehavior>();
+        private Dictionary<CustomerBehavior, Vector3> queuePositions = new Dictionary<CustomerBehavior, Vector3>();
+        private List<CustomerBehavior> availableCustomers = new List<CustomerBehavior>();
 
         [SerializeField]
-        private UnityEvent<animal_people_wolf_1> onCustomerRegistered;
+        private UnityEvent<CustomerBehavior> onCustomerRegistered;
         
         [SerializeField]
-        private UnityEvent<animal_people_wolf_1> onCustomerLeaving;
+        private UnityEvent<CustomerBehavior> onCustomerLeaving;
 
         void Awake()
         {
@@ -42,7 +42,7 @@ namespace SojaExiles
 
         private void FindAllCustomers()
         {
-            var customers = FindObjectsOfType<animal_people_wolf_1>();
+            var customers = FindObjectsOfType<CustomerBehavior>();
             foreach (var customer in customers)
             {
                 if (customer.CompareTag("Customer"))
@@ -53,7 +53,7 @@ namespace SojaExiles
             Debug.Log($"Found {availableCustomers.Count} customers in the scene");
         }
 
-        public void RegisterCustomer(animal_people_wolf_1 customer)
+        public void RegisterCustomer(CustomerBehavior customer)
         {
             if (!npcQueue.Contains(customer))
             {
@@ -63,22 +63,22 @@ namespace SojaExiles
             }
         }
 
-        public bool IsFirstInQueue(animal_people_wolf_1 customer)
+        public bool IsFirstInQueue(CustomerBehavior customer)
         {
             return npcQueue.Count > 0 && npcQueue.Peek() == customer;
         }
 
-        public void CustomerLeaving(animal_people_wolf_1 customer)
+        public void CustomerLeaving(CustomerBehavior customer)
         {
             if (npcQueue.Contains(customer))
             {
-                npcQueue = new Queue<animal_people_wolf_1>(npcQueue.Where(c => c != customer));
+                npcQueue = new Queue<CustomerBehavior>(npcQueue.Where(c => c != customer));
                 onCustomerLeaving?.Invoke(customer);
                 UpdateQueuePositions();
             }
         }
 
-        public bool GetIsFirstInQueue(animal_people_wolf_1 customer)
+        public bool GetIsFirstInQueue(CustomerBehavior customer)
         {
             return IsFirstInQueue(customer);
         }
@@ -104,7 +104,7 @@ namespace SojaExiles
             }
         }
 
-        public Vector3 GetQueuePosition(animal_people_wolf_1 npc)
+        public Vector3 GetQueuePosition(CustomerBehavior npc)
         {
             if (queuePositions.TryGetValue(npc, out Vector3 position))
             {

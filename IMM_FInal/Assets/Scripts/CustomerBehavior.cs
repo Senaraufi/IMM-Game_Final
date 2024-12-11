@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SojaExiles
 {
-    public class animal_people_wolf_1 : MonoBehaviour
+    public class CustomerBehavior : MonoBehaviour
     {
         public float proximityThreshold = 0.5f;
         public string requestMessage = "Can I have a burger, please?";
@@ -132,28 +132,17 @@ namespace SojaExiles
 
         public void ServeFood(string foodServed)
         {
-            if (queueManager != null)
-            {
-                queueManager.CustomerLeaving(this);
-            }
-
-            // Get the food request component
-            var foodRequest = GetComponent<CustomerFoodRequest>();
-            if (foodRequest != null)
-            {
-                // Show a response based on whether they got the correct food
-                bool isCorrectFood = foodServed.ToLower() == foodRequest.GetDesiredFood().ToString().ToLower();
-                foodRequest.ShowResponse(isCorrectFood);
-                
-                // Wait a moment before hiding the request
-                StartCoroutine(HideRequestAfterDelay(foodRequest, 2f));
-            }
+            if (hasBeenServed) return;
 
             hasBeenServed = true;
             servedFood = foodServed;
             isWaitingInQueue = false;
 
-            StartCoroutine(ReturnToStart());
+            // Leave the queue
+            if (queueManager != null)
+            {
+                queueManager.CustomerLeaving(this);
+            }
         }
 
         private IEnumerator HideRequestAfterDelay(CustomerFoodRequest request, float delay)
@@ -176,6 +165,11 @@ namespace SojaExiles
         {
             hasBeenServed = false;
             servedFood = "";
+        }
+
+        public void StartReturnToStart()
+        {
+            StartCoroutine(ReturnToStart());
         }
 
         private IEnumerator ReturnToStart()
@@ -272,6 +266,33 @@ namespace SojaExiles
                 yield return new WaitForSeconds(messageDisplayTime);
                 uiText.text = "";
                 uiText.enabled = false;
+            }
+        }
+
+        public void PlayHappyAnimation()
+        {
+            if (animController != null)
+            {
+                animController.SetBool("Happy", true);
+                StartCoroutine(ResetAnimation("Happy"));
+            }
+        }
+
+        public void PlayAngryAnimation()
+        {
+            if (animController != null)
+            {
+                animController.SetBool("Angry", true);
+                StartCoroutine(ResetAnimation("Angry"));
+            }
+        }
+
+        private IEnumerator ResetAnimation(string animationName)
+        {
+            yield return new WaitForSeconds(2f);
+            if (animController != null)
+            {
+                animController.SetBool(animationName, false);
             }
         }
     }

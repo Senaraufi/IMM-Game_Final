@@ -95,6 +95,15 @@ namespace SojaExiles
             lastPosition = currentPosition;
         }
 
+        public void SetMovementState(bool isWalking)
+        {
+            if (animator != null && animator.runtimeAnimatorController != null)
+            {
+                animator.SetBool(IS_WALKING, isWalking);
+                animator.SetBool(IS_IDLE, !isWalking);
+            }
+        }
+
         public void PlayWaveAnimation()
         {
             if (animator != null && animator.runtimeAnimatorController != null)

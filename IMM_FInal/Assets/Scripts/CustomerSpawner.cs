@@ -18,7 +18,7 @@ namespace SojaExiles
         [SerializeField]
         private int maxCustomers = 5;
 
-        private List<animal_people_wolf_1> spawnedCustomers = new List<animal_people_wolf_1>();
+        private List<CustomerBehavior> spawnedCustomers = new List<CustomerBehavior>();
         private RegisterQueueManager queueManager;
         private bool isSpawning = true;
         private int currentWaitingSpot = 0;
@@ -28,7 +28,7 @@ namespace SojaExiles
             // If no customer prefab is assigned, try to load it
             if (customerPrefab == null)
             {
-                customerPrefab = Resources.Load<GameObject>("animal_people_wolf_1");
+                customerPrefab = Resources.Load<GameObject>("CustomerPrefab");
                 if (customerPrefab == null)
                 {
                     Debug.LogError("Customer prefab not found! Please assign it in the inspector.");
@@ -53,7 +53,7 @@ namespace SojaExiles
 
         private void PositionExistingNPCs()
         {
-            var existingNPCs = FindObjectsOfType<animal_people_wolf_1>();
+            var existingNPCs = FindObjectsOfType<CustomerBehavior>();
             foreach (var npc in existingNPCs)
             {
                 if (npc != null && npc.CompareTag("Customer"))
@@ -86,9 +86,9 @@ namespace SojaExiles
                 customer.AddComponent<Animator>();
             }
 
-            if (!customer.GetComponent<animal_people_wolf_1>())
+            if (!customer.GetComponent<CustomerBehavior>())
             {
-                customer.AddComponent<animal_people_wolf_1>();
+                customer.AddComponent<CustomerBehavior>();
             }
 
             if (!customer.GetComponent<CustomerAnimationController>())
@@ -143,14 +143,14 @@ namespace SojaExiles
                     if (customerObj != null)
                     {
                         PositionNPC(customerObj);
-                        spawnedCustomers.Add(customerObj.GetComponent<animal_people_wolf_1>());
+                        spawnedCustomers.Add(customerObj.GetComponent<CustomerBehavior>());
                     }
                 }
                 yield return new WaitForSeconds(spawnInterval);
             }
         }
 
-        public void RemoveCustomer(animal_people_wolf_1 customer)
+        public void RemoveCustomer(CustomerBehavior customer)
         {
             if (spawnedCustomers.Contains(customer))
             {

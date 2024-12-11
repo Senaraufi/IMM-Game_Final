@@ -9,16 +9,16 @@ namespace SojaExiles
         private Animator animator;
         private RuntimeAnimatorController defaultController;
         private RegisterQueueManager queueManager;
-        private animal_people_wolf_1 wolfComponent;
+        private CustomerBehavior customerBehavior;
 
         void Awake()
         {
-            // Add wolf component first if it doesn't exist
-            wolfComponent = GetComponent<animal_people_wolf_1>();
-            if (wolfComponent == null)
+            // Add customer behavior component first if it doesn't exist
+            customerBehavior = GetComponent<CustomerBehavior>();
+            if (customerBehavior == null)
             {
-                wolfComponent = gameObject.AddComponent<animal_people_wolf_1>();
-                Debug.Log($"[{gameObject.name}] Added wolf component");
+                customerBehavior = gameObject.AddComponent<CustomerBehavior>();
+                Debug.Log($"[{gameObject.name}] Added customer behavior component");
             }
             
             // Get or add the animator component
@@ -97,7 +97,7 @@ namespace SojaExiles
             // Register with queue manager if we're a customer
             if (CompareTag("Customer"))
             {
-                queueManager.RegisterCustomer(wolfComponent);
+                queueManager.RegisterCustomer(customerBehavior);
                 Debug.Log($"[{gameObject.name}] Registered with queue manager");
             }
         }

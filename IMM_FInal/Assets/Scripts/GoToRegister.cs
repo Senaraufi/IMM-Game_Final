@@ -36,46 +36,31 @@ namespace SojaExiles
                 return;
             }
 
-            Debug.Log("Attempting to serve customer...");
-            var npcs = FindObjectsOfType<animal_people_wolf_1>();
+            var npcs = FindObjectsOfType<CustomerBehavior>();
             foreach (var npc in npcs)
             {
                 if (queueManager.IsFirstInQueue(npc))
                 {
-                    Debug.Log($"Found first customer in queue: {npc.name}");
-                    // Get the customer's food request
                     var foodRequest = npc.GetComponent<CustomerFoodRequest>();
                     if (foodRequest != null)
                     {
                         FoodType requestedFood = foodRequest.GetDesiredFood();
-                        Debug.Log($"Customer wants: {requestedFood}, Trying to serve: {foodToServe}");
+                        Debug.Log($"Customer wants: {requestedFood}, Serving: {foodToServe}");
                         
-                        // Convert string to FoodType
                         FoodType servingFood;
                         if (System.Enum.TryParse(foodToServe, true, out servingFood))
                         {
                             bool isCorrectOrder = servingFood == requestedFood;
-                            Debug.Log($"Order is correct: {isCorrectOrder}");
                             
-                            // Show the appropriate response
+                            // Always show response and serve food
                             foodRequest.ShowResponse(isCorrectOrder);
-                            
-                            if (isCorrectOrder)
-                            {
-                                Debug.Log("Serving correct food to customer");
-                                // Only serve food and trigger events if the order was correct
-                                npc.ServeFood(foodToServe);
-                                onServeCustomer?.Invoke();
-                            }
+                            npc.ServeFood(foodToServe);
+                            onServeCustomer?.Invoke();
                         }
                         else
                         {
                             Debug.LogError($"Could not parse food type: {foodToServe}");
                         }
-                    }
-                    else
-                    {
-                        Debug.LogError($"CustomerFoodRequest component missing on {npc.name}!");
                     }
                     break;
                 }
