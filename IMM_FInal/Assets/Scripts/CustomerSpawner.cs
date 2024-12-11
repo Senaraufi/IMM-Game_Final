@@ -13,7 +13,7 @@ namespace SojaExiles
         private GameObject customerPrefab;
         
         [SerializeField]
-        private float spawnInterval = 10f;
+        public float spawnInterval = 10f;
         
         [SerializeField]
         private int maxCustomers = 5;

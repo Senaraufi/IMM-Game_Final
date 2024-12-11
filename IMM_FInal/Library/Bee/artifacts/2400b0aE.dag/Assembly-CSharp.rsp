@@ -386,6 +386,7 @@
 "Assets/Scripts/MainMenu.cs"
 "Assets/Scripts/PressEcollision.cs"
 "Assets/Scripts/RegisterQueueManager.cs"
+"Assets/Scripts/TestScript.cs"
 "Assets/Scripts/TextHide.cs"
 "Assets/Scripts/TextManager.cs"
 "Assets/Scripts/Trigger.cs"

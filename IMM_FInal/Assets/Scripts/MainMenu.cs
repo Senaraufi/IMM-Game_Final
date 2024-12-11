@@ -1,42 +1,60 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
-public class MainMenu : MonoBehaviour
+namespace SojaExiles
 {
-    [Header("UI Elements")]
-    public TextMeshProUGUI titleText;
-    public GameObject difficultyButtons;
-
-    private void Start()
+    public class MainMenu : MonoBehaviour
     {
-        // Set up the title text
-        if (titleText != null)
+        [Header("UI Elements")]
+        public Button startButton;
+        public TextMeshProUGUI titleText;
+        public GameManager gameManager;
+
+        void Start()
         {
-            titleText.text = "Cooking Game";
-            titleText.fontSize = 72;
-            titleText.color = Color.white;
+            Debug.Log("MainMenu Start called");
+            
+            // Set up button listener
+            if (startButton != null)
+            {
+                startButton.onClick.AddListener(OnStartClicked);
+                Debug.Log("Start button listener added");
+            }
+            else
+            {
+                Debug.LogError("Start button not assigned!");
+            }
+
+            // Set up title text
+            if (titleText != null)
+            {
+                titleText.text = "Cooking Game";
+                titleText.fontSize = 72;
+                titleText.color = Color.white;
+                Debug.Log("Title text set up");
+            }
         }
 
-        // Ensure difficulty buttons are visible
-        if (difficultyButtons != null)
+        void OnStartClicked()
         {
-            difficultyButtons.SetActive(true);
+            Debug.Log("Start button clicked!");
+            if (gameManager != null)
+            {
+                gameManager.StartGame();
+            }
+            else
+            {
+                Debug.LogError("GameManager not assigned!");
+            }
         }
-    }
 
-    // These methods will be called by the UI buttons
-    public void OnEasySelected()
-    {
-        GameManager.Instance.SetDifficulty(0);
-    }
-
-    public void OnMediumSelected()
-    {
-        GameManager.Instance.SetDifficulty(1);
-    }
-
-    public void OnHardSelected()
-    {
-        GameManager.Instance.SetDifficulty(2);
+        void OnDestroy()
+        {
+            if (startButton != null)
+            {
+                startButton.onClick.RemoveListener(OnStartClicked);
+            }
+        }
     }
 }

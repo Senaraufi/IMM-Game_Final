@@ -1,103 +1,36 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-public class GameManager : MonoBehaviour
+namespace SojaExiles
 {
-    public static GameManager Instance { get; private set; }
-    
-    public enum Difficulty
+    public class GameManager : MonoBehaviour
     {
-        Easy,
-        Medium,
-        Hard
-    }
+        public GameObject mainMenuPanel;
+        public Button startButton;
 
-    public Difficulty currentDifficulty { get; private set; }
-    public bool gameStarted { get; private set; } = false;
-
-    [Header("UI References")]
-    public GameObject mainMenuPanel;
-    public GameObject gameUI;
-
-    private void Awake()
-    {
-        if (Instance == null)
+        void Start()
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            // Make sure the menu is visible at start
+            if (mainMenuPanel != null)
+            {
+                mainMenuPanel.SetActive(true);
+            }
+
+            // Set up button click listener if button exists
+            if (startButton != null)
+            {
+                startButton.onClick.AddListener(StartGame);
+            }
         }
-        else
+
+        public void StartGame()
         {
-            Destroy(gameObject);
-        }
-    }
-
-    private void Start()
-    {
-        // Ensure game starts in menu state
-        if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
-        if (gameUI != null) gameUI.SetActive(false);
-        Time.timeScale = 0; // Pause the game
-    }
-
-    public void SetDifficulty(int difficultyLevel)
-    {
-        currentDifficulty = (Difficulty)difficultyLevel;
-        StartGame();
-    }
-
-    public void StartGame()
-    {
-        gameStarted = true;
-        if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
-        if (gameUI != null) gameUI.SetActive(true);
-        Time.timeScale = 1; // Resume the game
-
-        // Apply difficulty settings
-        switch (currentDifficulty)
-        {
-            case Difficulty.Easy:
-                SetEasyDifficulty();
-                break;
-            case Difficulty.Medium:
-                SetMediumDifficulty();
-                break;
-            case Difficulty.Hard:
-                SetHardDifficulty();
-                break;
-        }
-    }
-
-    private void SetEasyDifficulty()
-    {
-        // Set easy mode parameters
-        // Example: slower customer spawn rate, more time to prepare food
-        var customerSpawner = FindObjectOfType<CustomerSpawner>();
-        if (customerSpawner != null)
-        {
-            customerSpawner.spawnInterval = 20f;
-        }
-    }
-
-    private void SetMediumDifficulty()
-    {
-        // Set medium mode parameters
-        var customerSpawner = FindObjectOfType<CustomerSpawner>();
-        if (customerSpawner != null)
-        {
-            customerSpawner.spawnInterval = 15f;
-        }
-    }
-
-    private void SetHardDifficulty()
-    {
-        // Set hard mode parameters
-        // Example: faster customer spawn rate, less time to prepare food
-        var customerSpawner = FindObjectOfType<CustomerSpawner>();
-        if (customerSpawner != null)
-        {
-            customerSpawner.spawnInterval = 10f;
+            Debug.Log("Button clicked - Starting game");
+            if (mainMenuPanel != null)
+            {
+                mainMenuPanel.SetActive(false);
+                Debug.Log("Main menu hidden");
+            }
         }
     }
 }
