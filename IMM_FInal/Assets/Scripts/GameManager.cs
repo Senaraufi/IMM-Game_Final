@@ -1,36 +1,57 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace SojaExiles
 {
     public class GameManager : MonoBehaviour
     {
-        public GameObject mainMenuPanel;
-        public Button startButton;
+        [SerializeField] private GameObject mainMenuPanel;  // Serialized for Unity Inspector
 
-        void Start()
+        void Awake()
         {
-            // Make sure the menu is visible at start
-            if (mainMenuPanel != null)
+            // Try to find the panel if it's not assigned
+            if (mainMenuPanel == null)
             {
-                mainMenuPanel.SetActive(true);
-            }
-
-            // Set up button click listener if button exists
-            if (startButton != null)
-            {
-                startButton.onClick.AddListener(StartGame);
+                mainMenuPanel = transform.Find("MainMenuPanel")?.gameObject;
+                if (mainMenuPanel == null)
+                {
+                    mainMenuPanel = GameObject.Find("MainMenuPanel");
+                }
             }
         }
 
-        public void StartGame()
+        void Start()
         {
-            Debug.Log("Button clicked - Starting game");
-            if (mainMenuPanel != null)
+            if (mainMenuPanel == null)
             {
-                mainMenuPanel.SetActive(false);
-                Debug.Log("Main menu hidden");
+                Debug.LogError("MainMenuPanel is not assigned! Please assign it in the Inspector.");
+                return;
             }
+            
+            mainMenuPanel.SetActive(true);
+            Debug.Log("MainMenuPanel is ready and visible");
+        }
+
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                Debug.Log("Q key pressed - Starting game");
+                StartGame();
+            }
+        }
+
+        public void StartGame()  // Made public so MainMenu.cs can access it
+        {
+            if (mainMenuPanel == null)
+            {
+                Debug.LogError("MainMenuPanel is not assigned!");
+                return;
+            }
+
+            Debug.Log("Hiding main menu panel");
+            mainMenuPanel.SetActive(false);
         }
     }
 }
