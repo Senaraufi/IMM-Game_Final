@@ -6,21 +6,18 @@ namespace SojaExiles
     public class AcceptFood : MonoBehaviour
     {
         private CustomerFoodRequest customerFoodRequest;
-        private CustomerAnimationController animationController;
-        private MonoBehaviour customerComponent;
-        private RegisterQueueManager queueManager;
+        private CustomerBehavior customerBehavior;
         private bool isProcessingDelivery = false;
 
         void Start()
         {
             customerFoodRequest = GetComponent<CustomerFoodRequest>();
-            animationController = GetComponent<CustomerAnimationController>();
-            customerComponent = GetComponent<animal_people_wolf_1>();
-            queueManager = RegisterQueueManager.Instance;
+            customerBehavior = GetComponent<CustomerBehavior>();
             
             if (customerFoodRequest == null)
             {
-                return;
+                Debug.LogError($"[{gameObject.name}] Missing CustomerFoodRequest component!");
+                customerFoodRequest = gameObject.AddComponent<CustomerFoodRequest>();
             }
         }
 
@@ -40,17 +37,6 @@ namespace SojaExiles
                     return;
                 }
 
-                // Queue check
-                if (queueManager == null || customerComponent == null)
-                {
-                    return;
-                }
-
-                if (!queueManager.IsFirstInQueue(customerComponent))
-                {
-                    return;
-                }
-
                 // Get food types
                 FoodType incomingFood = foodScript.FoodType;
                 FoodType wantedFood = customerFoodRequest.GetDesiredFood();
@@ -61,21 +47,18 @@ namespace SojaExiles
                 if (isCorrectFood)
                 {
                     // Show response only if customer is first in queue
-                    if (queueManager.IsFirstInQueue(customerComponent))
-                    {
-                        customerFoodRequest.ShowResponse(true);
-                    }
+                    customerFoodRequest.ShowResponse(true);
                     
                     // Play animation
-                    if (animationController != null)
+                    if (customerBehavior != null)
                     {
-                        animationController.PlayHappyAnimation();
+                        customerBehavior.PlayHappyAnimation();
                     }
                     
                     // Serve and cleanup
-                    if (customerComponent is animal_people_wolf_1 wolfComponent)
+                    if (customerBehavior != null)
                     {
-                        wolfComponent.ServeFood(incomingFood.ToString());
+                        customerBehavior.ServeFood(incomingFood.ToString());
                     }
                     
                     // Make sure to clear the reference before destroying
@@ -87,21 +70,18 @@ namespace SojaExiles
                 else
                 {
                     // Show response only if customer is first in queue
-                    if (queueManager.IsFirstInQueue(customerComponent))
-                    {
-                        customerFoodRequest.ShowResponse(false);
-                    }
+                    customerFoodRequest.ShowResponse(false);
                     
                     // Play animation
-                    if (animationController != null)
+                    if (customerBehavior != null)
                     {
-                        animationController.PlayAngryAnimation();
+                        customerBehavior.PlayAngryAnimation();
                     }
 
                     // Make the customer leave even with wrong food
-                    if (customerComponent is animal_people_wolf_1 wolfComponent)
+                    if (customerBehavior != null)
                     {
-                        wolfComponent.ServeFood("WrongFood");
+                        customerBehavior.ServeFood("WrongFood");
                     }
                     Destroy(other.gameObject);
                 }
@@ -111,42 +91,47 @@ namespace SojaExiles
         public bool AcceptFoodItem(FoodType foodType, GameObject foodObject)
         {
             if (isProcessingDelivery || customerFoodRequest == null)
+            {
+                Debug.LogWarning("Cannot accept food - already processing or missing components");
                 return false;
+            }
 
+            Debug.Log($"Customer {gameObject.name} accepting food: {foodType}");
             isProcessingDelivery = true;
 
             // Compare with desired food
-            bool isCorrectFood = (foodType == customerFoodRequest.GetDesiredFood());
+            bool isCorrectFood = foodType == customerFoodRequest.GetDesiredFood();
+            Debug.Log($"Is correct food? {isCorrectFood}. Customer wanted: {customerFoodRequest.GetDesiredFood()}");
             
             // Show response
             customerFoodRequest.ShowResponse(isCorrectFood);
-
-            // Handle animations if available
-            if (animationController != null)
-            {
-                if (isCorrectFood)
-                    animationController.PlayHappyAnimation();
-                else
-                    animationController.PlayAngryAnimation();
-            }
-
-            // Handle wolf component if available
-            if (customerComponent is animal_people_wolf_1 wolfComponent)
-            {
-                wolfComponent.ServeFood(foodType.ToString());
-            }
-
-            // Clean up
-            if (foodObject != null)
-                Destroy(foodObject);
-
-            StartCoroutine(FinishDelivery());
+            
+            // Start coroutine to process delivery
+            StartCoroutine(ProcessDeliveryComplete(foodObject, isCorrectFood));
             return isCorrectFood;
         }
 
-        private IEnumerator FinishDelivery()
+        private IEnumerator ProcessDeliveryComplete(GameObject foodObject, bool wasCorrectOrder)
         {
+            Debug.Log($"Processing delivery completion for {gameObject.name}");
+            
+            // Wait for response to be visible
             yield return new WaitForSeconds(2f);
+            
+            // Destroy the food object
+            if (foodObject != null)
+                Destroy(foodObject);
+
+            // Wait a bit more before leaving
+            yield return new WaitForSeconds(1f);
+            
+            // Make customer leave
+            if (customerBehavior != null)
+            {
+                Debug.Log($"Customer {gameObject.name} is leaving");
+                customerBehavior.StartReturnToStart();
+            }
+            
             isProcessingDelivery = false;
         }
     }
