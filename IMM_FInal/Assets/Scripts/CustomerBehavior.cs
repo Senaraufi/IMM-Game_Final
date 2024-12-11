@@ -175,6 +175,7 @@ namespace SojaExiles
             if (!hasBeenServed)
             {
                 hasBeenServed = true;
+                Debug.Log($"[{gameObject.name}] Customer marked as served.");
                 if (queueManager != null)
                 {
                     queueManager.CustomerLeaving(this);
@@ -183,9 +184,18 @@ namespace SojaExiles
                 // Start moving back
                 if (agent != null)
                 {
+                    Debug.Log($"[{gameObject.name}] Setting destination to start position.");
                     agent.SetDestination(startPosition);
                     StartCoroutine(WaitForReturnToStart());
                 }
+                else
+                {
+                    Debug.LogError($"[{gameObject.name}] NavMeshAgent is missing!");
+                }
+            }
+            else
+            {
+                Debug.Log($"[{gameObject.name}] Already marked as served.");
             }
         }
 
@@ -215,14 +225,14 @@ namespace SojaExiles
             hasBeenServed = false;
             isWaitingInQueue = false;
             hasGreeted = false;
+
+            Debug.Log($"[{gameObject.name}] Customer returned to start position.");
         }
 
         public void EnterQueue()
         {
-            if (hasBeenServed || isWaitingInQueue) return;
-            
             isWaitingInQueue = true;
-            queueManager.RegisterCustomer(this);
+            Debug.Log($"[{gameObject.name}] Entered queue.");
         }
 
         public bool HasBeenServed()
@@ -235,22 +245,21 @@ namespace SojaExiles
             hasBeenServed = false;
         }
 
-        public void StartMovingToRegister()  // Adding this back for compatibility
+        public void StartMovingToRegister()
         {
-            EnterQueue();
+            if (agent != null && queueManager != null)
+            {
+                Vector3 targetPosition = queueManager.GetQueuePosition(this);
+                agent.SetDestination(targetPosition);
+                SetAnimationState(true);
+                Debug.Log($"[{gameObject.name}] Moving to register.");
+            }
         }
 
-        public void ServeFood(string foodServed)  // Adding this back for compatibility
+        public void ServeFood(string foodServed)
         {
-            if (hasBeenServed) return;
-
+            Debug.Log($"[{gameObject.name}] Served food: {foodServed}.");
             hasBeenServed = true;
-            isWaitingInQueue = false;
-
-            if (queueManager != null)
-            {
-                queueManager.CustomerLeaving(this);
-            }
         }
     }
 }

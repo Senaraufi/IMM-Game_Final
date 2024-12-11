@@ -122,21 +122,10 @@ namespace SojaExiles
             return desiredFood;
         }
 
-        public bool HasActiveRequest()
-        {
-            return hasOrder;
-        }
-
         private IEnumerator HideTextAfterDelay(float delay)
         {
             yield return new WaitForSeconds(delay);
             HideRequest();
-        }
-
-        public void ResetFoodRequest()
-        {
-            hasReceivedFood = false;
-            hasOrder = false;
         }
     }
 }
