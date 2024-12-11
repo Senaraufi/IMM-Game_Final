@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using System.Linq;
 
 namespace SojaExiles
 {
@@ -13,7 +14,7 @@ namespace SojaExiles
         private Transform registerPosition;
         
         [SerializeField]
-        private float spacingBetweenNPCs = 1.5f;
+        private float spacing = 1.5f;
         
         private Queue<animal_people_wolf_1> npcQueue = new Queue<animal_people_wolf_1>();
         private Dictionary<animal_people_wolf_1, Vector3> queuePositions = new Dictionary<animal_people_wolf_1, Vector3>();
@@ -59,7 +60,6 @@ namespace SojaExiles
                 npcQueue.Enqueue(customer);
                 onCustomerRegistered?.Invoke(customer);
                 UpdateQueuePositions();
-                Debug.Log($"Customer {customer.name} registered in queue. Queue size: {npcQueue.Count}");
             }
         }
 
@@ -70,12 +70,11 @@ namespace SojaExiles
 
         public void CustomerLeaving(animal_people_wolf_1 customer)
         {
-            if (npcQueue.Count > 0 && npcQueue.Peek() == customer)
+            if (npcQueue.Contains(customer))
             {
-                npcQueue.Dequeue();
+                npcQueue = new Queue<animal_people_wolf_1>(npcQueue.Where(c => c != customer));
                 onCustomerLeaving?.Invoke(customer);
                 UpdateQueuePositions();
-                Debug.Log($"Customer {customer.name} left the queue. Queue size: {npcQueue.Count}");
             }
         }
 
@@ -88,26 +87,21 @@ namespace SojaExiles
         {
             if (registerPosition == null)
             {
-                Debug.LogError("Register position is not set!");
                 return;
             }
 
+            // Clear old positions
             queuePositions.Clear();
+
+            // Calculate new positions
             Vector3 basePosition = registerPosition.position;
-            Vector3 forward = registerPosition.forward;
-            
             int index = 0;
             foreach (var npc in npcQueue)
             {
-                // Calculate position behind the register
-                Vector3 queuePosition = basePosition + (-forward * spacingBetweenNPCs * index);
-                queuePosition.y = basePosition.y; // Keep at ground level
-                
+                Vector3 queuePosition = basePosition + (Vector3.back * spacing * index);
                 queuePositions[npc] = queuePosition;
                 index++;
             }
-            
-            Debug.Log($"Updated queue positions for {queuePositions.Count} customers");
         }
 
         public Vector3 GetQueuePosition(animal_people_wolf_1 npc)
