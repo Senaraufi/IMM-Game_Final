@@ -392,6 +392,7 @@
 "Assets/Scripts/TextHide.cs"
 "Assets/Scripts/TextManager.cs"
 "Assets/Scripts/Trigger.cs"
+"Assets/Scripts/animal_people_wolf_1.cs"
 "Assets/Supercyan Character Pack Animal People Sample/Scripts/AccessoryLogic.cs"
 "Assets/Supercyan Character Pack Animal People Sample/Scripts/AccessoryWearLogic.cs"
 "Assets/Supercyan Character Pack Animal People Sample/Scripts/DemoFree.cs"

@@ -11,13 +11,14 @@ namespace SojaExiles
         private bool hasOrder = false;
         private float showDuration = 3f;
         private bool isShowing = false;
-        private Coroutine fadeCoroutine;
-        private bool isAtCounter = false;
         private Coroutine hideTextCoroutine;
+        private bool hasReceivedFood = false;
+        private bool isAtCounter = false;
 
-        void Start()
+        void Awake()
         {
             InitializeTextComponent();
+            GenerateRandomFoodRequest();
         }
 
         private void InitializeTextComponent()
@@ -40,7 +41,7 @@ namespace SojaExiles
             requestText.fontSize = 3f;
             requestText.outlineWidth = 0.2f;
             requestText.outlineColor = Color.black;
-            requestText.gameObject.SetActive(true);
+            requestText.gameObject.SetActive(false);
         }
 
         void Update()
@@ -55,14 +56,17 @@ namespace SojaExiles
 
         public void GenerateRandomFoodRequest()
         {
-            // Randomly select a food type
-            desiredFood = Random.value < 0.5f ? FoodType.Pizza : FoodType.Hotdog;
-            hasOrder = true;
+            if (!hasReceivedFood)  // Only generate if haven't received food
+            {
+                desiredFood = Random.value < 0.5f ? FoodType.Pizza : FoodType.Hotdog;
+                hasOrder = true;
+                ShowRequest(); // Show the request immediately
+            }
         }
 
         public void ShowResponse(bool isCorrectOrder)
         {
-            Debug.Log($"[{gameObject.name}] ShowResponse called with isCorrectOrder: {isCorrectOrder}");
+            hasReceivedFood = true;  // Mark that we've received food
             
             if (requestText == null)
             {
@@ -70,57 +74,37 @@ namespace SojaExiles
                 InitializeTextComponent();
             }
 
-            // Make sure text object is active and facing camera
+            // Replace the order text with the response
             requestText.gameObject.SetActive(true);
-            requestText.transform.LookAt(Camera.main.transform);
-            requestText.transform.Rotate(0, 180, 0); // Make text face the camera
-            
+
             if (isCorrectOrder)
             {
-                string[] positiveResponses = {
-                    "Thank you! This is perfect!",
-                    "Yummy! Just what I wanted!",
-                    "Amazing! You got it right!",
-                    "Delicious! Great service!"
-                };
-                requestText.text = positiveResponses[Random.Range(0, positiveResponses.Length)];
+                requestText.text = "Thank you!";
                 requestText.color = new Color(0, 0.8f, 0); // Bright green
-                Debug.Log($"[{gameObject.name}] Set positive response: {requestText.text}");
+                Debug.Log($"[{gameObject.name}] Showing thank you response");
             }
             else
             {
-                string[] negativeResponses = {
-                    "This is not what I ordered!",
-                    "Wrong food! I wanted something else!",
-                    "No, no, no! This isn't right!",
-                    "That's completely wrong!"
-                };
-                requestText.text = negativeResponses[Random.Range(0, negativeResponses.Length)];
+                requestText.text = "This is not what I ordered!";
                 requestText.color = new Color(0.8f, 0, 0); // Bright red
-                Debug.Log($"[{gameObject.name}] Set negative response: {requestText.text}");
+                Debug.Log($"[{gameObject.name}] Showing wrong order response");
             }
-            
-            // Make text more visible
-            requestText.fontSize = 3f;
-            requestText.outlineWidth = 0.2f;
-            requestText.outlineColor = Color.black;
-            
-            // Cancel any existing hide coroutine
+
+            // Start coroutine to hide text after delay
             if (hideTextCoroutine != null)
             {
                 StopCoroutine(hideTextCoroutine);
             }
-            
-            // Start new hide coroutine
-            hideTextCoroutine = StartCoroutine(HideTextAfterDelay(3f));
+            hideTextCoroutine = StartCoroutine(HideTextAfterDelay(2f));
         }
 
-        private IEnumerator HideTextAfterDelay(float delay)
+        public void ShowRequest()
         {
-            yield return new WaitForSeconds(delay);
-            if (requestText != null)
+            if (requestText != null && hasOrder && !hasReceivedFood)  // Only show if haven't received food
             {
-                requestText.gameObject.SetActive(false);
+                requestText.gameObject.SetActive(true);
+                requestText.text = $"I want {desiredFood}!";
+                requestText.color = Color.black;
             }
         }
 
@@ -138,33 +122,21 @@ namespace SojaExiles
             return desiredFood;
         }
 
-        public void SetAtCounter(bool atCounter)
+        public bool HasActiveRequest()
         {
-            isAtCounter = atCounter;
-            if (requestText != null)
-            {
-                requestText.gameObject.SetActive(atCounter && hasOrder);
-                if (atCounter && hasOrder)
-                {
-                    requestText.text = $"I want {desiredFood}!";
-                    requestText.color = Color.black;
-                }
-            }
+            return hasOrder;
         }
 
-        public void ShowRequest()
+        private IEnumerator HideTextAfterDelay(float delay)
         {
-            if (requestText != null && hasOrder)
-            {
-                requestText.gameObject.SetActive(true);
-                requestText.text = $"I want {desiredFood}!";
-                requestText.color = Color.black;
-            }
-            else if (requestText == null)
-            {
-                InitializeTextComponent();
-                GenerateRandomFoodRequest();
-            }
+            yield return new WaitForSeconds(delay);
+            HideRequest();
+        }
+
+        public void ResetFoodRequest()
+        {
+            hasReceivedFood = false;
+            hasOrder = false;
         }
     }
 }

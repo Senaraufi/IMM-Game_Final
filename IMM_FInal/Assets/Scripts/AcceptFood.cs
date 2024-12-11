@@ -1,5 +1,5 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
 namespace SojaExiles
 {
@@ -7,140 +7,90 @@ namespace SojaExiles
     {
         private CustomerFoodRequest customerFoodRequest;
         private CustomerBehavior customerBehavior;
-        private bool isProcessingDelivery = false;
+        private bool hasReceivedFood = false;
 
-        void Start()
+        void Awake()
         {
             customerFoodRequest = GetComponent<CustomerFoodRequest>();
-            customerBehavior = GetComponent<CustomerBehavior>();
-            
             if (customerFoodRequest == null)
             {
-                Debug.LogError($"[{gameObject.name}] Missing CustomerFoodRequest component!");
                 customerFoodRequest = gameObject.AddComponent<CustomerFoodRequest>();
+            }
+            
+            customerBehavior = GetComponent<CustomerBehavior>();
+            if (customerBehavior == null)
+            {
+                Debug.LogError($"[{gameObject.name}] Missing CustomerBehavior component!");
             }
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!isProcessingDelivery && customerFoodRequest != null)
+            if (!hasReceivedFood && customerFoodRequest != null)
             {
                 if (!other.gameObject.CompareTag("Food"))
                 {
                     return;
                 }
 
-                // Get components
+                // Get food component
                 FoodScript foodScript = other.gameObject.GetComponent<FoodScript>();
                 if (foodScript == null)
                 {
                     return;
                 }
 
-                // Get food types
-                FoodType incomingFood = foodScript.FoodType;
-                FoodType wantedFood = customerFoodRequest.GetDesiredFood();
-
-                // Simple direct comparison
-                bool isCorrectFood = incomingFood == wantedFood;
-                
-                if (isCorrectFood)
-                {
-                    // Show response only if customer is first in queue
-                    customerFoodRequest.ShowResponse(true);
-                    
-                    // Play animation
-                    if (customerBehavior != null)
-                    {
-                        customerBehavior.PlayHappyAnimation();
-                    }
-                    
-                    // Serve and cleanup
-                    if (customerBehavior != null)
-                    {
-                        customerBehavior.ServeFood(incomingFood.ToString());
-                    }
-                    
-                    // Make sure to clear the reference before destroying
-                    if (foodScript != null)
-                    {
-                        Destroy(other.gameObject);
-                    }
-                }
-                else
-                {
-                    // Show response only if customer is first in queue
-                    customerFoodRequest.ShowResponse(false);
-                    
-                    // Play animation
-                    if (customerBehavior != null)
-                    {
-                        customerBehavior.PlayAngryAnimation();
-                    }
-
-                    // Make the customer leave even with wrong food
-                    if (customerBehavior != null)
-                    {
-                        customerBehavior.ServeFood("WrongFood");
-                    }
-                    Destroy(other.gameObject);
-                }
+                ProcessFoodDelivery(foodScript);
             }
         }
 
         public bool AcceptFoodItem(FoodType foodType, GameObject foodObject)
         {
-            if (isProcessingDelivery || customerFoodRequest == null)
+            if (hasReceivedFood || customerFoodRequest == null)
             {
-                Debug.LogWarning("Cannot accept food - already processing or missing components");
+                Debug.LogWarning("Cannot accept food - already received food or missing components");
                 return false;
             }
 
-            Debug.Log($"Customer {gameObject.name} accepting food: {foodType}");
-            isProcessingDelivery = true;
+            hasReceivedFood = true;
 
             // Compare with desired food
             bool isCorrectFood = foodType == customerFoodRequest.GetDesiredFood();
-            Debug.Log($"Is correct food? {isCorrectFood}. Customer wanted: {customerFoodRequest.GetDesiredFood()}");
-            
-            // Show response
+            Debug.Log($"[{gameObject.name}] Received {foodType}, wanted {customerFoodRequest.GetDesiredFood()}, correct: {isCorrectFood}");
+
+            // Show response in the same text bubble
             customerFoodRequest.ShowResponse(isCorrectFood);
-            
-            // Play appropriate animation
-            if (customerBehavior != null)
-            {
-                if (isCorrectFood)
-                {
-                    customerBehavior.PlayHappyAnimation();
-                }
-                else
-                {
-                    customerBehavior.PlayAngryAnimation();
-                }
-            }
-            
-            // Destroy the food object after a delay
-            StartCoroutine(DestroyFoodAfterDelay(foodObject, 1f));
+
+            // Destroy the food
+            Destroy(foodObject);
+
+            // Start the leave sequence after showing response
+            StartCoroutine(LeaveAfterResponse());
+
             return isCorrectFood;
         }
 
-        private IEnumerator DestroyFoodAfterDelay(GameObject foodObject, float delay)
+        private IEnumerator LeaveAfterResponse()
         {
-            yield return new WaitForSeconds(delay);
-            if (foodObject != null)
-                Destroy(foodObject);
+            // Wait for response to be visible
+            yield return new WaitForSeconds(2f);
 
-            // Wait a bit more before leaving
-            yield return new WaitForSeconds(1f);
-            
             // Make customer leave
             if (customerBehavior != null)
             {
-                Debug.Log($"Customer {gameObject.name} is leaving");
+                // Mark as served and update queue
+                customerBehavior.ServeFood("Served");
+                
+                // Make them walk back to start
                 customerBehavior.StartReturnToStart();
+                
+                Debug.Log($"[{gameObject.name}] Customer leaving after response");
             }
-            
-            isProcessingDelivery = false;
+        }
+
+        private void ProcessFoodDelivery(FoodScript foodScript)
+        {
+            AcceptFoodItem(foodScript.FoodType, foodScript.gameObject);
         }
     }
 }
