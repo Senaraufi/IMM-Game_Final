@@ -137,8 +137,12 @@ namespace SojaExiles
         {
             if (requestText == null)
             {
-                Debug.LogError($"[{gameObject.name}] TextMeshPro component is missing!");
-                return;
+                InitializeTextComponent();
+                if (requestText == null)
+                {
+                    Debug.LogError($"[{gameObject.name}] Failed to initialize TextMeshPro component!");
+                    return;
+                }
             }
 
             // Ensure text is in the correct position and visible
