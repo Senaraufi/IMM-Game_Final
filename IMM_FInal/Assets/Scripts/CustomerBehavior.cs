@@ -56,9 +56,9 @@ namespace SojaExiles
                 
                 if (distance > proximityThreshold)
                 {
-                    // Record path points while walking to register
-                    if (!hasBeenServed && pathToRegister.Count == 0 || 
-                        (pathToRegister.Count > 0 && Vector3.Distance(pathToRegister[pathToRegister.Count - 1], transform.position) > 1f))
+                    // Only record path points if we're far enough from the last recorded point
+                    if (pathToRegister.Count == 0 || 
+                        Vector3.Distance(pathToRegister[pathToRegister.Count - 1], transform.position) > 2f)
                     {
                         pathToRegister.Add(transform.position);
                     }
@@ -69,40 +69,44 @@ namespace SojaExiles
                     // Update animation and speed based on distance
                     if (animController != null)
                     {
-                        if (distance > 5f)
+                        bool shouldWalk = distance > proximityThreshold;
+                        if (shouldWalk != animController.GetBool("Walk"))
                         {
-                            agent.speed = 5f;
-                            animController.SetBool("Walk", true);
-                        }
-                        else
-                        {
-                            agent.speed = 2f;
-                            animController.SetBool("Walk", true);
+                            animController.SetBool("Walk", shouldWalk);
+                            animController.SetBool("Idle", !shouldWalk);
+                            agent.speed = distance > 5f ? 5f : 2f;
                         }
                     }
 
+                    // Only update rotation if we need to move
                     Vector3 moveDirection = (targetPosition - transform.position).normalized;
                     if (moveDirection != Vector3.zero)
                     {
-                        transform.rotation = Quaternion.LookRotation(moveDirection);
+                        transform.rotation = Quaternion.Slerp(transform.rotation, 
+                            Quaternion.LookRotation(moveDirection), Time.deltaTime * 5f);
                     }
                 }
                 else
                 {
-                    agent.ResetPath();
-                    if (animController != null)
+                    if (agent.hasPath)
                     {
-                        animController.SetBool("Walk", false);
-                        animController.SetBool("Idle", true);
+                        agent.ResetPath();
+                        if (animController != null)
+                        {
+                            animController.SetBool("Walk", false);
+                            animController.SetBool("Idle", true);
+                        }
                     }
                     
+                    // Only update camera facing when needed
                     if (Camera.main != null)
                     {
                         Vector3 directionToCamera = Camera.main.transform.position - transform.position;
                         directionToCamera.y = 0;
                         if (directionToCamera != Vector3.zero)
                         {
-                            transform.rotation = Quaternion.LookRotation(directionToCamera);
+                            transform.rotation = Quaternion.Slerp(transform.rotation,
+                                Quaternion.LookRotation(directionToCamera), Time.deltaTime * 5f);
                         }
                     }
                 }
@@ -242,6 +246,7 @@ namespace SojaExiles
             
             // Reset state
             pathToRegister.Clear();
+            yield return new WaitForSeconds(3.0f); // Wait for response animation to complete
             Destroy(gameObject, 0.5f);
         }
 

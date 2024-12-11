@@ -10,6 +10,7 @@ namespace SojaExiles
         private FoodType desiredFood;
         private bool hasOrder = false;
         private bool isAtCounter = false;
+        private Coroutine hideTextCoroutine;
 
         void Start()
         {
@@ -25,35 +26,26 @@ namespace SojaExiles
 
         private void InitializeTextComponent()
         {
-            // First try to find existing TextMeshPro component
+            // Find or create TextMeshPro component
             requestText = GetComponentInChildren<TextMeshPro>();
-            
             if (requestText == null)
             {
-                // Create a new GameObject for the text
+                Debug.LogWarning($"[{gameObject.name}] Creating new TextMeshPro");
                 GameObject textObj = new GameObject("RequestText");
                 textObj.transform.SetParent(transform);
-                
-                // Position it above the customer's head
-                textObj.transform.localPosition = new Vector3(0, 2.5f, 0);
-                textObj.transform.localRotation = Quaternion.identity;
-                
-                // Add TextMeshPro component
                 requestText = textObj.AddComponent<TextMeshPro>();
                 
-                // Configure the text component
-                requestText.alignment = TextAlignmentOptions.Center;
-                requestText.fontSize = 3f;
-                requestText.color = Color.black;
-                requestText.enableWordWrapping = true;
-                requestText.overflowMode = TextOverflowModes.Overflow;
-                requestText.margin = new Vector4(2, 2, 2, 2);
+                // Position the text above the customer
+                textObj.transform.localPosition = new Vector3(0, 2f, 0);
+                textObj.transform.localRotation = Quaternion.identity;
             }
 
-            // Ensure text is properly configured
-            requestText.enableWordWrapping = true;
+            // Set default text properties
             requestText.alignment = TextAlignmentOptions.Center;
             requestText.fontSize = 3f;
+            requestText.outlineWidth = 0.2f;
+            requestText.outlineColor = Color.black;
+            requestText.gameObject.SetActive(true);
         }
 
         public void GenerateRandomFoodRequest()
@@ -82,7 +74,6 @@ namespace SojaExiles
                     requestText.color = Color.black;
                 }
             }
-            Debug.Log($"[{gameObject.name}] Set at counter: {atCounter}, Text visible: {requestText != null && requestText.gameObject.activeSelf}");
         }
 
         public void ShowRequest()
@@ -102,47 +93,57 @@ namespace SojaExiles
 
         public void ShowResponse(bool isCorrectOrder)
         {
+            Debug.Log($"[{gameObject.name}] ShowResponse called with isCorrectOrder: {isCorrectOrder}");
+            
             if (requestText == null)
             {
+                Debug.LogWarning($"[{gameObject.name}] Request text was null, initializing");
                 InitializeTextComponent();
             }
 
-            if (requestText != null)
+            // Make sure text object is active and facing camera
+            requestText.gameObject.SetActive(true);
+            requestText.transform.LookAt(Camera.main.transform);
+            requestText.transform.Rotate(0, 180, 0); // Make text face the camera
+            
+            if (isCorrectOrder)
             {
-                // Make sure text object is active
-                requestText.gameObject.SetActive(true);
-                
-                if (isCorrectOrder)
-                {
-                    string[] positiveResponses = {
-                        "Thank you! This is perfect!",
-                        "Yummy! Just what I wanted!",
-                        "Amazing! You got it right!",
-                        "Delicious! Great service!"
-                    };
-                    requestText.text = positiveResponses[Random.Range(0, positiveResponses.Length)];
-                    requestText.color = new Color(0, 0.8f, 0); // Bright green
-                }
-                else
-                {
-                    string[] negativeResponses = {
-                        "This is not what I ordered!",
-                        "Wrong food! I wanted something else!",
-                        "No, no, no! This isn't right!",
-                        "That's completely wrong!"
-                    };
-                    requestText.text = negativeResponses[Random.Range(0, negativeResponses.Length)];
-                    requestText.color = new Color(0.8f, 0, 0); // Bright red
-                }
-                
-                // Make text more visible
-                requestText.fontSize = 3f;
-                requestText.outlineWidth = 0.2f;
-                requestText.outlineColor = Color.white;
-                
-                // Start coroutine to hide text after delay
-                StartCoroutine(HideTextAfterDelay(3f));
+                string[] positiveResponses = {
+                    "Thank you! This is perfect!",
+                    "Yummy! Just what I wanted!",
+                    "Amazing! You got it right!",
+                    "Delicious! Great service!"
+                };
+                requestText.text = positiveResponses[Random.Range(0, positiveResponses.Length)];
+                requestText.color = new Color(0, 0.8f, 0); // Bright green
+                Debug.Log($"[{gameObject.name}] Set positive response: {requestText.text}");
             }
+            else
+            {
+                string[] negativeResponses = {
+                    "This is not what I ordered!",
+                    "Wrong food! I wanted something else!",
+                    "No, no, no! This isn't right!",
+                    "That's completely wrong!"
+                };
+                requestText.text = negativeResponses[Random.Range(0, negativeResponses.Length)];
+                requestText.color = new Color(0.8f, 0, 0); // Bright red
+                Debug.Log($"[{gameObject.name}] Set negative response: {requestText.text}");
+            }
+            
+            // Make text more visible
+            requestText.fontSize = 3f;
+            requestText.outlineWidth = 0.2f;
+            requestText.outlineColor = Color.black;
+            
+            // Cancel any existing hide coroutine
+            if (hideTextCoroutine != null)
+            {
+                StopCoroutine(hideTextCoroutine);
+            }
+            
+            // Start new hide coroutine
+            hideTextCoroutine = StartCoroutine(HideTextAfterDelay(3f));
         }
 
         private IEnumerator HideTextAfterDelay(float delay)
@@ -168,7 +169,8 @@ namespace SojaExiles
             // Keep text facing the camera
             if (requestText != null && requestText.gameObject.activeInHierarchy && Camera.main != null)
             {
-                requestText.transform.rotation = Camera.main.transform.rotation;
+                requestText.transform.LookAt(Camera.main.transform);
+                requestText.transform.Rotate(0, 180, 0); // Make text face the camera
             }
         }
 

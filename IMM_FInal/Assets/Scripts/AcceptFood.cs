@@ -6,21 +6,18 @@ namespace SojaExiles
     public class AcceptFood : MonoBehaviour
     {
         private CustomerFoodRequest customerFoodRequest;
-        private CustomerAnimationController animationController;
         private CustomerBehavior customerBehavior;
-        private RegisterQueueManager queueManager;
         private bool isProcessingDelivery = false;
 
         void Start()
         {
             customerFoodRequest = GetComponent<CustomerFoodRequest>();
-            animationController = GetComponent<CustomerAnimationController>();
             customerBehavior = GetComponent<CustomerBehavior>();
-            queueManager = RegisterQueueManager.Instance;
             
             if (customerFoodRequest == null)
             {
                 Debug.LogError($"[{gameObject.name}] Missing CustomerFoodRequest component!");
+                customerFoodRequest = gameObject.AddComponent<CustomerFoodRequest>();
             }
         }
 
@@ -41,48 +38,51 @@ namespace SojaExiles
 
         public bool AcceptFoodItem(FoodType foodType, GameObject foodObject)
         {
-            if (isProcessingDelivery || customerFoodRequest == null || customerBehavior == null)
+            if (isProcessingDelivery || customerFoodRequest == null)
+            {
+                Debug.LogWarning("Cannot accept food - already processing or missing components");
                 return false;
+            }
 
+            Debug.Log($"Customer {gameObject.name} accepting food: {foodType}");
             isProcessingDelivery = true;
             
             // Compare with desired food
             bool isCorrectFood = (foodType == customerFoodRequest.GetDesiredFood());
+            Debug.Log($"Is correct food? {isCorrectFood}. Customer wanted: {customerFoodRequest.GetDesiredFood()}");
             
             // Show response first
             customerFoodRequest.ShowResponse(isCorrectFood);
             
-            // Then serve food and play animation
-            customerBehavior.ServeFood(foodType.ToString());
-            
-            if (isCorrectFood)
-            {
-                customerBehavior.PlayHappyAnimation();
-            }
-            else
-            {
-                customerBehavior.PlayAngryAnimation();
-            }
+            // Start coroutine to process delivery
+            StartCoroutine(ProcessDeliveryComplete(foodObject, isCorrectFood));
+            return isCorrectFood;
+        }
 
+        private IEnumerator ProcessDeliveryComplete(GameObject foodObject, bool wasCorrectOrder)
+        {
+            Debug.Log($"Processing delivery completion for {gameObject.name}");
+            
+            // Wait for response to be visible
+            yield return new WaitForSeconds(2f);
+            
             // Destroy the food object
             if (foodObject != null)
             {
                 Destroy(foodObject);
             }
 
-            StartCoroutine(ProcessDeliveryComplete());
-            return isCorrectFood;
-        }
-
-        private IEnumerator ProcessDeliveryComplete()
-        {
-            yield return new WaitForSeconds(3f); // Wait longer for response animation
-            isProcessingDelivery = false;
+            // Wait a bit more before leaving
+            yield return new WaitForSeconds(1f);
             
+            // Make customer leave
             if (customerBehavior != null)
             {
+                Debug.Log($"Customer {gameObject.name} is leaving");
                 customerBehavior.StartReturnToStart();
             }
+            
+            isProcessingDelivery = false;
         }
     }
 }

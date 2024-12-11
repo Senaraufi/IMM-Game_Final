@@ -101,14 +101,15 @@ namespace SojaExiles
                         {
                             Debug.Log("Delivery successful, adding points");
                             pointsManager.AddPoints(10);
-                            // Only destroy and clear if delivery was successful
-                            Destroy(heldObject);
+                            // Let AcceptFood handle the food destruction
                             heldObject = null;
                         }
                         else
                         {
                             Debug.Log("Delivery failed, subtracting points");
                             pointsManager.AddPoints(-5);
+                            // Let AcceptFood handle the food destruction
+                            heldObject = null;
                         }
                     }
                     else
