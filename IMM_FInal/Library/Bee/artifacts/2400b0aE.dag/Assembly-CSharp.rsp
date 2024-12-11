@@ -368,6 +368,7 @@
 "Assets/Brick Project Studio/_BPS Basic Assets/Common/Scripts and Animations/Windows/opencloseWindow1.cs"
 "Assets/PointsManager.cs"
 "Assets/Scripts/AcceptFood.cs"
+"Assets/Scripts/BackgroundMusic.cs"
 "Assets/Scripts/ButtonHandler.cs"
 "Assets/Scripts/CustomerAnimationController.cs"
 "Assets/Scripts/CustomerBehavior.cs"
