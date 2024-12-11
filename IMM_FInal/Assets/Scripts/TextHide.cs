@@ -16,18 +16,13 @@ public class TextHide : MonoBehaviour
         HideAllText();
     }
 
-    // Method to show text
-    public void ShowText(string message)
+    // Method to display text
+    public void DisplayText(string message)
     {
         if(text != null)
         {
             text.text = message;
             text.enabled = true;
-            Debug.Log($"Text displayed: {message}");
-        }
-        else
-        {
-            Debug.LogError("TextMeshProUGUI component is not assigned.");
         }
     }
 
@@ -38,11 +33,15 @@ public class TextHide : MonoBehaviour
         {
             text.text = "";
             text.enabled = false;
-            Debug.Log("Text has been hidden.");
         }
-        else
+    }
+
+    // Method to toggle text
+    public void ToggleText()
+    {
+        if(text != null)
         {
-            Debug.LogError("TextMeshProUGUI component is not assigned.");
+            text.enabled = !text.enabled;
         }
     }
 
