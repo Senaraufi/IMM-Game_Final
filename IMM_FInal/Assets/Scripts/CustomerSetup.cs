@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEditor;
 using TMPro;
 
 namespace SojaExiles
@@ -68,32 +67,23 @@ namespace SojaExiles
             // Set up animator controller
             if (animator.runtimeAnimatorController == null)
             {
-                // First try to load from Resources
+                // Try to load controllers from Resources folder
                 defaultController = Resources.Load<RuntimeAnimatorController>("CustomerAnimator");
                 
                 if (defaultController == null)
                 {
-                    // Try to find the WolfController in the project
-                    string[] guids = UnityEditor.AssetDatabase.FindAssets("WolfController t:AnimatorController");
-                    if (guids.Length > 0)
-                    {
-                        string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
-                        defaultController = UnityEditor.AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(path);
-                    }
-                    
-                    // Final fallback to FreeAnimations
-                    if (defaultController == null)
-                    {
-                        defaultController = Resources.Load<RuntimeAnimatorController>("FreeAnimations");
-                    }
+                    defaultController = Resources.Load<RuntimeAnimatorController>("WolfController");
                 }
                 
+                if (defaultController == null)
+                {
+                    defaultController = Resources.Load<RuntimeAnimatorController>("FreeAnimations");
+                }
+
                 if (defaultController != null)
                 {
                     animator.runtimeAnimatorController = defaultController;
                     Debug.Log($"[{gameObject.name}] Assigned animator controller: {defaultController.name}");
-                    
-                    // Set up animator parameters
                     animator.SetBool("Walk", false);
                     animator.SetBool("Run", false);
                 }
