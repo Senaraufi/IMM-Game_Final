@@ -16,15 +16,15 @@ namespace SojaExiles
         [SerializeField]
         private float spacing = 1.5f;
         
-        private Queue<CustomerBehavior> npcQueue = new Queue<CustomerBehavior>();
-        private Dictionary<CustomerBehavior, Vector3> queuePositions = new Dictionary<CustomerBehavior, Vector3>();
-        private List<CustomerBehavior> availableCustomers = new List<CustomerBehavior>();
+        private Queue<MonoBehaviour> npcQueue = new Queue<MonoBehaviour>();
+        private Dictionary<MonoBehaviour, Vector3> queuePositions = new Dictionary<MonoBehaviour, Vector3>();
+        private List<MonoBehaviour> availableCustomers = new List<MonoBehaviour>();
 
         [SerializeField]
-        private UnityEvent<CustomerBehavior> onCustomerRegistered;
+        private UnityEvent<MonoBehaviour> onCustomerRegistered;
         
         [SerializeField]
-        private UnityEvent<CustomerBehavior> onCustomerLeaving;
+        private UnityEvent<MonoBehaviour> onCustomerLeaving;
 
         void Awake()
         {
@@ -42,7 +42,7 @@ namespace SojaExiles
 
         private void FindAllCustomers()
         {
-            var customers = FindObjectsOfType<CustomerBehavior>();
+            var customers = FindObjectsOfType<MonoBehaviour>();
             foreach (var customer in customers)
             {
                 if (customer.CompareTag("Customer"))
@@ -53,7 +53,7 @@ namespace SojaExiles
             Debug.Log($"Found {availableCustomers.Count} customers in the scene");
         }
 
-        public void RegisterCustomer(CustomerBehavior customer)
+        public void RegisterCustomer(MonoBehaviour customer)
         {
             if (!npcQueue.Contains(customer))
             {
@@ -63,22 +63,22 @@ namespace SojaExiles
             }
         }
 
-        public bool IsFirstInQueue(CustomerBehavior customer)
+        public bool IsFirstInQueue(MonoBehaviour customer)
         {
             return npcQueue.Count > 0 && npcQueue.Peek() == customer;
         }
 
-        public void CustomerLeaving(CustomerBehavior customer)
+        public void CustomerLeaving(MonoBehaviour customer)
         {
             if (npcQueue.Contains(customer))
             {
-                npcQueue = new Queue<CustomerBehavior>(npcQueue.Where(c => c != customer));
+                npcQueue = new Queue<MonoBehaviour>(npcQueue.Where(c => c != customer));
                 onCustomerLeaving?.Invoke(customer);
                 UpdateQueuePositions();
             }
         }
 
-        public bool GetIsFirstInQueue(CustomerBehavior customer)
+        public bool GetIsFirstInQueue(MonoBehaviour customer)
         {
             return IsFirstInQueue(customer);
         }
@@ -104,7 +104,7 @@ namespace SojaExiles
             }
         }
 
-        public Vector3 GetQueuePosition(CustomerBehavior npc)
+        public Vector3 GetQueuePosition(MonoBehaviour npc)
         {
             if (queuePositions.TryGetValue(npc, out Vector3 position))
             {

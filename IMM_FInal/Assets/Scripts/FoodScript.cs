@@ -12,6 +12,12 @@ namespace SojaExiles
             // Log the food type when the object is created
             Debug.Log($"[{gameObject.name}] Food type initialized as: {foodType}");
         }
+
+        void OnDestroy()
+        {
+            // When this food is destroyed (given to customer), request a new one
+            FoodSpawner.RespawnFood(foodType);
+        }
         
         public FoodType FoodType 
         { 

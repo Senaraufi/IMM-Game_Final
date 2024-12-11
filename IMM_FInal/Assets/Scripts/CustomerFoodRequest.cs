@@ -1,59 +1,47 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.UI;
 
 namespace SojaExiles
 {
     public class CustomerFoodRequest : MonoBehaviour
     {
-        private TextMeshPro requestText;
+        public GameObject requestBubble;
+        public TMP_Text requestText;
+        public Image foodIcon;
+        public Sprite[] foodIcons;
+        public float showDuration = 3f;
+        public float fadeSpeed = 2f;
         private FoodType desiredFood;
-        private bool hasOrder = false;
+        private CanvasGroup canvasGroup;
+        private bool isShowing = false;
+        private Coroutine fadeCoroutine;
         private bool isAtCounter = false;
 
         void Start()
         {
-            InitializeTextComponent();
-            GenerateRandomFoodRequest();
-            
-            // Make sure text starts hidden
-            if (requestText != null)
+            if (requestBubble != null)
             {
-                requestText.gameObject.SetActive(false);
+                canvasGroup = requestBubble.GetComponent<CanvasGroup>();
+                if (canvasGroup == null)
+                {
+                    canvasGroup = requestBubble.AddComponent<CanvasGroup>();
+                }
+                requestBubble.SetActive(true);
+                canvasGroup.alpha = 0;
             }
+
+            GenerateRandomFoodRequest();
         }
 
-        private void InitializeTextComponent()
+        void Update()
         {
-            // First try to find existing TextMeshPro component
-            requestText = GetComponentInChildren<TextMeshPro>();
-            
-            if (requestText == null)
+            // Make the request bubble always face the camera without flipping
+            if (requestBubble != null && requestBubble.activeSelf)
             {
-                // Create a new GameObject for the text
-                GameObject textObj = new GameObject("RequestText");
-                textObj.transform.SetParent(transform);
-                
-                // Position it above the customer's head
-                textObj.transform.localPosition = new Vector3(0, 2.5f, 0);
-                textObj.transform.localRotation = Quaternion.identity;
-                
-                // Add TextMeshPro component
-                requestText = textObj.AddComponent<TextMeshPro>();
-                
-                // Configure the text component
-                requestText.alignment = TextAlignmentOptions.Center;
-                requestText.fontSize = 3f;
-                requestText.color = Color.black;
-                requestText.enableWordWrapping = true;
-                requestText.overflowMode = TextOverflowModes.Overflow;
-                requestText.margin = new Vector4(2, 2, 2, 2);
+                requestBubble.transform.forward = Camera.main.transform.forward;
             }
-
-            // Ensure text is properly configured
-            requestText.enableWordWrapping = true;
-            requestText.alignment = TextAlignmentOptions.Center;
-            requestText.fontSize = 3f;
         }
 
         public void GenerateRandomFoodRequest()
@@ -61,115 +49,99 @@ namespace SojaExiles
             // Get a random food type
             FoodType[] foodTypes = (FoodType[])System.Enum.GetValues(typeof(FoodType));
             desiredFood = foodTypes[Random.Range(0, foodTypes.Length)];
-            
+
+            // Update UI
             if (requestText != null)
             {
-                requestText.text = $"I want {desiredFood}!";
-                requestText.gameObject.SetActive(isAtCounter);
+                requestText.text = $"I want a {desiredFood}!";
             }
-            hasOrder = true;
+
+            if (foodIcon != null && foodIcons != null && foodIcons.Length > 0)
+            {
+                int iconIndex = (int)desiredFood;
+                if (iconIndex < foodIcons.Length)
+                {
+                    foodIcon.sprite = foodIcons[iconIndex];
+                }
+            }
+        }
+
+        public void ShowRequest()
+        {
+            if (fadeCoroutine != null)
+            {
+                StopCoroutine(fadeCoroutine);
+            }
+            fadeCoroutine = StartCoroutine(FadeIn());
+        }
+
+        public void HideRequest()
+        {
+            if (fadeCoroutine != null)
+            {
+                StopCoroutine(fadeCoroutine);
+            }
+            fadeCoroutine = StartCoroutine(FadeOut());
         }
 
         public void SetAtCounter(bool atCounter)
         {
             isAtCounter = atCounter;
+            if (atCounter)
+            {
+                ShowRequest();
+            }
+            else
+            {
+                HideRequest();
+            }
+        }
+
+        public bool IsAtCounter()
+        {
+            return isAtCounter;
+        }
+
+        private IEnumerator FadeIn()
+        {
+            if (canvasGroup != null)
+            {
+                while (canvasGroup.alpha < 1)
+                {
+                    canvasGroup.alpha += Time.deltaTime * fadeSpeed;
+                    yield return null;
+                }
+                isShowing = true;
+            }
+        }
+
+        private IEnumerator FadeOut()
+        {
+            if (canvasGroup != null)
+            {
+                while (canvasGroup.alpha > 0)
+                {
+                    canvasGroup.alpha -= Time.deltaTime * fadeSpeed;
+                    yield return null;
+                }
+                isShowing = false;
+            }
+        }
+
+        public void ShowResponse(bool isCorrect)
+        {
             if (requestText != null)
             {
-                requestText.gameObject.SetActive(atCounter && hasOrder);
-                if (atCounter && hasOrder)
-                {
-                    requestText.text = $"I want {desiredFood}!";
-                    requestText.color = Color.black;
-                }
-            }
-            Debug.Log($"[{gameObject.name}] Set at counter: {atCounter}, Text visible: {requestText != null && requestText.gameObject.activeSelf}");
-        }
-
-        public void ShowRequest()
-        {
-            if (requestText != null && hasOrder)
-            {
-                requestText.gameObject.SetActive(true);
-                requestText.text = $"I want {desiredFood}!";
-                requestText.color = Color.black;
-            }
-            else if (requestText == null)
-            {
-                InitializeTextComponent();
-                GenerateRandomFoodRequest();
+                requestText.text = isCorrect ? "Thank you!" : "That's not what I wanted...";
+                ShowRequest();
+                StartCoroutine(HideAfterDelay(showDuration));
             }
         }
 
-        public void ShowResponse(bool isCorrectOrder)
-        {
-            if (requestText == null)
-            {
-                InitializeTextComponent();
-            }
-
-            if (requestText != null)
-            {
-                // Make sure text object is active
-                requestText.gameObject.SetActive(true);
-                
-                if (isCorrectOrder)
-                {
-                    string[] positiveResponses = {
-                        "Thank you! This is perfect!",
-                        "Yummy! Just what I wanted!",
-                        "Amazing! You got it right!",
-                        "Delicious! Great service!"
-                    };
-                    requestText.text = positiveResponses[Random.Range(0, positiveResponses.Length)];
-                    requestText.color = new Color(0, 0.8f, 0); // Bright green
-                }
-                else
-                {
-                    string[] negativeResponses = {
-                        "This is not what I ordered!",
-                        "Wrong food! I wanted something else!",
-                        "No, no, no! This isn't right!",
-                        "That's completely wrong!"
-                    };
-                    requestText.text = negativeResponses[Random.Range(0, negativeResponses.Length)];
-                    requestText.color = new Color(0.8f, 0, 0); // Bright red
-                }
-                
-                // Make text more visible
-                requestText.fontSize = 3f;
-                requestText.outlineWidth = 0.2f;
-                requestText.outlineColor = Color.white;
-                
-                // Start coroutine to hide text after delay
-                StartCoroutine(HideTextAfterDelay(3f));
-            }
-        }
-
-        private IEnumerator HideTextAfterDelay(float delay)
+        private IEnumerator HideAfterDelay(float delay)
         {
             yield return new WaitForSeconds(delay);
-            if (requestText != null)
-            {
-                requestText.gameObject.SetActive(false);
-            }
-        }
-
-        public void HideRequest()
-        {
-            if (requestText != null)
-            {
-                requestText.gameObject.SetActive(false);
-                hasOrder = false;
-            }
-        }
-
-        void Update()
-        {
-            // Keep text facing the camera
-            if (requestText != null && requestText.gameObject.activeInHierarchy && Camera.main != null)
-            {
-                requestText.transform.rotation = Camera.main.transform.rotation;
-            }
+            HideRequest();
         }
 
         public FoodType GetDesiredFood()
@@ -177,9 +149,9 @@ namespace SojaExiles
             return desiredFood;
         }
 
-        public bool HasOrder()
+        public bool IsShowing()
         {
-            return hasOrder;
+            return isShowing;
         }
     }
 }

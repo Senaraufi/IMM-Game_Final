@@ -7,7 +7,7 @@ namespace SojaExiles
     {
         private CustomerFoodRequest customerFoodRequest;
         private CustomerAnimationController animationController;
-        private CustomerBehavior customerBehavior;
+        private MonoBehaviour customerComponent;
         private RegisterQueueManager queueManager;
         private bool isProcessingDelivery = false;
 
@@ -15,12 +15,12 @@ namespace SojaExiles
         {
             customerFoodRequest = GetComponent<CustomerFoodRequest>();
             animationController = GetComponent<CustomerAnimationController>();
-            customerBehavior = GetComponent<CustomerBehavior>();
+            customerComponent = GetComponent<animal_people_wolf_1>();
             queueManager = RegisterQueueManager.Instance;
             
             if (customerFoodRequest == null)
             {
-                Debug.LogError($"[{gameObject.name}] Missing CustomerFoodRequest component!");
+                return;
             }
         }
 
@@ -28,61 +28,126 @@ namespace SojaExiles
         {
             if (!isProcessingDelivery && customerFoodRequest != null)
             {
-                if (other.CompareTag("Food"))
+                if (!other.gameObject.CompareTag("Food"))
                 {
-                    var foodScript = other.GetComponent<FoodScript>();
+                    return;
+                }
+
+                // Get components
+                FoodScript foodScript = other.gameObject.GetComponent<FoodScript>();
+                if (foodScript == null)
+                {
+                    return;
+                }
+
+                // Queue check
+                if (queueManager == null || customerComponent == null)
+                {
+                    return;
+                }
+
+                if (!queueManager.IsFirstInQueue(customerComponent))
+                {
+                    return;
+                }
+
+                // Get food types
+                FoodType incomingFood = foodScript.FoodType;
+                FoodType wantedFood = customerFoodRequest.GetDesiredFood();
+
+                // Simple direct comparison
+                bool isCorrectFood = incomingFood == wantedFood;
+                
+                if (isCorrectFood)
+                {
+                    // Show response only if customer is first in queue
+                    if (queueManager.IsFirstInQueue(customerComponent))
+                    {
+                        customerFoodRequest.ShowResponse(true);
+                    }
+                    
+                    // Play animation
+                    if (animationController != null)
+                    {
+                        animationController.PlayHappyAnimation();
+                    }
+                    
+                    // Serve and cleanup
+                    if (customerComponent is animal_people_wolf_1 wolfComponent)
+                    {
+                        wolfComponent.ServeFood(incomingFood.ToString());
+                    }
+                    
+                    // Make sure to clear the reference before destroying
                     if (foodScript != null)
                     {
-                        AcceptFoodItem(foodScript.FoodType, other.gameObject);
+                        Destroy(other.gameObject);
                     }
+                }
+                else
+                {
+                    // Show response only if customer is first in queue
+                    if (queueManager.IsFirstInQueue(customerComponent))
+                    {
+                        customerFoodRequest.ShowResponse(false);
+                    }
+                    
+                    // Play animation
+                    if (animationController != null)
+                    {
+                        animationController.PlayAngryAnimation();
+                    }
+
+                    // Make the customer leave even with wrong food
+                    if (customerComponent is animal_people_wolf_1 wolfComponent)
+                    {
+                        wolfComponent.ServeFood("WrongFood");
+                    }
+                    Destroy(other.gameObject);
                 }
             }
         }
 
         public bool AcceptFoodItem(FoodType foodType, GameObject foodObject)
         {
-            if (isProcessingDelivery || customerFoodRequest == null || customerBehavior == null)
+            if (isProcessingDelivery || customerFoodRequest == null)
                 return false;
 
             isProcessingDelivery = true;
-            
+
             // Compare with desired food
             bool isCorrectFood = (foodType == customerFoodRequest.GetDesiredFood());
             
-            // Show response first
+            // Show response
             customerFoodRequest.ShowResponse(isCorrectFood);
-            
-            // Then serve food and play animation
-            customerBehavior.ServeFood(foodType.ToString());
-            
-            if (isCorrectFood)
+
+            // Handle animations if available
+            if (animationController != null)
             {
-                customerBehavior.PlayHappyAnimation();
-            }
-            else
-            {
-                customerBehavior.PlayAngryAnimation();
+                if (isCorrectFood)
+                    animationController.PlayHappyAnimation();
+                else
+                    animationController.PlayAngryAnimation();
             }
 
-            // Destroy the food object
+            // Handle wolf component if available
+            if (customerComponent is animal_people_wolf_1 wolfComponent)
+            {
+                wolfComponent.ServeFood(foodType.ToString());
+            }
+
+            // Clean up
             if (foodObject != null)
-            {
                 Destroy(foodObject);
-            }
 
-            StartCoroutine(ProcessDeliveryComplete());
+            StartCoroutine(FinishDelivery());
             return isCorrectFood;
         }
 
-        private IEnumerator ProcessDeliveryComplete()
+        private IEnumerator FinishDelivery()
         {
-            yield return new WaitForSeconds(3f); // Wait longer for response animation
+            yield return new WaitForSeconds(2f);
             isProcessingDelivery = false;
-            
-            if (customerBehavior != null)
-            {
-                customerBehavior.StartReturnToStart();
-            }
         }
     }
 }

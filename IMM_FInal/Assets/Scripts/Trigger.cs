@@ -9,11 +9,11 @@ namespace SojaExiles
         void Start()
         {
             // Check for NPCs at start
-            var customers = FindObjectsOfType<CustomerBehavior>();
-            Debug.Log($"Found {customers.Length} customers in the scene");
-            foreach (var customer in customers)
+            var npcs = FindObjectsOfType<animal_people_wolf_1>();
+            Debug.Log($"Found {npcs.Length} NPCs in the scene");
+            foreach (var npc in npcs)
             {
-                Debug.Log($"Customer: {customer.name}, Tag: {customer.tag}, HasNavMesh: {customer.GetComponent<UnityEngine.AI.NavMeshAgent>() != null}");
+                Debug.Log($"NPC: {npc.name}, Tag: {npc.tag}, HasNavMesh: {npc.GetComponent<UnityEngine.AI.NavMeshAgent>() != null}");
             }
         }
 
@@ -24,18 +24,18 @@ namespace SojaExiles
             // Check if the player has entered the trigger and it hasn't been triggered yet
             if (other.CompareTag("Player") && !hasTriggered)
             {
-                Debug.Log("Player entered KitchenTrigger, triggering customer movement.");
+                Debug.Log("Player entered KitchenTrigger, triggering NPC movement.");
                 
-                // Find all customers in the scene
-                var customers = FindObjectsOfType<CustomerBehavior>();
-                Debug.Log($"Found {customers.Length} customers to move");
+                // Find all NPCs in the scene
+                var npcs = FindObjectsOfType<animal_people_wolf_1>();
+                Debug.Log($"Found {npcs.Length} NPCs to move");
                 
-                foreach (var customer in customers)
+                foreach (var npc in npcs)
                 {
-                    if (customer != null && customer.CompareTag("Customer"))
+                    if (npc != null && npc.CompareTag("Customer"))
                     {
-                        Debug.Log($"Starting movement for customer: {customer.name}");
-                        customer.StartMovingToRegister();
+                        Debug.Log($"Starting movement for NPC: {npc.name}");
+                        npc.StartMovingToRegister();
                     }
                 }
                 

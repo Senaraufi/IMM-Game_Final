@@ -66,7 +66,7 @@ namespace SojaExiles
 
         private void ServeCustomers()
         {
-            var customers = FindObjectsOfType<CustomerBehavior>();
+            var customers = FindObjectsOfType<animal_people_wolf_1>();
             foreach (var customer in customers)
             {
                 if (customer != null && customer.CompareTag("Customer"))
