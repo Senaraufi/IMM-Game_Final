@@ -34,14 +34,14 @@ namespace SojaExiles
                 }
                 else
                 {
-                    Debug.LogError("Main camera not found. Please ensure there is a camera tagged as 'MainCamera'.");
+                    // Removed Debug.LogError
                 }
             }
         }
 
         public void ButtonPressed()
         {
-            Debug.Log($"Button '{buttonId}' was pressed!");
+            // Removed Debug.Log
             onButtonPressed?.Invoke();
         }
 
