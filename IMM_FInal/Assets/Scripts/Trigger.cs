@@ -32,18 +32,10 @@ namespace SojaExiles
                 
                 foreach (var npc in npcs)
                 {
-                    if (npc != null)
+                    if (npc != null && npc.CompareTag("Customer"))
                     {
-                        Debug.Log($"Processing NPC: {npc.name}, Tag: {npc.tag}");
-                        if (npc.CompareTag("Customer"))
-                        {
-                            Debug.Log($"Starting movement for NPC: {npc.name}");
-                            npc.StartMovingToRegister();
-                        }
-                        else
-                        {
-                            Debug.Log($"NPC {npc.name} doesn't have Customer tag");
-                        }
+                        Debug.Log($"Starting movement for NPC: {npc.name}");
+                        npc.StartMovingToRegister();
                     }
                 }
                 
