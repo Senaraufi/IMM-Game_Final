@@ -8,6 +8,7 @@ namespace SojaExiles
         private CustomerFoodRequest customerFoodRequest;
         private CustomerAnimationController animationController;
         private animal_people_wolf_1 wolfComponent;
+        private QueueManager queueManager;
         private bool isProcessingDelivery = false;
 
         void Start()
@@ -15,10 +16,11 @@ namespace SojaExiles
             customerFoodRequest = GetComponent<CustomerFoodRequest>();
             animationController = GetComponent<CustomerAnimationController>();
             wolfComponent = GetComponent<animal_people_wolf_1>();
+            queueManager = GetComponent<QueueManager>();
             
             if (customerFoodRequest == null)
             {
-                Debug.LogError($"[{gameObject.name}] Missing CustomerFoodRequest component!");
+                return;
             }
         }
 
@@ -26,13 +28,84 @@ namespace SojaExiles
         {
             if (!isProcessingDelivery && customerFoodRequest != null)
             {
-                if (other.CompareTag("Food"))
+                if (!other.gameObject.CompareTag("Food"))
                 {
-                    var foodScript = other.GetComponent<FoodScript>();
+                    return;
+                }
+
+                // Get components
+                FoodScript foodScript = other.gameObject.GetComponent<FoodScript>();
+                if (foodScript == null)
+                {
+                    return;
+                }
+
+                // Queue check
+                if (queueManager == null || wolfComponent == null)
+                {
+                    return;
+                }
+
+                if (!queueManager.IsFirstInQueue(wolfComponent))
+                {
+                    return;
+                }
+
+                // Get food types
+                FoodType incomingFood = foodScript.FoodType;
+                FoodType wantedFood = customerFoodRequest.GetDesiredFood();
+
+                // Simple direct comparison
+                bool isCorrectFood = incomingFood == wantedFood;
+                
+                if (isCorrectFood)
+                {
+                    // Show response only if customer is first in queue
+                    if (queueManager.IsFirstInQueue(wolfComponent))
+                    {
+                        customerFoodRequest.ShowResponse(true);
+                    }
+                    
+                    // Play animation
+                    if (animationController != null)
+                    {
+                        animationController.PlayHappyAnimation();
+                    }
+                    
+                    // Serve and cleanup
+                    wolfComponent.ServeFood(incomingFood.ToString());
+                    
+                    // Request a new food item to be spawned before destroying this one
+                    var foodSpawner = FindObjectOfType<FoodSpawner>();
+                    if (foodSpawner != null)
+                    {
+                        foodSpawner.RespawnFood(incomingFood);
+                    }
+                    
+                    // Make sure to clear the reference before destroying
                     if (foodScript != null)
                     {
-                        AcceptFoodItem(foodScript.FoodType, other.gameObject);
+                        foodSpawner.ClearFoodReference(other.gameObject);
+                        Destroy(other.gameObject);
                     }
+                }
+                else
+                {
+                    // Show response only if customer is first in queue
+                    if (queueManager.IsFirstInQueue(wolfComponent))
+                    {
+                        customerFoodRequest.ShowResponse(false);
+                    }
+                    
+                    // Play animation
+                    if (animationController != null)
+                    {
+                        animationController.PlayAngryAnimation();
+                    }
+
+                    // Make the customer leave even with wrong food
+                    wolfComponent.ServeFood("WrongFood");
+                    Destroy(other.gameObject);
                 }
             }
         }
