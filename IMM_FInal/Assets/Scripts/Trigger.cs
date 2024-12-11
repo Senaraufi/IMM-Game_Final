@@ -10,23 +10,23 @@ namespace SojaExiles
         void Start()
         {
             queueManager = RegisterQueueManager.Instance;
-            
-            // Log debug info about NPCs
-            var npcs = FindObjectsOfType<animal_people_wolf_1>();
-            Debug.Log($"Found {npcs.Length} NPCs in the scene");
-            foreach (var npc in npcs)
-            {
-                Debug.Log($"NPC: {npc.name}, Tag: {npc.tag}, HasNavMesh: {npc.GetComponent<UnityEngine.AI.NavMeshAgent>() != null}");
-            }
         }
 
         void OnTriggerEnter(Collider other)
         {
-            // Check if the player has entered the trigger and it hasn't been triggered yet
             if (other.CompareTag("Player") && !hasTriggered && queueManager != null)
             {
                 hasTriggered = true;
-                queueManager.StartQueueProcessing();
+                // Find all NPCs and make them start moving to register
+                var npcs = FindObjectsOfType<animal_people_wolf_1>();
+                foreach (var npc in npcs)
+                {
+                    if (npc != null && npc.CompareTag("Customer"))
+                    {
+                        npc.StartMovingToRegister();
+                    }
+                }
+                Debug.Log("Player entered trigger area, starting queue process");
             }
         }
 

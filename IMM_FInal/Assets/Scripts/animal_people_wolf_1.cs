@@ -47,6 +47,27 @@ namespace SojaExiles
             startRotation = transform.rotation;
         }
 
+        public void StartMovingToRegister()
+        {
+            if (!CompareTag("Customer") || queueManager == null)
+            {
+                return;
+            }
+
+            isWaitingInQueue = true;
+            pathToRegister.Clear();
+            pathToRegister.Add(startPosition);
+            queueManager.RegisterCustomer(this);
+
+            // Show the food request when starting to move
+            var foodRequest = GetComponent<CustomerFoodRequest>();
+            if (foodRequest != null)
+            {
+                foodRequest.GenerateRandomFoodRequest(); // Generate a new request
+                foodRequest.ShowRequest(); // Show it immediately
+            }
+        }
+
         void Update()
         {
             if (!hasBeenServed && isWaitingInQueue && queueManager != null)
@@ -106,27 +127,6 @@ namespace SojaExiles
                         }
                     }
                 }
-            }
-        }
-
-        public void StartMovingToRegister()
-        {
-            if (!CompareTag("Customer") || queueManager == null)
-            {
-                return;
-            }
-
-            isWaitingInQueue = true;
-            pathToRegister.Clear();
-            pathToRegister.Add(startPosition);
-            queueManager.RegisterCustomer(this);
-
-            // Show the food request when starting to move
-            var foodRequest = GetComponent<CustomerFoodRequest>();
-            if (foodRequest != null)
-            {
-                foodRequest.GenerateRandomFoodRequest(); // Generate a new request
-                foodRequest.ShowRequest(); // Show it immediately
             }
         }
 

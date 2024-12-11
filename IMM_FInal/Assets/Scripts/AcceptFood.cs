@@ -129,7 +129,6 @@ namespace SojaExiles
             yield return new WaitForSeconds(delay);
             if (foodObject != null)
                 Destroy(foodObject);
-<<<<<<< Updated upstream
 
             // Wait a bit more before leaving
             yield return new WaitForSeconds(1f);
@@ -141,9 +140,6 @@ namespace SojaExiles
                 customerBehavior.StartReturnToStart();
             }
             
-=======
-            }
->>>>>>> Stashed changes
             isProcessingDelivery = false;
         }
     }

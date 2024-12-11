@@ -11,35 +11,88 @@ namespace SojaExiles
         [SerializeField] private float spawnDelay = 0.5f;  // Short delay before spawning new food
 
         private static FoodSpawner instance;
-        private FoodType foodToSpawn;
-        
-        void Awake()
+        public static FoodSpawner Instance
         {
-            if (instance == null)
+            get
             {
-                instance = this;
+                if (instance == null)
+                {
+                    instance = FindObjectOfType<FoodSpawner>();
+                    if (instance == null)
+                    {
+                        Debug.LogError("No FoodSpawner found in the scene!");
+                    }
+                }
+                return instance;
             }
+        }
+
+        void Start()
+        {
+            // Spawn initial food items
+            SpawnFood(FoodType.Pizza);
+            SpawnFood(FoodType.Hotdog);
+            Debug.Log("Initial food items spawned");
         }
 
         public static void RespawnFood(FoodType type)
         {
-            if (instance != null)
+            if (Instance != null)
             {
-                instance.foodToSpawn = type;
-                instance.Invoke("SpawnFood", instance.spawnDelay);
+                Debug.Log($"Respawning food of type: {type}");
+                Instance.Invoke("SpawnFood", Instance.spawnDelay, type);
             }
         }
 
-        private void SpawnFood()
+        private void SpawnFood(FoodType type)
         {
-            if (foodToSpawn == FoodType.pizza && pizzaPrefab != null && pizzaSpawnPoint != null)
+            GameObject prefab = null;
+            Transform spawnPoint = null;
+            
+            switch (type)
             {
-                GameObject newFood = Instantiate(pizzaPrefab, pizzaSpawnPoint.position, pizzaSpawnPoint.rotation);
+                case FoodType.Pizza:
+                    prefab = pizzaPrefab;
+                    spawnPoint = pizzaSpawnPoint;
+                    break;
+                case FoodType.Hotdog:
+                    prefab = hotdogPrefab;
+                    spawnPoint = hotdogSpawnPoint;
+                    break;
             }
-            else if (foodToSpawn == FoodType.hotdog && hotdogPrefab != null && hotdogSpawnPoint != null)
+
+            if (prefab != null && spawnPoint != null)
             {
-                GameObject newFood = Instantiate(hotdogPrefab, hotdogSpawnPoint.position, hotdogSpawnPoint.rotation);
+                GameObject newFood = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
+                FoodScript foodScript = newFood.GetComponent<FoodScript>();
+                if (foodScript == null)
+                {
+                    foodScript = newFood.AddComponent<FoodScript>();
+                }
+                // Set the food type
+                foodScript.SetFoodType(type);
+                Debug.Log($"Spawned new {type} at {spawnPoint.name}");
             }
+            else
+            {
+                Debug.LogError($"Missing prefab or spawn point for {type}");
+            }
+        }
+
+        private void Invoke(string methodName, float delay, FoodType type)
+        {
+            Invoke(() => SpawnFood(type), delay);
+        }
+
+        private void Invoke(System.Action action, float delay)
+        {
+            StartCoroutine(InvokeRoutine(action, delay));
+        }
+
+        private System.Collections.IEnumerator InvokeRoutine(System.Action action, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            action?.Invoke();
         }
     }
 }
