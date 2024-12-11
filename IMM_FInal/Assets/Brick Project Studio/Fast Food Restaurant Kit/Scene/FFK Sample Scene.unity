@@ -4397,6 +4397,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f251fb3da11241d7be474f4e551b4b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requestBubble: {fileID: 0}
+  requestText: {fileID: 0}
+  foodIcon: {fileID: 0}
+  foodIcons: []
+  showDuration: 3
+  fadeSpeed: 2
 --- !u!4 &735663183 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3263380325597232994, guid: 9b4c7175919cf984c8bfa6006681c124, type: 3}
@@ -5580,6 +5586,37 @@ Transform:
   - {fileID: 1318669935}
   m_Father: {fileID: 1724934455}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &904003252
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 904003253}
+  m_Layer: 0
+  m_Name: HotdogSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &904003253
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904003252}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.269, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1457785067}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &913879321
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6564,6 +6601,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f251fb3da11241d7be474f4e551b4b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requestBubble: {fileID: 0}
+  requestText: {fileID: 0}
+  foodIcon: {fileID: 0}
+  foodIcons: []
+  showDuration: 3
+  fadeSpeed: 2
 --- !u!4 &1049080121 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 961081019932393342, guid: d3ff576f6131e91448d4d670d0b55bc0, type: 3}
@@ -7501,6 +7544,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f251fb3da11241d7be474f4e551b4b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requestBubble: {fileID: 0}
+  requestText: {fileID: 0}
+  foodIcon: {fileID: 0}
+  foodIcons: []
+  showDuration: 3
+  fadeSpeed: 2
 --- !u!111 &1230386620
 Animation:
   m_ObjectHideFlags: 0
@@ -8804,6 +8853,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23abcb24df99e723b671dcdc72e500d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1457785065
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1457785067}
+  - component: {fileID: 1457785066}
+  m_Layer: 0
+  m_Name: FoodSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1457785066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457785065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f86e8c736eee0a687abf88d44d4bd177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pizzaPrefab: {fileID: 1008448554}
+  hotdogPrefab: {fileID: 749383265}
+  pizzaSpawnPoint: {fileID: 1500834779}
+  hotdogSpawnPoint: {fileID: 904003253}
+  spawnDelay: 0.5
+--- !u!4 &1457785067
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457785065}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.483, y: 1.255, z: 20.243}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1500834779}
+  - {fileID: 904003253}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1463426949
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9047,6 +9147,37 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 729341719}
   m_SourcePrefab: {fileID: 100100000, guid: 33cc7075490f68e3c81640bd2168e22e, type: 3}
+--- !u!1 &1500834778
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1500834779}
+  m_Layer: 0
+  m_Name: PizzaSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1500834779
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500834778}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.217, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1457785067}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1501552174
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13334,3 +13465,4 @@ SceneRoots:
   - {fileID: 1795040705}
   - {fileID: 1670189574}
   - {fileID: 68845606}
+  - {fileID: 1457785067}
